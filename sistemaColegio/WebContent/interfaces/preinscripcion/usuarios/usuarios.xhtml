@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+
+
+	<!--<h:outputScript name="scrollUniversal.js" library="universales/js"/>-->
+	<script type="text/javascript" src="js/usuarios.js" />
+
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+
+	<h:outputScript name="universaljs.js" library="universales/js" />
+
+	<!--Estilos para eventos de subir y bajar-->
+	<h:outputScript name="jquery.scrollTo-1.4.2-min.js" library="jquery" />
+	<h:outputScript name="jquery.localscroll-1.2.7-min.js" library="jquery" />
+	<title>Registro Usuarios</title>
+</h:head>
+<h:body style="background:none;">
+	
+	<h:form id="idFormDatosUsuarios">
+		<p:growl id="messages" showDetail="true"/>
+		<h:panelGroup class="clasePanelGroupPrincipalDatosEstudiante"
+			style="width: 90%; margin: 0 auto" layout="block">
+			<fieldset class="fieldSetUniversal"
+				style="width: 100%; margin: 0 auto; background: #dadadd">
+				<div style="width: 90%; margin-left: 40px;"></div>
+				<fieldset class="fieldSetUniversal"
+					style="width: 75%; margin-left: 40px; background: #f0e6d9">
+					<legend>Información del Alumno</legend>
+					<br /> <br />
+					<table style="width: 100%">
+						<tr>
+							<td><h:outputLabel value="Nombres:" /></td>
+							<td><h:inputText id="nombre" style="width: 90%"
+									value="#{registroUsuarios.usuarioPreinscripcion.nombres}"
+									styleClass="inputEstudiantes" tabindex="1">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Apellidos:" /></td>
+							<td><h:inputText style="width: 90%" 
+									value="#{registroUsuarios.usuarioPreinscripcion.apellidos}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Grado:"/></td>
+							<td><h:panelGroup id="estudiantesGrados">
+									<h:panelGroup>
+										<h:selectOneMenu
+											value="#{registroUsuarios.usuarioPreinscripcion.grado}"
+											styleClass="inputEstudiantes">
+											<f:selectItem itemLabel="--" itemValue="-10" />
+											<f:selectItems value="#{registroUsuarios.dataListGrados}"
+												var="grado" itemLabel="#{grado.nombre}"
+												itemValue="#{grado.idgrados}" />
+											<f:ajax event="valueChange" execute="@this" />
+										</h:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGroup></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Edad:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioPreinscripcion.edad}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Sexo:" /></td>
+							<td><h:selectOneRadio
+									value="#{registroUsuarios.usuarioPreinscripcion.sexo}">
+									<f:selectItem itemLabel="Masculino" itemValue="Masculino"></f:selectItem>
+									<f:selectItem itemLabel="Femenino" itemValue="Femenino"></f:selectItem>
+								</h:selectOneRadio></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Teléfono:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioPreinscripcion.telefono}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="E-mail" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioPreinscripcion.email}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Acudiente" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioPreinscripcion.acudiente}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Colegio Anterior" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioPreinscripcion.colegioanterior}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+					</table>
+				</fieldset>
+
+
+				<br />
+
+				<h:panelGroup id="informacionEstudiante">
+				</h:panelGroup>
+				<br />
+				<center>
+					<div style="margin: 0 auto; width: 40%">
+						<h:commandButton styleClass="botonVerde botonesFont" actionListener="#{registroUsuarios.crearPreinscripcion}" value="Inscribirse"> </h:commandButton>
+						
+					</div>
+				</center>
+			</fieldset>
+		</h:panelGroup>
+	</h:form>
+	<br />
+	<br />
+</h:body>
+</html>

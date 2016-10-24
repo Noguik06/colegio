@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../../../templates/general/templateGeneral.xhtml">
+        <ui:define name="title">
+            <title>Informes</title>
+        </ui:define>
+        <ui:define name="content">
+            <h:body>
+                <h:panelGroup rendered="#{rolesManager.contabilidad()}">
+                    <h:form id="formPagos" style="width: 1200px; min-width: 1200px;" onsubmit="return false;">
+                        <h:outputScript name="jquery.js" library="jquery"/>
+                        <h:outputScript name="validaciones.js" library="universales/js"/>
+                        <h:outputScript name="universaljs.js" library="universales/js"/>
+
+                        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+                        <h:outputStylesheet name="botones.css" library="universales/css"/>
+                        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+                        <h:outputStylesheet name="letras.css" library="universales/css"/>
+                        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+
+                        <link href="css/informesPagos.css" rel="stylesheet" type="text/css" />
+                        <script src="js/informesPagos.js" type="text/javascript" charset="utf-8"></script>
+
+                        <!--Datapicker-->
+                        <h:outputScript name="ui.datepicker.js" library="dataPicker/js"/>
+                        <h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css"/>
+
+
+                        <h:messages id="mensajes" layout="table" errorClass="errorMensaje" infoClass="exitoMensaje" style="display: none;"/>
+
+                        <h:panelGroup id="totales" layout="block" style="width: 75%; margin: 0 auto;">
+
+
+                            <table width="40%" style="width: 40%;">
+                                <tr>
+                                    <td>
+                                        <h:outputText value="Inicio" styleClass="labelResaltado"/>
+                                    </td>
+                                    <td>
+                                        <h:inputText styleClass="fecha" id="fechaInicio" onfocus="blur()">
+
+                                        </h:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h:outputText value="Fin" styleClass="labelResaltado"/>
+                                    </td>
+                                    <td>
+                                        <h:inputText styleClass="fecha" id="fechaFin" onfocus="blur()">
+
+                                        </h:inputText>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="50%">
+                                        <h:outputText value="Ingresos"  styleClass="labelResaltado"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{pagosManager.totalIngresos()}" styleClass="labelSinResaltar">
+                                            <f:convertNumber />
+                                        </h:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="50%">
+                                        <h:outputText value="Egresos"  styleClass="labelResaltado"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{pagosManager.totalEgresos()}"  styleClass="labelSinResaltar">
+                                            <f:convertNumber />
+                                        </h:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="50%">
+                                        <h:outputText value="Total"  styleClass="labelResaltado"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{pagosManager.total()}">
+                                            <f:convertNumber />
+                                        </h:outputText>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <br/>
+
+
+                            <h:outputLabel value="Ver Informe" styleClass="botonAzul">
+                                <f:ajax event="click" render="totales" execute="@form"
+                                        onevent="despuesGenerarInforme"/>
+                            </h:outputLabel>
+                        </h:panelGroup>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <h:panelGroup layout="block" style="width: 75%; margin: 0 auto;">
+                            <h:outputText value="Buscar: " styleClass="labelResaltado"/>
+                            <h:inputText id="inputTextBuscar">
+                                <f:ajax event="keyup" render="tablaDeudasUsuarios"/>
+                            </h:inputText>
+                            <br/>
+                            <br/>
+
+                            <table width="100%" cellpadding="0" cellspacing="0"
+                                   style="width: 100%; margin: 0 auto;">
+                                <tr>
+                                    <td width="50%">
+                                        <h:panelGroup layout="block" style="width: 100%;">
+
+                                            <div class="divTablaHeader" style="width: 100%; display: block;">
+                                                <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                                    <thead style="width: 100%;">
+                                                        <tr style="height: 35px">
+                                                            <th class="colUsuariosInforme-1 colUsuariosInformesHader bordesHeader"> 
+                                                                <label>Nombre</label>
+                                                            </th>
+                                                            <th class="colUsuariosInforme-2 colUsuariosInformesHader bordesHeader">
+                                                                <label>Tipo</label>
+                                                            </th>
+                                                            <th class="colUsuariosInforme-3 ">
+                                                                <label>Tipo</label>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <div style="width: 100%; overflow: auto; overflow-x:hidden;">
+                                                <div style="width: 100%; margin: 0 auto; height: 200px; max-height: 200px; overflow: hidden; overflow-x: hidden; overflow-y: auto;" id="contenedorEstudiantesBusqueda">
+                                                    <h:panelGroup layout="block" style="max-height: 200px; height: 200px; overflow-x: hidden; overflow-y: auto;">
+                                                        <h:dataTable id="tablaDeudasUsuarios" value="#{pagosManager.totalDeudasUsuarios()}" var="totalesUsuarios" rowClasses="fila1, fila2"
+                                                                     width="100%" cellpadding="0" cellspacing="0" columnClasses="colUsuariosInforme-1 colUsuariosInformesBody bordesHeader, colUsuariosInforme-2 colUsuariosInformesBody bordesHeader, colUsuariosInforme-3">
+                                                            <h:column>
+                                                                <h:outputText value="#{totalesUsuarios.usuarios.nombres} #{totalesUsuarios.usuarios.apellidos}" styleClass="labelSinResaltar marginIzquierdo"
+                                                                              style="text-transform: capitalize;">
+                                                                    <f:converter converterId="minusculasjava"/>
+                                                                </h:outputText>
+                                                            </h:column>
+                                                            <h:column>
+                                                                <h:outputText value="#{totalesUsuarios.total}" styleClass="labelSinResaltar marginIzquierdo">
+                                                                    <f:convertNumber />
+                                                                </h:outputText>
+                                                            </h:column>
+                                                            <h:column>
+                                                                <center>
+                                                                    <h:outputLabel value="Ver Deudas" styleClass="labelSinResaltar">
+                                                                        <f:ajax event="click" listener="#{pagosManager.seleccionarUsuarioInforme(totalesUsuarios.usuarios)}" render=":formPagos:deudasUsuarioParticular" execute="@this"/>
+                                                                    </h:outputLabel>
+                                                                </center>
+                                                            </h:column>
+                                                        </h:dataTable>
+                                                    </h:panelGroup>
+                                                </div>
+                                            </div>
+                                        </h:panelGroup>
+                                    </td>
+                                    <td width="5%">
+                                        &nbsp;
+                                    </td>
+                                    <td width="40%"  style="vertical-align: top">
+                                        <h:panelGroup id="deudasUsuarioParticular" >
+                                            <h:outputText value="#{pagosManager.usuarioEscogido.nombres} #{pagosManager.usuarioEscogido.apellidos}"
+                                                          style="text-transform: capitalize;">
+                                                <f:converter converterId="minusculasjava"/>
+                                            </h:outputText>
+                                            <br/>
+                                            <br/>
+                                            <div class="divTablaHeader" style="width: 100%; display: block;">
+                                                <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                                    <thead style="width: 100%;">
+                                                        <tr style="height: 35px">
+                                                            <th class="colUsuariosInformeDeudas-1 colUsuariosInformesDeudasHader bordesHeader"> 
+                                                                <label>Tipo</label>
+                                                            </th>
+                                                            <th class="colUsuariosInformeDeudas-2 colUsuariosInformesDeudasHader bordesHeader">
+                                                                <label>Nombre</label>
+                                                            </th>
+                                                            <th class="colUsuariosInformeDeudas-3 ">
+                                                                <label>Valor</label>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+
+                                            <h:dataTable value="#{pagosManager.dalistPagosUsuarios}" var="deudasUsuario" rowClasses="fila1, fila2"
+                                                         width="100%" cellpadding="0" cellspacing="0" columnClasses="colUsuariosInformeDeudas-1 colUsuariosInformesDeudasBody bordesHeader, colUsuariosInformeDeudas-2 colUsuariosInformesDeudasBody bordesHeader, colUsuariosInformeDeudas-3">
+                                                <h:column>
+                                                    <h:outputText value="#{deudasUsuario.pagos.tipopagos.nombre}" style="text-transform: capitalize;"
+                                                                  styleClass="labelSinResaltar marginIzquierdo">
+                                                        <f:converter converterId="minusculasjava"/>
+                                                    </h:outputText>
+                                                </h:column>
+                                                <h:column>
+                                                    <h:outputText value="#{deudasUsuario.pagos.nombre}" styleClass="labelSinResaltar marginIzquierdo"/>
+                                                </h:column>
+                                                <h:column>
+                                                    <h:outputText value="#{deudasUsuario.saldo}" styleClass="marginIzquierdo">
+                                                        <f:convertNumber/>
+                                                    </h:outputText>
+                                                </h:column>
+                                            </h:dataTable>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+
+                        <div id="backgroundPopup" style="z-index: 0" onclick="escongerPopUP()"/>
+                        <br/>
+
+                    </h:form>
+                </h:panelGroup>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>

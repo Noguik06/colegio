@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../../../templates/general/templateGeneral.xhtml">
+        <ui:define name="title">
+            <title>Agregar Cobros</title>
+        </ui:define>
+        <ui:define name="content">
+            <h:body>
+                <h:panelGroup rendered="#{rolesManager.contabilidad()}">
+                    <h:form id="formPagos" style="width: 95%; min-width: 95%;" onsubmit="return false;">
+
+                        <h:outputScript name="jquery.js" library="jquery"/>
+                        <h:outputScript name="validaciones.js" library="universales/js"/>
+                        <h:outputScript name="universaljs.js" library="universales/js"/>
+
+                        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+                        <h:outputStylesheet name="botones.css" library="universales/css"/>
+                        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+                        <h:outputStylesheet name="letras.css" library="universales/css"/>
+                        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+
+                        <link href="css/agregarpagos.css" rel="stylesheet" type="text/css" />
+                        <script src="js/agregarPagos.js" type="text/javascript" charset="utf-8"></script>
+
+                        <!--Datapicker-->
+                        <h:outputScript name="ui.datepicker.js" library="dataPicker/js"/>
+                        <h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css"/>
+
+
+                        <h:messages id="mensajes" layout="table" errorClass="errorMensaje" infoClass="exitoMensaje" style="display: none;"/>
+
+                        <h:panelGroup layout="block" style="width: 90%; margin: 0 auto;">
+                            <div style="width: 100%">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td>
+                                            <h:outputLabel value="Agregar [+]" class="labelResaltado">
+                                                <f:ajax event="click" render=":formPagos:configuracionTiposPagos" onevent="despuesAgregarNuevo" listener="#{pagosManager.agregarNuevoPago()}"/>
+                                            </h:outputLabel> 
+                                        </td>
+
+                                        <td>
+                                            <table style="float: right;">
+                                                <tr>
+                                                    <td>
+                                                        <div class="claseDivLabelBuscarPrincipal">
+                                                            <h:outputLabel value="Buscar:" class="claseLabelBuscarPrincipal"/>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <h:inputText  id="inputTextBuscar" class="claseInputTextBuscarPrincipal" onfocus="guardarValorEspecial(this); guardarValorLetras(this)" onkeyup="if(validarLetras(this)) return false;">
+                                                            <f:ajax event="keyup"  render="idPanelGroupContenedorTablaPrincipal" onevent="despuesBuscar"/>
+                                                        </h:inputText>                                
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>                
+
+
+                            <!--                        <table width="100%">
+                                                        <tr>
+                                                            <td>
+                                                                &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                <h:panelGroup id="idPanelGroupLabelSeEncontro" layout="block" style="float: right">
+                                                                    <label style="color: #575757; font-style: italic;">Se encontró </label><h:outputLabel value=" {estudiantesManager.dataListEstudiantes==null or estudiantesManager.dataListEstudiantes.size()==0?'0':estudiantesManager.dataListEstudiantes.size()}" style="color: #575757; font-style: italic; font-weight: bolder"/> <label style="color: #575757; font-style: italic;">Estudiantes</label>
+                                                                    <label style="color: #575757; font-style: italic;"> de </label><h:outputLabel value=" {estudiantesManager.dataListEstudiantesTotales()}" style="color: #575757; font-style: italic; font-weight: bolder"/>
+                                                                </h:panelGroup>
+                            
+                                                            </td>
+                                                        </tr>-->
+                            <!--</table>-->
+                            <h:panelGroup id="idPanelGroupContenedorTablaPrincipal" layout="block" style="width: 100%;">
+                                <!--<div class="headerClassUniversal2 claseDivContenedorHeaderPrincipal">-->
+                                <div class="divTablaHeader" style="width: 100%;">
+                                    <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                        <thead style="width: 100%;">
+                                            <tr style="height: 35px">
+                                                <th class="colTiposPagos-1 colTiposPagosHader bordesHeader"> 
+                                                    <label>Nombre</label>
+                                                </th>
+                                                <th class="colTiposPagos-2 ">
+                                                    <label>Tipo</label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+
+                                <div style="width: 100%; overflow: auto; overflow-x:hidden;">
+                                    <div style="width: 100%; margin: 0 auto; height: 200px; max-height: 200px; overflow: hidden; overflow-x: hidden; overflow-y: auto;" id="contenedorEstudiantesBusqueda">
+                                        <h:panelGroup id="idPanelGroupTablaPedidosPrincipal" class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal" layout="block"
+                                                      style="width: 100%; overflow: hidden;">
+                                            <h:dataTable id="tablaDatosBusqueda" width="100%;" style="width: 100%; min-width: 100%; max-width: 100%;"  columnClasses="colTiposPagos-1 colTiposPagosBody bordesHeader, colTiposPagos-2" value="#{pagosManager.dataListBusquedaPagos}" var="pagos" rowClasses="fila1, fila2" cellpadding="0" cellspacing="0">
+                                                <f:ajax  event="click" listener="#{pagosManager.seleccionarPago(pagos)}"  render=":formPagos:configuracionTiposPagos" onevent="despuesSeleccionarPago">
+                                                    <h:column> <!-- Código Proveedor-->                                                                        
+                                                        <div id="#{pagos.idpagos}_estudiantes">
+                                                        </div>
+                                                        <a class="bajaEstudiantes" id="#{pagos.idpagos}">
+                                                        </a>
+                                                        <a class="subeEstudiantes">
+                                                        </a>
+
+                                                        <h:outputLabel style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize; cursor: pointer;" value="#{pagos.nombre}" class="labelSinResaltar claseClickEstudiante">
+                                                            <f:converter converterId="minusculasjava"/>
+                                                        </h:outputLabel>
+                                                    </h:column>
+                                                    <h:column> <!-- Código Proveedor-->                                                                        
+                                                        <h:outputLabel style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize; cursor: pointer;" value="#{pagos.tipopagos.tipo == 0 ? 'Ingreso':'Egreso'}" class="labelSinResaltar">
+                                                            <f:converter converterId="minusculasjava"/>
+                                                        </h:outputLabel>                                    
+                                                    </h:column>
+                                                </f:ajax>
+                                            </h:dataTable>
+                                            <!--                                                <h:panelGroup layout="block" id="letrerobusqueda" >
+                                                                                                <h:panelGroup layout="block" style=" width: 100%; background: #F7F7F7; font-size: 13px; width: 100%; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;">
+                                                                                                    <center>
+                                                                                                        <h:outputLabel rendered="{estudiantesManager.dataListEstudiantes == null or estudiantesManager.dataListEstudiantes.size() == 0}"  style="display: block;">
+                                                                                                            <div style="height: 30px;">
+                                                                                                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                                                                    <tr style="height: 30px;">
+                                                                                                                        <th style="width: 100%; background: white;">
+                                                                                                                            ¡BUSCAR PRODUCTOS POR: Grado, Nombre, Apellidos!
+                                                                                                                        </th>
+                                                                                                                    </tr>
+                                                                                                                </table>
+                                                                                                            </div>
+                                                                                                        </h:outputLabel>
+                                                                                                    </center>
+                                                                                                </h:panelGroup>
+                                                                                            </h:panelGroup>-->
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <h:panelGroup id="configuracionTiposPagos">
+                                <div class="fieldSetUniversal" style="width: 40%; max-width: 40%; margin: 0 auto; display: #{pagosManager.pagoSeleccionado !=null?'block':'none'}">
+                                    <h:panelGrid  columns="2" rendered="#{pagosManager.pagoSeleccionado !=null}">
+                                        <h:outputLabel value="Nombre:"/>
+
+                                        <h:inputText value="#{pagosManager.pagoSeleccionado.nombre}"/>
+
+                                        <h:outputLabel value="Tipo"/>
+
+                                        <h:selectOneMenu value="#{pagosManager.tipoPago}">
+                                            <f:selectItem itemValue="0" itemLabel="---"/>
+                                            <f:selectItems value="#{pagosManager.dataListTiposPagos}" var="tipos" itemValue="#{tipos.idtipopagos}" itemLabel="#{tipos.nombre}"/> 
+                                        </h:selectOneMenu>
+
+                                        <h:outputLabel value="Valor"/>
+
+                                        <h:inputText value="#{pagosManager.pagoSeleccionado.valor}" onkeyup="validarNumero(this)">
+                                            <f:convertNumber />
+                                        </h:inputText>
+
+                                        <h:outputLabel value="Fecha Inicio:"/>
+
+                                        <h:inputText id="fechaInicioPago"  styleClass="fecha" onfocus="blur()" value="#{pagosManager.pagoSeleccionado.fechainicio}">
+                                            <f:convertDateTime pattern="dd-MM-yyyy" timeZone="America/Bogota" />
+                                        </h:inputText>
+
+                                        <h:outputLabel value="Fecha Fin:"/>
+
+                                        <h:inputText id="fechaCreacionPago" styleClass="fecha" onfocus="blur()" value="#{pagosManager.pagoSeleccionado.fechacracion}">
+                                            <f:convertDateTime pattern="dd-MM-yyyy" timeZone="America/Bogota" />
+                                        </h:inputText>
+
+                                        <h:outputLabel value="Guardar" styleClass="botonAzul">
+                                            <f:ajax event="mousedown" render=":formPagos:idPanelGroupContenedorTablaPrincipal :formPagos:contenedorUsuariosPagos :formPagos:mensajes" execute=":formPagos:configuracionTiposPagos"  listener="#{pagosManager.guardarPagos()}"
+                                                    onevent="despuesEdicion"/>
+                                        </h:outputLabel>
+
+                                        &nbsp;
+                                    </h:panelGrid>
+                                </div>
+                                <br/>
+                                <br/>
+
+                                <h:panelGroup id="contenedorUsuariosPagos">
+                                    <h:panelGroup rendered="#{pagosManager.pagoSeleccionado !=null and pagosManager.pagoSeleccionado.idpagos > 0}">
+                                        <h:panelGroup rendered="#{pagosManager.pagoSeleccionado.tipopagos.tipo == 0}">
+                                            <span class="labelResaltado">
+                                                Buscar
+                                            </span>
+                                            <h:inputText id="busquedaUsuariosPagos" onfocus="guardarValorLetras(this);" onkeyup="ponderId(this); if (validarTiempoBusquedaConTiempo(this, 500)) return false;" autocomplete="off" size="50">
+                                                <f:ajax event="keyup" render="tablaUsuariosBusquedaConPagos tablaUsuariosBusquedaSinPagos tablaDivConPagos tablaTipoUsuariosSinPago"
+                                                        onevent="despuesBuscarUsuarios"/>
+                                            </h:inputText>
+                                            <br/>
+                                            <br/>
+                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td width="50%">
+                                                        <div style="width: 100%; margin-right: 2px;">
+                                                            <!--<div class="headerClassUniversal2 claseDivContenedorHeaderPrincipal">-->
+                                                            <div class="divTablaHeader" style="width: 100%;">
+                                                                <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                                                    <thead style="width: 100%;">
+                                                                        <tr style="height: 35px">
+                                                                            <th class="colUsuariosPago-1 colUsariosPagoHader bordesHeader"> 
+                                                                                <label>Usuario</label>
+                                                                            </th>
+                                                                            <th class="colUsuariosPago-2 colUsariosPagoHader bordesHeader"> 
+                                                                                <label>Valor</label>
+                                                                            </th>
+                                                                            <th class="colUsuariosPago-3 colUsariosPagoHader bordesHeader"> 
+                                                                                <label>Pago</label>
+                                                                            </th>
+                                                                            <th class="colUsuariosPago-4 colUsariosPagoHader bordesHeader"> 
+                                                                                <label>Saldo</label>
+                                                                            </th>
+                                                                            <th class="colUsuariosPago-5 colUsariosPagoHader bordesHeader"> 
+                                                                                <label>&nbsp;</label>
+                                                                            </th>
+                                                                            <th class="colUsuariosPago-6 ">
+                                                                                <label>&nbsp;</label>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                            <h:panelGroup id="tablaDivConPagos" layout="block" style="width: 100%;">
+                                                                <div style="width: 100%; max-height: 300px; overflow: hidden; overflow-y: auto;">
+                                                                    <!--Tabla para ver los usuarios que han sido agregadas a este tipo de pago-->
+                                                                    <h:dataTable width="100%" cellpadding="0" cellspacing="0" id="tablaUsuariosBusquedaConPagos" value="#{pagosManager.dataListUsuariosBusqueda}" var="usuariosPagos"
+                                                                                 style="width:  100%; display: #{pagosManager.dataListUsuariosBusqueda == null or pagosManager.dataListUsuariosBusqueda.size() == 0?'none':'block'}"
+                                                                                 rowClasses="fila1, fila2"
+                                                                                 columnClasses="colUsuariosPago-1 bordesHeader colUsariosPagoBody, colUsuariosPago-2 bordesHeader colUsariosPagoBody, colUsuariosPago-3 bordesHeader colUsariosPagoBody, colUsuariosPago-4 bordesHeader colUsariosPagoBody, colUsuariosPago-5 colUsariosPagoBody bordesHeader, colUsuariosPago-6">
+                                                                        <h:column>
+                                                                            <h:outputLabel value="#{usuariosPagos.usuarios.apellidos} #{usuariosPagos.usuarios.nombres}"  styleClass="labelSinResaltar" style="text-transform: capitalize;">
+                                                                                <f:converter converterId="minusculasjava"/>
+                                                                            </h:outputLabel>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <center>
+                                                                                <h:inputText id="valorRealInput" styleClass="#{usuariosPagos.idrelacionpagousuarios}" value="#{pagosManager.valorReal}"
+                                                                                             onkeyup="validarNumero(this); if(event.keyCode != 13) return false" style="max-width: 90%; width: 90%; display: none;">
+                                                                                    <f:convertNumber locale="es_ES"/>
+                                                                                    <f:ajax event="keyup" execute="@this" render="@this valorRealLabel valorSaldo" onevent="despuesagregar"/>
+                                                                                    <f:ajax event="blur" render="@this valorRealLabel" execute="@none"/>
+                                                                                </h:inputText>
+                                                                            </center>
+                                                                            <div class="marginIzquierdo"> 
+                                                                                <h:outputLabel id="valorRealLabel" styleClass="#{usuariosPagos.idrelacionpagousuarios} " value="#{usuariosPagos.valorreal}">
+                                                                                    <f:convertNumber locale="es_ES"/>
+                                                                                    <f:ajax event="click" render="@this" listener="#{pagosManager.seleccionarUsuario(usuariosPagos)}" onevent="despuesEscogerUsuarioCambiarValor"/>
+                                                                                </h:outputLabel>
+                                                                            </div>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <center>
+                                                                                <h:inputText id="valorAbonoPago" value="#{pagosManager.pagoAbono}" disabled="#{pagosManager.saldoActivo(usuariosPagos)?'true':'false'}" onkeyup="validarNumero(this); if(event.keyCode != 13) return false"
+                                                                                             style="max-width: 70%; width: 70%;">
+                                                                                    <f:convertNumber />
+                                                                                    <f:ajax event="keyup" execute="@this" render="valorSaldo @this" disabled="#{pagosManager.saldoActivo(usuariosPagos)?'true':'false'}" rendered="#{pagosManager.saldoActivo(usuariosPagos)?'false':'true'}"
+                                                                                            onevent="despuesagregar"/>
+                                                                                </h:inputText>
+                                                                            </center>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <h:outputText id="valorSaldo" value="#{usuariosPagos.saldo}"  styleClass="labelSinResaltar marginIzquierdo">
+                                                                                <f:convertNumber />
+                                                                            </h:outputText>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <center>
+                                                                                <h:outputLabel value="Pagos" styleClass="marginIzquierdo">
+                                                                                    <f:ajax event="click" render=":formPagos:divPagosIngresos" listener="#{pagosManager.seleccionarUsuario(usuariosPagos)}"
+                                                                                            onevent="despuesSeleccionarVerPagos"/>
+                                                                                </h:outputLabel>
+                                                                            </center>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <center>
+                                                                                <h:outputLabel value="Eliminar" styleClass="labelSinResaltar">
+                                                                                    <f:ajax event="click" render="@form" execute="@this" onevent="despueseliminar" listener="#{pagosManager.eliminarUsuario(usuariosPagos)}"/>
+                                                                                </h:outputLabel> 
+                                                                            </center>
+                                                                        </h:column>
+                                                                    </h:dataTable>
+
+                                                                    <!--Tabla para agregar un usuario en particular-->
+
+                                                                    <h:dataTable width="100%" cellpadding="0" cellspacing="0" border="0" id="tablaUsuariosBusquedaSinPagos" value="#{pagosManager.dataListUsuariosNoBusqueda}" var="usuariosSinPagos"
+                                                                                 style="width: 100%; display: #{pagosManager.dataListUsuariosNoBusqueda == null or pagosManager.dataListUsuariosNoBusqueda.size() == 0?'none':'block'}"
+                                                                                 rowClasses="filaMorado1, filaMorado2" 
+                                                                                 columnClasses="colUsuariosPago-1 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-2 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-3 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-4 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-5 colUsariosSinPagosPagoBody bordesHeader, colUsuariosPago-6">
+                                                                        <h:column>
+                                                                            <h:outputLabel value="#{usuariosSinPagos.nombres} #{usuariosSinPagos.apellidos}"  styleClass="labelSinResaltar" style="text-transform: capitalize;">
+                                                                                <f:converter converterId="minusculasjava"/>
+                                                                            </h:outputLabel>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <center>
+                                                                                <h:outputLabel value="Agregar"  styleClass="labelSinResaltar">
+                                                                                    <f:ajax event="click" render="@form" execute="@this" onevent="despuesagregargrupo" listener="#{pagosManager.agregarUsuario(usuariosSinPagos)}"/>
+                                                                                </h:outputLabel> 
+                                                                            </center>
+                                                                        </h:column>
+                                                                    </h:dataTable>
+
+                                                                    <!--Tabla para agregar todos los usuarios de un grupo-->
+                                                                    <h:dataTable id="tablaTipoUsuariosSinPago" value="#{pagosManager.dataListTiposUsuarios}" var="usuarios"
+                                                                                 width="100%" cellpadding="0" cellspacing="0" style="width: 100%;"
+                                                                                 rowClasses="filaMorado1, filaMorado2"
+                                                                                 columnClasses="colUsuariosPago-1 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-2 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-3 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-4 bordesHeader colUsariosSinPagosPagoBody, colUsuariosPago-5 colUsariosSinPagosPagoBody bordesHeader, colUsuariosPago-6">
+                                                                        <h:column>
+                                                                            <h:outputLabel value="#{usuarios}" styleClass="labelSinResaltar"/>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            &nbsp;
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <h:outputLabel value="Agregar"  styleClass="labelSinResaltar">
+                                                                                <f:ajax event="click" listener="#{pagosManager.agregarGrupo(usuarios)}" render="@form" execute="@this" onevent="despuesagregargrupo"/>
+                                                                            </h:outputLabel>
+                                                                        </h:column>
+                                                                    </h:dataTable>
+
+                                                                </div>
+
+
+
+                                                            </h:panelGroup>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%">
+                                                        &nbsp;
+                                                    </td>
+                                                    <td style="vertical-align: top;">
+                                                        <div class="marginIzquierdo">
+                                                            <!--//Lista de los abonos que se han hecho-->
+                                                            <h:panelGroup id="divPagosIngresos" layout="block">
+
+                                                                <h:outputLabel value="#{pagosManager.datListAbonosIngresos != null and pagosManager.datListAbonosIngresos.size()==0?'Este usuario no ha registrado aún algún pago':''}">
+
+
+                                                                </h:outputLabel>
+                                                                <div style="width: 100%; display: #{pagosManager.datListAbonosIngresos == null || pagosManager.datListAbonosIngresos.size() == 0?'none':'block'}">
+                                                                    <div class="divTablaHeader" style="width: 100%;">
+                                                                        <table style="width: 100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                                            <thead style="width: 100%;">
+                                                                                <tr>
+                                                                                    <td class="colAbonosIngresos-1 bordesHeader colAbonosIngresosHader">
+                                                                                        Valor
+                                                                                    </td>
+                                                                                    <td class="colAbonosIngresos-2 bordesHeader colAbonosIngresosHader">
+                                                                                        Fecha
+                                                                                    </td>
+                                                                                    <td class="colAbonosIngresos-3">
+                                                                                        &nbsp;
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                        </table>
+                                                                    </div>
+                                                                    <!--Abono para los ingresos-->
+                                                                    <h:dataTable value="#{pagosManager.datListAbonosIngresos}" var="ingresos" id="abonosIngresos"
+                                                                                 width="100%" cellpadding="0" cellspacing="0" border="0" columnClasses="colAbonosIngresos-1 colAbonosIngresosBody bordesHeader, colAbonosIngresos-2 bordesHeader colAbonosIngresosBody, colAbonosIngresos-3">
+                                                                        <h:column>
+                                                                            <h:outputText value="#{ingresos.valor}" styleClass="marginIzquierdo">
+                                                                                <f:convertNumber locale="es_ES"/>
+                                                                            </h:outputText>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <h:outputText value="#{ingresos.fechaabono}" styleClass="marginIzquierdo">
+                                                                                <f:convertDateTime type="both" dateStyle="full" pattern="d MMMM 'de' yyyy  h:mm a" timeZone="America/Bogota"/>
+                                                                            </h:outputText>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <center>
+                                                                                <h:outputLabel value="Eliminar">
+                                                                                    <f:ajax event="click" execute="@this" render=":formPagos:contenedorUsuariosPagos" listener="#{pagosManager.eliminarIngreso(ingresos)}"/>
+                                                                                </h:outputLabel>
+                                                                            </center>
+                                                                        </h:column>
+                                                                    </h:dataTable>
+                                                                </div>
+                                                            </h:panelGroup>
+
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </h:panelGroup>
+
+
+                                        <!--Pagos para los egresos-->
+                                        <h:panelGroup id="tablaListaPagosIngresos" rendered="#{pagosManager.pagoSeleccionado.tipopagos.tipo == 1}">
+                                            <table width="80%" cellpadding="0" cellspacing="0" style="width: 80%; margin: 0 auto;">
+                                                <tr>
+                                                    <td width="50%" style="vertical-align: top;">
+                                                        <div class="divTablaHeader" style="width: 100%;">
+                                                            <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                                                <thead style="width: 100%;">
+                                                                    <tr style="height: 35px">
+                                                                        <th class="colUsuariosEgresos-1 bordesHeader"> 
+                                                                            <label>Valor</label>
+                                                                        </th>
+                                                                        <th class="colUsuariosEgresos-2 bordesHeader"> 
+                                                                            <label>Pago</label>
+                                                                        </th>
+                                                                        <th class="colUsuariosEgresos-3 bordesHeader"> 
+                                                                            <label>Saldo</label>
+                                                                        </th>
+                                                                        <th class="colUsuariosEgresos-4"> 
+                                                                            <label>&nbsp;</label>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+
+
+                                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                                            <tr class="fila1">
+                                                                <td class="colUsuariosEgresos-1 bordesHeader">
+                                                                    <h:outputText value="#{pagosManager.pagoSeleccionado.valor}" styleClass="marginIzquierdo">
+                                                                        <f:convertNumber locale="es_ES"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                                <td class="colUsuariosEgresos-2 bordesHeader">
+                                                                    <center>
+                                                                        <h:inputText id="valorAbonoEgreso" value="0"  disabled="#{pagosManager.saldoEgreso >= pagosManager.pagoSeleccionado.valor ?'true':'false'}" onkeyup="validarNumero(this); if(event.keyCode != 13) return false"
+                                                                                     style="width: 70%;">
+                                                                            <f:convertNumber />
+                                                                            <f:ajax event="keyup" render="@this :formPagos:abonosEgresos saldoEgreso" listener="#{pagosManager.pagarEgresos()}"/>
+                                                                        </h:inputText>
+                                                                    </center>
+                                                                </td>
+                                                                <td class="colUsuariosEgresos-3 bordesHeader">
+                                                                    <h:outputText id="saldoEgreso" value="#{pagosManager.pagoSeleccionado.valor - pagosManager.saldoEgreso}" styleClass="marginIzquierdo">
+                                                                        <f:convertNumber locale="es_ES"/>
+                                                                    </h:outputText>
+                                                                </td>
+                                                                <td class="colUsuariosEgresos-3">
+                                                                    <center>
+                                                                        <h:outputLabel value="Ver Pagos">
+                                                                            <f:ajax event="click" render=":formPagos:abonosEgresos"/>
+                                                                        </h:outputLabel>
+                                                                    </center>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="3%;">
+                                                        &nbsp;
+                                                    </td>
+                                                    <td>
+                                                        <!--//Lista de los abonos que se han hecho-->
+                                                        <h:panelGroup id="divPagos" layout="block">
+                                                            <div class="divTablaHeader" style="width: 100%;">
+                                                                <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                                                    <thead style="width: 100%;">
+                                                                        <tr style="height: 35px">
+                                                                            <th class="colUsuariosPagosEgresos-1 bordesHeader"> 
+                                                                                <label>Valor Abono</label>
+                                                                            </th>
+                                                                            <th class="colUsuariosPagosEgresos-2 bordesHeader"> 
+                                                                                <label>Fecha</label>
+                                                                            </th>
+                                                                            <th class="colUsuariosPagosEgresos-3"> 
+                                                                                <label>&nbsp;</label>
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+
+                                                            <!--Abono para los egresos-->
+                                                            <h:dataTable value="#{pagosManager.datListAbonosEgresos}" var="egresos" id="abonosEgresos" width="100%"
+                                                                         cellpadding="0" cellspacing="0" border="0" rowClasses="fila1, fila2"
+                                                                         columnClasses="colUsuariosPagosEgresos-1 bordesHeader, colUsuariosPagosEgresos-2 bordesHeader, colUsuariosPagosEgresos-3 bordesHeader">
+                                                                <h:column>
+                                                                    <h:outputText value="#{egresos.valor}" styleClass="labelSinResaltar marginIzquierdo">
+                                                                        <f:convertNumber />
+                                                                    </h:outputText>
+                                                                </h:column>
+                                                                <h:column>
+                                                                    <h:outputText value="#{egresos.fecha}" styleClass="marginIzquierdo">
+                                                                        <f:convertDateTime type="both" dateStyle="full" pattern="d MMMM 'de' yyyy  h:mm a" timeZone="America/Bogota"/>
+                                                                    </h:outputText>
+                                                                </h:column>
+                                                                <h:column>
+                                                                    <center>
+                                                                        <h:outputLabel value="Eliminar" onclick="if(!confirm('Desea eliminar el abono a este egreso')) return false;">
+                                                                            <f:ajax event="click" execute="@this" render=":formPagos:tablaListaPagosIngresos" listener="#{pagosManager.eliminarAbonoEgreso(egresos)}"/>
+                                                                        </h:outputLabel>
+                                                                    </center>
+                                                                </h:column>
+                                                            </h:dataTable>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:form>
+
+                    <div id="backgroundPopup" style="z-index: 0" onclick="escongerPopUP()"/>
+                    <br/>
+                </h:panelGroup>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>

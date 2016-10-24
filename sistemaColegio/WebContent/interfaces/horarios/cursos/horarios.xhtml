@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Mi horario</title>
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+	<!--Css locales-->
+	<link href="css/notasAcademicasProfesor.css" rel="stylesheet"
+		type="text/css" />
+
+	<!--Js globales-->
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+	<h:outputScript name="universaljs.js" library="universales/js" />
+
+	<!--Js locales-->
+	<script type="text/javascript" src="js/notasAcademicas.js" />
+
+	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+	<h:outputScript name="ui.datepicker.js" library="dataPicker/js" />
+	<script type="text/javascript">
+		$(function(){
+			
+			 
+		})
+	</script>
+</h:head>
+<h:body>
+
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<h:form id="idFormTablaBusquedaAlumnosPincipal">
+		<br />
+		<br />
+		<h:commandLink>
+			Descargar
+			<p:dataExporter type="xls" target="est" fileName="Horario"
+				pageOnly="true" selectionOnly="true" />
+		</h:commandLink>
+		<br />
+		<br />
+		<br />
+
+
+		<p:dataTable value="#{horariosManager.dataListHorarios}" id="est"
+			var="horarios" widgetVar="provV" emptyMessage="No hay horario disponible">
+			<p:column headerText="Horas">
+				<h:outputText value="#{horarios.fila1}"></h:outputText>
+			</p:column>
+			<p:column headerText="Lunes">
+				<h:outputText value="#{horarios.fila2}"></h:outputText>
+			</p:column>
+			<p:column headerText="Martes">
+				<h:outputText value="#{horarios.fila3}"></h:outputText>
+			</p:column>
+			<p:column headerText="Miercoles">
+				<h:outputText value="#{horarios.fila4}"></h:outputText>
+			</p:column>
+			<p:column headerText="Jueves">
+				<h:outputText value="#{horarios.fila5}"></h:outputText>
+			</p:column>
+			<p:column headerText="Viernes">
+				<h:outputText value="#{horarios.fila6}"></h:outputText>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</h:body>
+</html>

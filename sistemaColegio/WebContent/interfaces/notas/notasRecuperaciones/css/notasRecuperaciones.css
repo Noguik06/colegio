@@ -1,0 +1,27 @@
+#formPrincipal{
+    width: 1270px;
+    min-width: 1270px;
+    max-width: 1270px;
+}
+
+/*###Tabla principal*/
+.colTablaRecupereaciones-1{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
+}
+.colTablaRecupereaciones-2{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
+
+}
+.colTablaRecupereaciones-3{
+
+}    
+
+.colTablaRecupereaciones-4{
+    width: 55%;
+    min-width: 55%;
+    max-width: 55%;   
+}

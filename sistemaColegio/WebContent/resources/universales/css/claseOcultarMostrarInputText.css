@@ -1,0 +1,46 @@
+.claseInputTextAreaDesable{
+    border: 1px solid transparent;    
+    overflow: hidden; 
+    background: transparent; 
+    resize: none
+}
+
+.claseInputTextAreaHoverEdit:focus{
+    background: white;
+    resize: both;
+    overflow: auto; 
+}
+
+.claseInputTextAreaDesableTotal{
+    color: black;
+    cursor: auto;
+}
+
+.claseInputTextAreaHoverEdit:hover{
+    border: 1px solid black;
+    overflow: auto; 
+    background: white; 
+    resize: both;
+}
+
+
+
+/*clase referentes para los input text*/
+.claseInputTextDesable{
+    border: 1px solid transparent;        
+    background: transparent;     
+}
+
+.claseInputTextHoverEdit:focus{
+    background: white;        
+}
+
+.claseInputTextDesableTotal{
+    color: black;
+    cursor: auto;
+}
+
+.claseInputTextHoverEdit:hover{
+    border: 1px solid black;    
+    background: white;     
+}

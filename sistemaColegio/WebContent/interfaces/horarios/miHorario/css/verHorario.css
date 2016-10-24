@@ -1,0 +1,50 @@
+.claseDisplayNoneTrHorarios{
+    display: none;
+}
+
+.claseCol1TablaHorariosByDias{
+    width: 15%;
+}
+.claseCol2TablaHorariosByDias{
+    width: 17%;
+}
+.claseCol3TablaHorariosByDias{
+    width: 17%;
+}
+.claseCol4TablaHorariosByDias{
+    width: 17%;
+}
+.claseCol5TablaHorariosByDias{
+    width: 17%;
+}
+.claseCol6TablaHorariosByDias{
+    width: 17%;
+}
+
+.claseNombresProfesorByAsignatura{
+    color: #4a4a4a;
+    font-size: 15px;
+}
+
+.claseHeaderClassHorariosByDias label{
+    text-shadow: 0 2px 1px rgba(0,0,0,0.3);
+}
+.claseHeaderClassHorariosByDias{
+    background: #AABDE6;
+    color: #FFF;
+    text-decoration: none;    
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);    
+    height: 35px;
+}
+.claseHeaderClassHorariosByHoras label{
+    text-shadow: 0 2px 1px rgba(0,0,0,0.3);
+}
+.claseHeaderClassHorariosByHoras{
+    background: #e0d38f;
+    color: #FFF;
+    text-decoration: none;    
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);    
+    height: 35px;
+}

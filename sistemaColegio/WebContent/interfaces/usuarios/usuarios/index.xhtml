@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="../../../templates/general/templateGeneral.xhtml">
+        <ui:define name="title">
+            <title>Registro Usuarios</title>
+        </ui:define>
+        <ui:define name="content">
+            <h:body rendered="#{rolesManager.registrarUsuarios()}">
+                <br/>
+                <br/>
+                <h:form id="idFormTablaBusquedaAlumnosPincipal" onsubmit="return false;">
+
+
+
+                    <h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css"/>
+
+
+
+                    <!--<h:outputScript name="scrollUniversal.js" library="universales/js"/>-->
+                    <h:outputScript name="jquery.js" library="jquery"/>
+                    <h:outputScript name="jquery-ui.js" library="jquery"/>
+                    <h:outputScript name="ui.datepicker.js" library="dataPicker/js"/>
+                    <script type="text/javascript" src="js/usuarios.js"/>
+
+
+                    <h:outputScript name="validaciones.js" library="universales/js"/>
+
+                    <!--Estilos para eventos de subir y bajar-->
+                    <h:outputScript name="jquery.scrollTo-1.4.2-min.js" library="jquery"/>
+                    <h:outputScript name="jquery.localscroll-1.2.7-min.js" library="jquery"/>
+
+
+                    <h:inputText value="" class="teto123"/>
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>

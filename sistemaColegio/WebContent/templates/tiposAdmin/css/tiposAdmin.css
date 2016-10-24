@@ -1,0 +1,128 @@
+/* 
+    Document   : F12 Proyectos de Inversión
+    Created on : 19/08/2011, 12:00:00 PM
+    Author     : Juan
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+    margin:0;
+    padding:0;
+}
+
+
+
+/*Css del contenedor izquierdo*/
+#containerTipos{
+    margin: 10px auto;
+    margin-top: 50px;
+}
+
+#containerTipos, #containerFormatos{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*Contenedor izquierdo centrado*/
+#wrapperTipos{
+    width: 501px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+/*css de la tabla header principal*/
+#headerAdmin tr, #headerAdminForm{
+    background: #AABDE6;
+}
+
+#headerAdmin-1{
+    width: 100px;
+}
+
+#headerAdmin-2{
+    width: 300px;
+}
+
+#headerAdmin-3{
+    width: 100px;
+}
+
+
+/*css de la tabla body principal*/
+.colADmin-1{
+    width: 100px;
+}
+
+.colAdmin-2{
+    width: 400px;
+}
+
+.colAdmin-3{
+    width: 100px;
+}
+
+
+
+
+/*css de la tabla header principal de Formatos*/
+#headerAdminForm-1{
+    width: 100px;
+}
+
+#headerAdminForm-2{
+    width: 400px;
+}
+
+
+/*css de la tabla body principal*/
+.colAdminForm-1{
+    width: 100px;
+}
+
+.colAdminForm-2{
+    width: 400px;
+}
+
+/*css del contenido de la tabla principal*/
+.rowAdmin, #footerAdminForm tfoot{
+    background: #F7F7F7;
+}
+
+.rowAdmin label{
+    margin-left: 10px; 
+}
+
+#footerAdminForm tfoot tr td{
+    text-align: center;
+    color: blue;
+    
+}
+
+#headerAdmin-3 .rowAdmin label, #headerAdmin-1 .rowAdmin label{
+    margin: 0;
+}
+
+/*css para arreglar las líneas blancas entre cada columna*/
+#headerAdmin tr th, .rowAdmin td, #headerAdminForm tr th{
+    border-left: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+
+/*css para que aparezca las opciones de editar al usuario*/
+.borrarTipo, .editarTipo{
+    display: none;
+    position: absolute;
+    margin-left: 490px;
+    cursor: pointer;
+}
+
+.editarTipo{
+    margin-top: -10px;
+}
+
+.borrarTipo{
+    margin-top: 10px;
+}

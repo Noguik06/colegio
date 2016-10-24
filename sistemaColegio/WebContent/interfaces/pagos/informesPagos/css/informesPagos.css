@@ -1,0 +1,63 @@
+/*
+###Div Utilizado para cuando estamos buscando los usuarios para agregar
+#backgroundPopup{
+    display:none;
+    position:fixed;
+    _position:absolute;  hack for internet explorer 6
+    height:100%;
+    width:100%;
+    top:0;
+    left:0;
+    background:transparent;
+    border:1px solid #cecece;
+    z-index:1;
+}
+
+Div utilizado para colocar los usuarios que pertnecen a un pago
+#usuariosPagos{
+    max-height: 100px;
+    height: 100px;
+    overflow-x:hidden;
+    overflow-y: auto;
+}
+
+Tabla de los pagos
+.colTiposPagos-1{
+    width: 50%;
+    min-width: 50%;
+    max-width: 50%;
+}
+
+.colTiposPagos-2{
+    width: 20%;
+}
+
+
+Tabla */
+
+/*Tabla de los usuarios que tienen deudas pendientes*/
+.colUsuariosInforme-1{
+    width: 50%;   
+    min-width: 50%;   
+    max-width: 50%;   
+}
+
+.colUsuariosInforme-2{
+    min-width: 20%;   
+    max-width: 20%;   
+    width: 20%;   
+}
+
+
+/*Tabla de las deudas de los usuarios que tienen deudas pendientes*/
+.colUsuariosInformeDeudas-1{
+    width: 30%;   
+    min-width: 30%;   
+    max-width: 30%;   
+}
+
+.colUsuariosInformeDeudas-2{
+    width: 30%;   
+    min-width: 30%;   
+    max-width: 30%;   
+}

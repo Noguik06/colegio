@@ -1,0 +1,517 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="../../../templates/general/templateGeneral.xhtml">
+        <ui:define name="title">
+            <title>Horarios</title>
+        </ui:define>
+        <ui:define name="content">
+            <h:body>
+                <link href="css/generacionHorarios.css" rel="stylesheet" type="text/css"/>                        
+                <link href="/sistemaColegio/resources/universales/css/cssUniversalRicardo.css" rel="stylesheet" type="text/css"/>
+                <link href="/sistemaColegio/resources/universales/css/botones.css" rel="stylesheet" type="text/css"/>
+                <link href="/sistemaColegio/resources/universales/css/sombrasUniversales.css" rel="stylesheet" type="text/css"/>
+                <script type="text/javascript" src="/sistemaColegio/resources/jquery/jquery.js"/>
+                <script type="text/javascript" src="/sistemaColegio/resources/universales/js/popUpUniversal.js"/>
+                <script type="text/javascript" src="/sistemaColegio/resources/universales/js/jsUniversalRicardo.js"/>
+                <script type="text/javascript" src="js/generacionHorarios.js"/>
+                <h:form id="idFormPrincial">
+                    <br/>
+                    <h:outputLabel value="#{generacionHorarion.metodoInicioRevisaGeneracionHorario()}"/>
+                    <h:panelGroup layout="block" rendered="#{!generacionHorarion.banderaHorarioGenerado}">
+                        <!--<f:ajax listener="{generacionHorarion.listenerClickBotonGenerarHorario()}" render=":idFormHorario" onevent="onEventBotonGenerarHorarios"/>-->
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+                                    <h:commandButton value="Generar Horario" class="botonNaranja botonesFont">                    
+                                        <f:ajax listener="#{generacionHorarion.metodoBotonGenerarHorarios()}" render=":idFormHorario" onevent="onEventBotonGenerarHorarios"/>
+                                    </h:commandButton>
+                                </td>
+                                <td>
+                                    <div id="idDivImagenCargando" class="claseBordeUniversalRedondear" style="background: white; opacity: 0.9; display: none;">
+                                        <center>
+                                            <h:graphicImage value="/resources/imagenes/ricardoNuevas/cargando2.gif"/>
+                                        </center>            
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" rendered="#{generacionHorarion.banderaHorarioGenerado}">
+                        <table>
+                            <tr>
+                                <td>
+                                    <h:commandButton value="Ver Horarios por Cursos" class="botonAzul botonesFont">
+                                        <f:ajax event="click" listener="#{generacionHorarion.metodoClickVerHorariosByCursos()}" render=":idFormHorario :idFormularioByProfesores" onevent="onEventBotonGenerarHorarios"/>
+                                    </h:commandButton>
+                                </td>
+                                <td>
+                                    <div id="idDivImagenCargandoBotonVerHorarioPorCurso" class="claseBordeUniversalRedondear" style="background: white; opacity: 0.9; height: 20px; width: 30px; padding: 5px; display: none;">
+                                        <center>
+                                            <h:graphicImage value="/resources/imagenes/ricardoNuevas/cargando2.gif" style="height: 100%"/>
+                                        </center>            
+                                    </div>
+                                </td>
+                                <td>
+                                    <h:commandButton value="Ver Horarios por Profesores" class="botonNaranja botonesFont">
+                                        <f:ajax event="click" listener="#{generacionHorarion.metodoVerHorarioByProfesores()}" render=":idFormularioByProfesores:idPanelGroupHoraioByProfesor :idFormHorario" onevent="onEventBotonGenerarHorarios"/>
+                                    </h:commandButton>
+                                </td>
+                                <td>
+                                    <div id="idDivImagenCargandoBotonVerHorarioPorProfesor" class="claseBordeUniversalRedondear" style="background: white; opacity: 0.9; height: 20px; width: 30px; padding: 5px; display: none;">
+                                        <center>
+                                            <h:graphicImage value="/resources/imagenes/ricardoNuevas/cargando2.gif" style="height: 100%"/>
+                                        </center>            
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>                
+                    </h:panelGroup>
+                </h:form>
+                <h:form id="idFormHorario">
+                    <h:panelGroup layout="block" style="width: 100%">
+                        <br/>
+                        <h:dataTable id="idTablaHorariosByCursosUno" value="#{generacionHorarion.listaCursosInicio}" var="cursosGeneral" style="width: 100%">
+                            <h:column>                        
+                                <h:panelGroup  layout="block">
+                                    <h:panelGroup id="idPanelGroupMateriasPendientesByCurso" layout="block" class="claseBorderRadiosTop" style="display: block;width: 90%; margin: 0 auto; text-align: center; font-weight: bolder; background: #f7f5ea; text-shadow: 0 2px 1px rgba(0,0,0,0.3);">
+                                        <div>
+                                            <h:commandButton value="Imprimir PDF" class="botonVerde botonesFont" action="#{generacionHorarion.metodoImprimirHorarioByCurso(cursosGeneral)}" style="float: left;"/>                                                                  
+                                            <div style="padding-top: 5px;">
+                                                <h:outputLabel value="#{cursosGeneral.grados.nombre} ::" />
+                                                <h:outputLabel value="Director: #{cursosGeneral.profesor.usuarios.nombres} #{cursosGeneral.profesor.usuarios.apellidos}" style="font-weight: normal;"/>
+                                            </div>
+                                        </div>
+                                        <h:outputLabel value="#{generacionHorarion.metodoCargaListaHorariosByCurso(cursosGeneral)}" rendered="#{generacionHorarion.banderaHorarioGenerado}"/>
+                                        <h:outputLabel value="#{generacionHorarion.metodoCargaActividadesIntermediasByCurso(cursosGeneral)}"/>
+                                        <h:outputLabel value="#{generacionHorarion.metodoBuscaBloquesByCursoForRenderLista(cursosGeneral)}"/>
+                                        <h:outputLabel value="#{generacionHorarion.metedoRevisarAsignaturasByCursoRenderHTML(cursosGeneral)}"/>
+                                        <h:dataTable value="#{generacionHorarion.listaRelacionprofesoresasignaturaperiodosByCursoRamdon}" var="asignaturasPendientes">
+                                            <h:column>
+                                                <h:outputLabel value="#{asignaturasPendientes.relacionasignaturaperiodos.asignaturas.nombre} #{asignaturasPendientes.cantidadhorasporsemana}" style="display: block; text-align: left; color: #c31624"/>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                    <h:outputLabel class="claseRenderPanelGroupMateriasPendientesByCurso" style="display: none;">
+                                        <f:ajax event="click" render="idPanelGroupMateriasPendientesByCurso"/>
+                                    </h:outputLabel>
+                                </h:panelGroup>                                
+                                <h:dataTable id="idTablaHorariosByBloquesDos" value="#{generacionHorarion.listaBloquesesByCursosGeneral}" class="claseBorderShadowUniversal" style="width: 90%; margin: 0 auto;" var="bloques" columnClasses="claseCol1TablaHorariosByDias, claseCol2TablaHorariosByDias, claseCol3TablaHorariosByDias, claseCol4TablaHorariosByDias, claseCol5TablaHorariosByDias, claseCol6TablaHorariosByDias" rowClasses="filaR1 claseShowTrTableBloqueHorarioHabilitado, filaR2 claseShowTrTableBloqueHorarioHabilitado">
+                                    <h:column headerClass="claseHeaderClassHorariosByHoras">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Hora"/>
+                                        </f:facet>
+                                        <h:outputLabel class="claseShowTrBloqueHorarioHabilitado" rendered="#{cursosGeneral.idcursos == bloques.cursos.idcursos}"/>
+                                        <h:panelGroup layout="block" rendered="#{cursosGeneral.idcursos == bloques.cursos.idcursos}">
+                                            <h:outputLabel value="#{bloques.bloques.horainicio}">
+                                                <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                            </h:outputLabel>-
+                                            <h:outputLabel value="#{bloques.bloques.horafin}">
+                                                <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                            </h:outputLabel>
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Lunes"/>
+                                        </f:facet>                                
+                                        <h:panelGroup layout="block" rendered="#{cursosGeneral.idcursos == bloques.cursos.idcursos}">
+                                            <h:panelGroup id="idPanelGroupLunesByRender" layout="block" >
+                                                <h:dataTable id="idTablaHorariosByActividadesIntermedias" value="#{generacionHorarion.listaRelacionactividadesintermediasbloquescursosGeneralesByCurso}" var="actividadIntermedia" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">                                                
+                                                    <h:column>                                                        
+                                                        <h:panelGroup class="clasePanelGroupValidoRender" layout="block" rendered="#{actividadIntermedia.relacionactividadesintermediasbloques.estadodiaactividad == 1 and actividadIntermedia.relacionactividadesintermediasbloques.bloques.idbloques == bloques.bloques.idbloques}">
+                                                            <h:outputLabel value="#{actividadIntermedia.relacionactividadesintermediasbloques.actividadesintermedias.nombre}"  style="font-style: italic; color: #919192"/>
+                                                        </h:panelGroup>
+                                                    </h:column>
+                                                </h:dataTable>
+                                                <h:dataTable id="idTablaHorariosByHorarioTres" value="#{generacionHorarion.listaHorariosFinal}" var="horarioByBloques" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                    <h:column>                                                                                                                        
+                                                        <f:ajax event="click" listener="#{generacionHorarion.listenerClicCeldaHorarioEditar(horarioByBloques)}" render=":idFormPopUpEditarCeldaHorario" onevent="onEventClicDivCeldaEditHorario">                                                    
+                                                            <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{cursosGeneral.idcursos == horarioByBloques.relacionprofesoresasignaturaperiodo.cursos.idcursos and horarioByBloques.estadodias == 1 and (horarioByBloques.relacionbloquescursos.bloques.idbloques == bloques.bloques.idbloques)}">
+                                                                <h:outputLabel value="#{horarioByBloques.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="display: block;cursor: pointer;"/>
+                                                                <h:panelGroup layout="block" rendered="#{horarioByBloques.relacionprofesoresasignaturaperiodo.profesores.idprofesores > 0}">
+                                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="cursor: pointer; display: block" value="#{horarioByBloques.relacionprofesoresasignaturaperiodo.profesores.usuarios.nombres} #{horarioByBloques.relacionprofesoresasignaturaperiodo.profesores.usuarios.apellidos}"/>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>                                                                
+                                                        </f:ajax>
+                                                    </h:column>
+                                                </h:dataTable>
+                                            </h:panelGroup>
+                                            <h:outputLabel class="claseLabelRenderByEditBloque" style="display: none">
+                                                <f:ajax event="click" render="idPanelGroupLunesByRender" onevent="onEventLabelRenderByBloqueEditado"/>
+                                            </h:outputLabel>
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Martes"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block" rendered="#{cursosGeneral.idcursos == bloques.cursos.idcursos}">
+                                            <h:panelGroup id="idPanelGroupMartesByRender" layout="block" >
+                                                <h:dataTable id="idTablaHorariosByActividadesIntermediasMartes" value="#{generacionHorarion.listaRelacionactividadesintermediasbloquescursosGeneralesByCurso}" var="actividadIntermedia" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">                                                
+                                                    <h:column>                                                        
+                                                        <h:panelGroup class="clasePanelGroupValidoRender" layout="block" rendered="#{actividadIntermedia.relacionactividadesintermediasbloques.estadodiaactividad == 2 and actividadIntermedia.relacionactividadesintermediasbloques.bloques.idbloques == bloques.bloques.idbloques}">
+                                                            <h:outputLabel value="#{actividadIntermedia.relacionactividadesintermediasbloques.actividadesintermedias.nombre}"  style="font-style: italic; color: #919192"/>
+                                                        </h:panelGroup>
+                                                    </h:column>
+                                                </h:dataTable>
+                                                <h:dataTable value="#{generacionHorarion.listaHorariosFinal}" var="horarioByBloques2" rowClasses="claseDisplayNoneTrHorarios">
+                                                    <h:column>                                
+                                                        <f:ajax event="click" listener="#{generacionHorarion.listenerClicCeldaHorarioEditar(horarioByBloques2)}" render=":idFormPopUpEditarCeldaHorario" onevent="onEventClicDivCeldaEditHorario">
+                                                            <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{cursosGeneral.idcursos == horarioByBloques2.relacionprofesoresasignaturaperiodo.cursos.idcursos and horarioByBloques2.estadodias == 2 and (horarioByBloques2.relacionbloquescursos.bloques.idbloques == bloques.bloques.idbloques)}">                                                                                                  
+                                                                <h:outputLabel value="#{horarioByBloques2.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="cursor: pointer; display: block"/>
+                                                                <h:panelGroup layout="block" rendered="#{horarioByBloques2.relacionprofesoresasignaturaperiodo.profesores.idprofesores > 0}">
+                                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="cursor: pointer; display: block" value="#{horarioByBloques2.relacionprofesoresasignaturaperiodo.profesores.usuarios.nombres} #{horarioByBloques2.relacionprofesoresasignaturaperiodo.profesores.usuarios.apellidos}"/>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>
+                                                        </f:ajax>
+                                                    </h:column>                                    
+                                                </h:dataTable>
+                                            </h:panelGroup>
+                                            <h:outputLabel class="claseLabelRenderByEditBloque" style="display: none">
+                                                <f:ajax event="click" render="idPanelGroupMartesByRender" onevent="onEventLabelRenderByBloqueEditado"/>
+                                            </h:outputLabel>
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Miercoles"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block" rendered="#{cursosGeneral.idcursos == bloques.cursos.idcursos}">
+                                            <h:panelGroup id="idPanelGroupMiercolesByRender" layout="block">
+                                                <h:dataTable id="idTablaHorariosByActividadesIntermediasMiercoles" value="#{generacionHorarion.listaRelacionactividadesintermediasbloquescursosGeneralesByCurso}" var="actividadIntermedia" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">                                                
+                                                    <h:column>                                                        
+                                                        <h:panelGroup class="clasePanelGroupValidoRender" layout="block" rendered="#{actividadIntermedia.relacionactividadesintermediasbloques.estadodiaactividad == 3 and actividadIntermedia.relacionactividadesintermediasbloques.bloques.idbloques == bloques.bloques.idbloques}">
+                                                            <h:outputLabel value="#{actividadIntermedia.relacionactividadesintermediasbloques.actividadesintermedias.nombre}"  style="font-style: italic; color: #919192"/>
+                                                        </h:panelGroup>
+                                                    </h:column>
+                                                </h:dataTable>
+                                                <h:dataTable value="#{generacionHorarion.listaHorariosFinal}" var="horarioByBloques3" rowClasses="claseDisplayNoneTrHorarios">
+                                                    <h:column>                                
+                                                        <f:ajax event="click" listener="#{generacionHorarion.listenerClicCeldaHorarioEditar(horarioByBloques3)}" render=":idFormPopUpEditarCeldaHorario" onevent="onEventClicDivCeldaEditHorario">
+                                                            <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{cursosGeneral.idcursos == horarioByBloques3.relacionprofesoresasignaturaperiodo.cursos.idcursos and horarioByBloques3.estadodias == 3 and (horarioByBloques3.relacionbloquescursos.bloques.idbloques == bloques.bloques.idbloques)}">                                            
+                                                                <h:outputLabel value="#{horarioByBloques3.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="cursor: pointer; display: block"/>
+                                                                <h:panelGroup layout="block" rendered="#{horarioByBloques3.relacionprofesoresasignaturaperiodo.profesores.idprofesores > 0}">
+                                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="cursor: pointer; display: block" value="#{horarioByBloques3.relacionprofesoresasignaturaperiodo.profesores.usuarios.nombres} #{horarioByBloques3.relacionprofesoresasignaturaperiodo.profesores.usuarios.apellidos}"/>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>                                                                
+                                                        </f:ajax>
+                                                    </h:column>                                    
+                                                </h:dataTable>
+                                            </h:panelGroup>
+                                            <h:outputLabel class="claseLabelRenderByEditBloque" style="display: none">
+                                                <f:ajax event="click" render="idPanelGroupMiercolesByRender" onevent="onEventLabelRenderByBloqueEditado"/>
+                                            </h:outputLabel>
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Jueves"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block" rendered="#{cursosGeneral.idcursos == bloques.cursos.idcursos}">
+                                            <h:panelGroup id="idPanelGroupJuevesByRender" layout="block" >
+                                                <h:dataTable id="idTablaHorariosByActividadesIntermediasjueves" value="#{generacionHorarion.listaRelacionactividadesintermediasbloquescursosGeneralesByCurso}" var="actividadIntermedia" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                    <h:column>                                                        
+                                                        <h:panelGroup class="clasePanelGroupValidoRender" layout="block" rendered="#{actividadIntermedia.relacionactividadesintermediasbloques.estadodiaactividad == 4 and actividadIntermedia.relacionactividadesintermediasbloques.bloques.idbloques == bloques.bloques.idbloques}">
+                                                            <h:outputLabel value="#{actividadIntermedia.relacionactividadesintermediasbloques.actividadesintermedias.nombre}"  style="font-style: italic; color: #919192"/>
+                                                        </h:panelGroup>
+                                                    </h:column>
+                                                </h:dataTable>
+                                                <h:dataTable value="#{generacionHorarion.listaHorariosFinal}" var="horarioByBloques4" rowClasses="claseDisplayNoneTrHorarios">
+                                                    <h:column>                                
+                                                        <f:ajax event="click" listener="#{generacionHorarion.listenerClicCeldaHorarioEditar(horarioByBloques4)}" render=":idFormPopUpEditarCeldaHorario" onevent="onEventClicDivCeldaEditHorario">
+                                                            <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{cursosGeneral.idcursos == horarioByBloques4.relacionprofesoresasignaturaperiodo.cursos.idcursos and horarioByBloques4.estadodias == 4 and (horarioByBloques4.relacionbloquescursos.bloques.idbloques == bloques.bloques.idbloques)}">                                                        
+                                                                <h:outputLabel value="#{horarioByBloques4.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="cursor: pointer; display: block"/>
+                                                                <h:panelGroup layout="block" rendered="#{horarioByBloques4.relacionprofesoresasignaturaperiodo.profesores.idprofesores > 0}">
+                                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="cursor: pointer; display: block" value="#{horarioByBloques4.relacionprofesoresasignaturaperiodo.profesores.usuarios.nombres} #{horarioByBloques4.relacionprofesoresasignaturaperiodo.profesores.usuarios.apellidos}"/>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>                                                                
+                                                        </f:ajax>
+                                                    </h:column>                                    
+                                                </h:dataTable>
+                                            </h:panelGroup>
+                                            <h:outputLabel class="claseLabelRenderByEditBloque" style="display: none">
+                                                <f:ajax event="click" render="idPanelGroupJuevesByRender" onevent="onEventLabelRenderByBloqueEditado"/>
+                                            </h:outputLabel>
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Viernes"/>
+                                        </f:facet>                                
+                                        <h:panelGroup layout="block" rendered="#{cursosGeneral.idcursos == bloques.cursos.idcursos}">
+                                            <h:panelGroup id="idPanelGroupViernesByRender" layout="block">
+                                                <h:dataTable id="idTablaHorariosByActividadesIntermediasViernes" value="#{generacionHorarion.listaRelacionactividadesintermediasbloquescursosGeneralesByCurso}" var="actividadIntermedia" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                    <h:column>                                                        
+                                                        <h:panelGroup class="clasePanelGroupValidoRender" layout="block" rendered="#{actividadIntermedia.relacionactividadesintermediasbloques.estadodiaactividad == 5 and actividadIntermedia.relacionactividadesintermediasbloques.bloques.idbloques == bloques.bloques.idbloques}">
+                                                            <h:outputLabel value="#{actividadIntermedia.relacionactividadesintermediasbloques.actividadesintermedias.nombre}"  style="font-style: italic; color: #919192"/>
+                                                        </h:panelGroup>
+                                                    </h:column>
+                                                </h:dataTable>
+
+                                                <h:dataTable value="#{generacionHorarion.listaHorariosFinal}" var="horarioByBloques5" rowClasses="claseDisplayNoneTrHorarios">
+                                                    <h:column>
+                                                        <f:ajax event="click" listener="#{generacionHorarion.listenerClicCeldaHorarioEditar(horarioByBloques5)}" render=":idFormPopUpEditarCeldaHorario" onevent="onEventClicDivCeldaEditHorario">
+                                                            <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{cursosGeneral.idcursos == horarioByBloques5.relacionprofesoresasignaturaperiodo.cursos.idcursos and horarioByBloques5.estadodias == 5 and (horarioByBloques5.relacionbloquescursos.bloques.idbloques == bloques.bloques.idbloques)}">
+                                                                <h:outputLabel value="#{horarioByBloques5.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="cursor: pointer; display: block"/>
+                                                                <h:panelGroup layout="block" rendered="#{horarioByBloques5.relacionprofesoresasignaturaperiodo.profesores.idprofesores > 0}">
+                                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="cursor: pointer; display: block" value="#{horarioByBloques5.relacionprofesoresasignaturaperiodo.profesores.usuarios.nombres} #{horarioByBloques5.relacionprofesoresasignaturaperiodo.profesores.usuarios.apellidos}"/>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>                                                                
+                                                        </f:ajax>
+                                                    </h:column>                                    
+                                                </h:dataTable>
+                                            </h:panelGroup>
+                                            <h:outputLabel class="claseLabelRenderByEditBloque" style="display: none">
+                                                <f:ajax event="click" render="idPanelGroupViernesByRender" onevent="onEventLabelRenderByBloqueEditado"/>
+                                            </h:outputLabel>
+                                        </h:panelGroup>
+                                    </h:column>
+                                </h:dataTable>                        
+                                <br/>
+                                <br/>                        
+                            </h:column>
+                        </h:dataTable>
+                        <h:panelGroup layout="block" style=" margin: 0 auto; background: #f7f5ea; position: fixed; bottom: 10px; padding: 15px" rendered="#{!generacionHorarion.banderaHorarioGenerado}">
+                            <h:outputLabel value="Establecer Horarios"  class="botonVerde botonesFont" rendered="#{generacionHorarion.listaCursosInicio.size() > 0}">
+                                <f:ajax event="click" listener="#{generacionHorarion.metodoEstablecerHorario()}"/>
+                            </h:outputLabel>
+                        </h:panelGroup>
+                        <br/>
+                        <br/>                        
+                    </h:panelGroup>               
+                </h:form>
+                <div class="clasePopUpEditarCeldaHorario claseHideByClickDivPantallaUniversal" style="position: fixed; min-height: 30%; width: 30%; z-index: 10; display: none;">
+                    <h:form id="idFormPopUpEditarCeldaHorario" style="width: 100%; height: 100%" onsubmit="return false;">
+                        <h:panelGroup layout="block" style="width: 100%; height: 100%">
+                            <fieldset class="claseSombrasPopUpUniversal" style="width: 100%; height: 100%; background:  white">
+                                <div style="width: 100%;">
+                                    <h:panelGroup layout="block" style="width: 40%; margin: 0 auto; background: #f6eecf;" class="claseBordeUniversalRedondear">
+                                        <h:outputLabel value="Editar Horario (Bloque)" style="display: block; width: 100%; text-align: center;">                                    
+                                        </h:outputLabel>
+                                    </h:panelGroup>                            
+                                    <!--                            <h:panelGroup layout="block" style="width: 40%; margin: 0 auto; background: #f6eecf; float: left;" class="claseBordeUniversalRedondear">
+                                                                    <h:outputLabel value="Editar Horario (Bloque)" style="display: block; width: 100%; text-align: center; cursor: pointer">
+                                                                        <f:ajax event="click" listener="#{generacionHorarion.listnerClickLabelEditarBloquesDefinitivamente()}" render="idPanelGroupParaTablaEditarBloques idPanelGroupParaLabelLimpiarBloque"/>
+                                                                    </h:outputLabel>
+                                                                </h:panelGroup>                            -->
+                                    <!--                            <h:panelGroup id="idPanelGroupParaLabelLimpiarBloque" layout="block">
+                                                                    <h:panelGroup  layout="block" style="width: 40%; margin: 0 auto; background: #be7273; float: right;" class="claseBordeUniversalRedondear" rendered="#{!generacionHorarion.banderaEditarBloqueByHorario}">
+                                                                        <h:outputLabel value="Limpiar bloque" style="display: block; width: 100%; text-align: center; cursor: pointer" onclick="if(!onClickLabelLimpiarBloqueSeleccionado()){return false}">
+                                                                            <f:ajax event="click" listener="#{generacionHorarion.listenerClickLabelLimpiarBloqueDefinitivamente()}" render=":idFormHorario" onevent="onEventClickLabellimpiarBloque"/>
+                                                                        </h:outputLabel>                                    
+                                                                    </h:panelGroup>
+                                                                </h:panelGroup>-->
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <h:panelGroup id="idPanelGroupParaTablaEditarBloques" layout="block">
+                                    <table style="width: 80%; margin: 0 auto;">
+                                        <tr>
+                                            <td>
+                                                <div class="#{!generacionHorarion.banderaEditarBloqueByHorario ? 'claseOpacityUniversal': ''}">
+                                                    <label style="font-weight: bolder">inicio: </label>
+                                                    <h:outputLabel value="#{generacionHorarion.horariosEditarByCelda.relacionbloquescursos.bloques.horainicio}">
+                                                        <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                            </td>
+                                            <td>                                    
+                                                <div class="#{!generacionHorarion.banderaEditarBloqueByHorario ? 'claseOpacityUniversal': ''}">
+                                                    <label style="font-weight: bolder">- Fin: </label>
+                                                    <h:outputLabel value="#{generacionHorarion.horariosEditarByCelda.relacionbloquescursos.bloques.horafin}">
+                                                        <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel class="#{!generacionHorarion.banderaEditarBloqueByHorario ? 'claseOpacityUniversal': ''}" value="Asignatura:"/>                                    
+                                            </td>
+                                            <td>
+                                                <h:selectOneMenu value="#{generacionHorarion.idRelacionAsignaturaPeriodo}" disabled="#{!generacionHorarion.banderaEditarBloqueByHorario}">                                            
+                                                    <f:ajax event="change" listener="#{generacionHorarion.listenerChangeListaAsignaturasByEditHorario()}" render="idPanelGroupListaProfesoresbyEditCelda"/>
+                                                    <f:selectItem itemLabel="Seleccionar ..." itemValue="#{null}"/>
+                                                    <f:selectItems value="#{generacionHorarion.listaRelacionasignaturaperiodosesEditarByCelda}" var="asignatura" itemLabel="#{asignatura.asignaturas.nombre}" itemValue="#{asignatura.idrelacionasignaturaperiodos}"/>
+                                                </h:selectOneMenu>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel class="#{!generacionHorarion.banderaEditarBloqueByHorario ? 'claseOpacityUniversal': ''}" value="Profesor:"/>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup id="idPanelGroupListaProfesoresbyEditCelda" layout="block">
+                                                    <h:selectOneMenu value="#{generacionHorarion.idProfesoresSelectByEditCeldaHorario}" disabled="#{!generacionHorarion.banderaEditarBloqueByHorario}">
+                                                        <f:ajax event="change" />
+                                                        <f:selectItem itemLabel="Seleccionar..." rendered="#{generacionHorarion.listaProfesoresByEditCelda.size() > 0}"/>
+                                                        <f:selectItems value="#{generacionHorarion.listaProfesoresByEditCelda}" var="profesores" itemLabel="#{profesores.usuarios.nombres} #{profesores.usuarios.apellidos}" itemValue="#{profesores.idprofesores}"/>
+                                                    </h:selectOneMenu>
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <br/>
+                                    <h:panelGroup layout="block">
+                                        <h:commandButton value="Realizar cambio" onclick="if(!onClickBotonRealizarIntercambioByCelda()){return false}" class="botonAzul botonesFont #{!generacionHorarion.banderaEditarBloqueByHorario ? 'claseOpacityUniversal': ''}" disabled="#{!generacionHorarion.banderaEditarBloqueByHorario}">
+                                            <f:ajax listener="#{generacionHorarion.listenerBotonRealizarCambios()}" onerror="onErrorBotonRealizarIntercambiarByCeldaHorario" onevent="onEventBotonRealizarIntercambiByCeldaEditHorario"/>
+                                        </h:commandButton>
+                                        <h:outputLabel value="Cancelar" class="botonGris botonesFont" onclick="onClickDivPantallaUniversal(); OnclickDivPantallaEditarHorario()"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </fieldset>
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+                <div class="claseDivPantallaUniversal" style="" onclick="onClickDivPantallaUniversal();OnclickDivPantallaEditarHorario()"/>
+
+                <h:form id="idFormularioByProfesores">
+                    <h:panelGroup id="idPanelGroupHoraioByProfesor" layout="block">
+                        <h:dataTable id="idDataTableHorariosByProfesor" value="#{generacionHorarion.listaProfesoresByHorariosProfesores}" var="profesoresByHorarios" style="width: 80%; margin: 0 auto;">
+                            <h:column>
+                                <h:panelGroup id="idPanelGroupMateriasPendientesByCurso" layout="block" class="claseBorderRadiosTop" style="display: block;width: 100%; margin: 0 auto; text-align: center; font-weight: bolder; background: #f7f5ea; text-shadow: 0 2px 1px rgba(0,0,0,0.3); padding-top: 10px; padding-bottom: 10px;">
+                                    <div>
+                                        <h:commandButton value="Imprimir PDF" class="botonVerde botonesFont" action="#{generacionHorarion.metodoImprimirPRUEBA(profesoresByHorarios)}" style="float: left;"/>                                        
+                                        <div>
+                                            <h:outputLabel value="#{profesoresByHorarios.usuarios.nombres} #{profesoresByHorarios.usuarios.apellidos} :: "/>
+                                            <h:outputLabel value="#{generacionHorarion.metodoBuscaCursoByDirector(profesoresByHorarios)} " style="font-weight: normal"/>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>                        
+                                <h:outputLabel value="#{generacionHorarion.metodoCargaByLabelBloquesByProfesor(profesoresByHorarios)}"/>
+
+                                <h:outputLabel value="#{generacionHorarion.metodoCargaListaHorariosByProfesor(profesoresByHorarios)}"/>
+                                <h:dataTable class="claseBorderShadowUniversal" value="#{generacionHorarion.listaBloquesByHorarioProfesores}" var="bloquesByHorarioProfesor" style="width: 100%" rowClasses="filaR1, filaR2" columnClasses="claseColumna1HoraByHorarioProfesores, claseColumna2LunesByHorarioProfesores, claseColumna2MartesByHorarioProfesores, claseColumna3MiercolesByHorarioProfesores, claseColumna4JuevesByHorarioProfesores, claseColumna5ViernesByHorarioProfesores">
+                                    <h:column headerClass="claseHeaderClassHorariosByHoras">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="Hora"/>
+                                        </f:facet>
+                                        <h:outputLabel value="#{bloquesByHorarioProfesor.horainicio}">
+                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                        </h:outputLabel> -
+                                        <h:outputLabel value="#{bloquesByHorarioProfesor.horafin}">
+                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                        </h:outputLabel>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="LUNES"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block">
+                                            <h:dataTable value="#{generacionHorarion.listaHorariosTEMP}" var="horariosProfesor" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                <h:column>
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 1 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and bloquesByHorarioProfesor.idbloques == horariosProfesor.relacionbloquescursos.bloques.idbloques and !generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 1 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques and ((bloquesByHorarioProfesor.horainicio.compareTo(horariosProfesor.relacionbloquescursos.bloques.horainicio) >= 0) and (( 0 >= bloquesByHorarioProfesor.horafin.compareTo(horariosProfesor.relacionbloquescursos.bloques.horafin))))}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+                                                </h:column>                            
+                                            </h:dataTable>                    
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="MARTES"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block">
+                                            <h:dataTable value="#{generacionHorarion.listaHorariosTEMP}" var="horariosProfesor" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                <h:column>
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 2 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and bloquesByHorarioProfesor.idbloques == horariosProfesor.relacionbloquescursos.bloques.idbloques and !generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 2 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques and ((bloquesByHorarioProfesor.horainicio.compareTo(horariosProfesor.relacionbloquescursos.bloques.horainicio) >= 0) and (( 0 >= bloquesByHorarioProfesor.horafin.compareTo(horariosProfesor.relacionbloquescursos.bloques.horafin))))}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+                                                </h:column>                            
+                                            </h:dataTable>                    
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="MIERCOLES"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block">
+                                            <h:dataTable value="#{generacionHorarion.listaHorariosTEMP}" var="horariosProfesor" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                <h:column>
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 3 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and bloquesByHorarioProfesor.idbloques == horariosProfesor.relacionbloquescursos.bloques.idbloques and !generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 3 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques and ((bloquesByHorarioProfesor.horainicio.compareTo(horariosProfesor.relacionbloquescursos.bloques.horainicio) >= 0) and (( 0 >= bloquesByHorarioProfesor.horafin.compareTo(horariosProfesor.relacionbloquescursos.bloques.horafin))))}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+                                                </h:column>                            
+                                            </h:dataTable>                    
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="JUEVES"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block">
+                                            <h:dataTable value="#{generacionHorarion.listaHorariosTEMP}" var="horariosProfesor" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                <h:column>
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 4 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and bloquesByHorarioProfesor.idbloques == horariosProfesor.relacionbloquescursos.bloques.idbloques and !generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 4 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques and ((bloquesByHorarioProfesor.horainicio.compareTo(horariosProfesor.relacionbloquescursos.bloques.horainicio) >= 0) and (( 0 >= bloquesByHorarioProfesor.horafin.compareTo(horariosProfesor.relacionbloquescursos.bloques.horafin))))}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+                                                </h:column>                            
+                                            </h:dataTable>                    
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <h:column headerClass="claseHeaderClassHorariosByDias">
+                                        <f:facet name="header">
+                                            <h:outputLabel value="VIERNES"/>
+                                        </f:facet>
+                                        <h:panelGroup layout="block">
+                                            <h:dataTable value="#{generacionHorarion.listaHorariosTEMP}" var="horariosProfesor" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                                <h:column>
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 5 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and bloquesByHorarioProfesor.idbloques == horariosProfesor.relacionbloquescursos.bloques.idbloques and !generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup layout="block" class="clasePanelGroupValidoRender" rendered="#{horariosProfesor.estadodias == 5 and profesoresByHorarios.idprofesores == horariosProfesor.relacionprofesoresasignaturaperiodo.profesores.idprofesores and generacionHorarion.banderaHorarioBloquesTEmporalesByProfesorMuchosBloques and ((bloquesByHorarioProfesor.horainicio.compareTo(horariosProfesor.relacionbloquescursos.bloques.horainicio) >= 0) and (( 0 >= bloquesByHorarioProfesor.horafin.compareTo(horariosProfesor.relacionbloquescursos.bloques.horafin))))}">
+                                                        <h:outputLabel class="claseLabelAsignaturaByHorarioProfesor" value="#{horariosProfesor.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}"/>
+                                                        <h:outputLabel class="claseLabelCursoByHorarioProfesor" value="#{horariosProfesor.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                    </h:panelGroup>
+                                                </h:column>                            
+                                            </h:dataTable>                    
+                                        </h:panelGroup>
+                                    </h:column>                            
+                                </h:dataTable>
+                                <br/>
+                                <br/>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                    <!--            <h:panelGroup layout="block" style="position: fixed; bottom: 10px; background: red; padding: 10px;">
+                                    <h:commandButton value="Descar PDF" action="{generacionHorarion.metodoImprimirPRUEBA()}">                                        
+                                    </h:commandButton>
+                                </h:panelGroup>-->
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>
+

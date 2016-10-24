@@ -1,0 +1,71 @@
+
+/*ESTILOS REFERENTES A LA TABLA QUE CONTIENE LA ASIGNACIÓN DE CURSOS-ASIGNATURAS-PROFESORES*/
+
+.claseColumna1TablaTablasAsigCurProf{
+    width: 30%;
+}
+.claseColumna2TablaTablasAsigCurProf{
+    width: 45%;
+}
+.claseColumna3TablaTablasAsigCurProf{
+    width: 25%;
+}
+
+/*tabla con los cursos*/
+.claseColumna1TablaCursos{    
+    width: 15%;
+}
+.claseColumna2TablaCursos{    
+    width: 73%;
+}
+.claseColumna3TablaCursos{    
+    width: 7%;
+}
+
+
+/*Estilos para la tabla Asignaturas*/
+.claseColumna1TablaAsignaturas{
+    width: 10%;
+}
+.claseColumna2TablaAsignaturas{
+    width: 85%;
+}
+
+
+/*Estilo para la tabla Profesores*/
+.claseColumna1TablaProfesores{
+    width: 15%
+}
+.claseColumna2TablaProfesores{
+    width: 55%
+}
+.claseColumna3TablaProfesores{
+    width: 30%        
+}
+
+/*Estilos referentes a la tabla asignaturas por año académico*/
+.claseColumna1TablaTablaAsignaturaByAnoAcademico{    
+    width: 55%;
+}
+.claseColumna2TablaTablaAsignaturaByAnoAcademico{    
+    width: 40%;
+}
+
+/*ESTILO REFERENTES A LA TABLA ASIGNATURAS CON RELACION EN AÑO ACADEMICO*/
+.claseColumna1TablaAsignaturaByAnoAcademico{
+    width: 75%;
+}
+.claseColumna2TablaAsignaturaByAnoAcademico{
+    width: 20%;
+}
+
+/*Estilos referentes a la tabla asignaturas generales*/
+.claseColumna1TablaAsignaturasGenerales{
+    width: 15%;
+}
+.claseColumna2TablaAsignaturasGenerales{
+    width: 70%;
+}
+.claseColumna3TablaAsignaturasGenerales{
+    width: 15%;
+}

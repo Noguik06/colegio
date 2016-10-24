@@ -1,0 +1,324 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputScript name="jquery.js" library="jquery" />
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+
+	<h:outputScript name="ui.core.js" library="dataPicker/js" />
+	<h:outputScript name="ui.datepicker.js" library="dataPicker/js" />
+	<h:outputStylesheet name="demos.css" library="dataPicker/css" />
+
+	<h:outputStylesheet name="ui.theme.css" library="dataPicker/css" />
+	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+	<h:outputScript name="ui.datepicker.js" library="dataPicker/js" />
+
+
+
+	<h:outputScript name="jquery.scrollTo-1.4.2-min.js" library="jquery" />
+	<h:outputScript name="jquery.localscroll-1.2.7-min.js" library="jquery" />
+
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<h:outputStylesheet name="ui.core.css" library="dataPicker/css" />
+
+	<h:outputStylesheet name="ui.theme.css" library="dataPicker/css" />
+	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+
+
+	<h:outputStylesheet name="antiscroll.css" library="antiscroll" />
+
+
+
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="primefaces.css" library="universales/css/" />
+	<h:outputStylesheet name="botones.css" library="universales/css/" />
+</h:head>
+<h:body>
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<br />
+	<br />
+	<h:form id="idFormTablaBusquedaAlumnosPincipal"
+		onsubmit="return false;">
+		<link href="/sistemaColegio/resources/universales/css/tablas.css"
+			rel="stylesheet" type="text/css" />
+		
+		<link href="/sistemaColegio/resources/universales/css/primefaces.css"
+			rel="stylesheet" type="text/css" />
+		<link
+			href="/sistemaColegio/resources/universales/css/claseTablasR.css"
+			rel="stylesheet" type="text/css" />
+		<link href="/sistemaColegio/resources/universales/css/botones.css"
+			rel="stylesheet" type="text/css" />
+
+		<link href="css/miUsuario.css" rel="stylesheet" type="text/css" />
+
+		<h:outputStylesheet name="fieldset.css" library="universales/css" />
+		<h:outputStylesheet name="ui.core.css" library="dataPicker/css" />
+
+		<h:outputStylesheet name="ui.theme.css" library="dataPicker/css" />
+		<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+		<h:outputScript name="jquery.js" library="jquery" />
+		<h:outputScript name="jquery-ui.js" library="jquery" />
+		<h:outputScript name="ui.datepicker.js" library="dataPicker/js" />
+		<script type="text/javascript"
+			src="/sistemaColegio/interfaces/usuarios/miUsuario/js/miUsuario.js" />
+
+
+		<h:outputScript name="jquery.form.js" library="jquery" />
+		<h:outputScript name="validaciones.js" library="universales/js" />
+
+		<!--Estilos para eventos de subir y bajar-->
+		<h:outputScript name="jquery.scrollTo-1.4.2-min.js" library="jquery" />
+		<h:outputScript name="jquery.localscroll-1.2.7-min.js"
+			library="jquery" />
+	</h:form>
+	<br />
+	<br />
+	<br />
+
+	<h:form id="idFormDatosUsuarios" onsubmit="return false"
+		style="width: 90%; margin: 0 auto;">
+		<h:panelGroup class="clasePanelGroupPrincipalDatosEstudiante"
+			style="width: 90%; margin: 0 auto" layout="block"
+			rendered="#{registroUsuarios.miUsuarioEscogido()}">
+			<fieldset class="fieldSetUniversal"
+				style="width: 100%; margin: 0 auto; background: #dadadd">
+				<legend>Información General</legend>
+				<div style="width: 50%; margin-left: 40px;"></div>
+				<fieldset class="fieldSetUniversal"
+					style="width: 50%; margin: 0 auto; background: #f0e6d9">
+					<legend>Información Alumno</legend>
+					<br /> <br />
+
+					<table style="width: 100%">
+						<tr>
+							<td><h:outputLabel value="Usuario" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.nombredeusuario}"
+									styleClass="labelSinResaltar">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Apellidos:" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.apellidos}"
+									styleClass="inputEstudiantes">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Nombres:" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.nombres}"
+									styleClass="inputEstudiantes">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Tipo Identificación:" /></td>
+							<td><h:outputText value="#{registroUsuarios.tipoIdentificacion}">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="No Identificación:" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.numeroidentificacion}"
+									styleClass="inputEstudiantes">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Fecha Nacimiento: " /> <h:outputLabel
+									style="color: grey" value="(dia-mes-año) " /></td>
+							<td><h:outputText class="inputEstudiantes"
+									style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.fechanacimiento}">
+									<f:convertDateTime pattern="dd-MM-yyyy"
+										timeZone="America/Bogota" />
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="email" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.email}"
+									styleClass="inputEstudiantes">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Residencia:" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.direccion}"
+									styleClass="inputEstudiantes">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Teléfono:" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.telefono}"
+									styleClass="inputEstudiantes">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Tipo de Sangre:" /></td>
+							<td><h:outputText style="width: 90%"
+									value="#{registroUsuarios.tipoSangre}">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="EPS:" /></td>
+							<td><h:outputText style="width: 90%" value="#{registroUsuarios.usuarioEscogido.eps}">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Alergias:" /></td>
+							<td><h:outputText style="width: 92%"
+									value="#{registroUsuarios.usuarioEscogido.alergias}"
+									styleClass="inputEstudiantes">
+								</h:outputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Password" /></td>
+							<td><h:inputSecret style="width: 92%"
+									value="#{registroUsuarios.usuarioEscogido.password}"
+									styleClass="inputEstudiantes">
+									<f:ajax event="keyup" execute="@this" />
+								</h:inputSecret></td>
+						</tr>
+					</table>
+				</fieldset>
+				<br /> <br /> <br />
+				<h:panelGroup id="paneltablaRelacionAcudientesEstudiantes">
+					<h:panelGroup
+						rendered="#{registroUsuarios.dataListAcudientesEstudiantes != null and registroUsuarios.dataListAcudientesEstudiantes.size() > 0}">
+						<fieldset class="fieldSetUniversal"
+							style="width: 90%; margin: 0 auto; background: #f0e6d9">
+							<div class="divTablaHeader" id="divTablaHeader"
+								style="width: 100%;">
+								<table style="float: right;" width="100%" cellspacing="0"
+									cellpadding="0" id="headerTablaBusquedaProductos">
+									<thead>
+										<tr>
+											<th class="co1Acudientes bordesHeader">Nombres</th>
+											<th class="co2Acudientes bordesHeader" title="Permitidos">Apellidos</th>
+											<th class="co3Acudientes bordesHeader"
+												title="Cantidad Almacén">Telefono</th>
+											<th class="co4Acudientes bordesHeader">Ocupacion</th>
+											<th class="co5Acudientes bordesHeader">Parentesco</th>
+											<th class="co6Acudientes">CC</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+							<h:dataTable id="idtablaRelacionAcudientesEstudiantes"
+								cellpadding="0" cellspacing="0" border="0" width="100%"
+								value="#{registroUsuarios.dataListAcudientesEstudiantes}"
+								var="acudiantes"
+								columnClasses="co1Acudientes, co2Acudientes, co3Acudientes, co4Acudientes, co5Acudientes, co6Acudientes">
+
+								<h:column class="co1Acudientes bordesHeader">
+									<center>
+										<h:outputText style="width: 90%"
+											value="#{acudiantes.acudientes.nombres}">
+										</h:outputText>
+									</center>
+								</h:column>
+								<h:column class="co2Acudientes bordesHeader">
+									<center>
+										<h:outputText style="width: 90%"
+											value="#{acudiantes.acudientes.apellidos}">
+										</h:outputText>
+									</center>
+
+								</h:column>
+								<h:column class="co3Acudientes bordesHeader">
+									<center>
+										<h:outputText style="width: 90%"
+											value="#{acudiantes.acudientes.telefonofijo}">
+										</h:outputText>
+									</center>
+								</h:column>
+								<h:column class="co4Acudientes bordesHeader">
+									<center>
+										<h:outputText style="width: 90%"
+											value="#{acudiantes.acudientes.ocupacion}">
+										</h:outputText>
+									</center>
+								</h:column>
+								<h:column class="co5Acudientes bordesHeader">
+									<center>
+										<h:outputText style="width: 90%"
+											value="#{acudiantes.parentesco}">
+										</h:outputText>
+									</center>
+								</h:column>
+								<h:column class="co5Acudientes">
+									<center>
+										<h:outputText style="width: 90%"
+											value="#{acudiantes.acudientes.numeroidentificacion}">
+										</h:outputText>
+									</center>
+								</h:column>
+
+								<h:column>
+
+								</h:column>
+
+							</h:dataTable>
+
+						</fieldset>
+					</h:panelGroup>
+				</h:panelGroup>
+
+
+				<br />
+
+
+				<div style="margin: 0 auto; width: 10%">
+					<h:commandButton
+						value="#{registroUsuarios.usuarioEscogido.idusuarios != 0?'Editar usuario':'Crear usuario'} "
+						class="botonVerde botonesFont"
+						onmousedown="if(event.button == 2) return false; if(!confirm('#{registroUsuarios.usuarioEscogido.idusuarios != 0?'Desea editar este usuario':'Desea crear este usuario'}')) return false;">
+						<f:ajax event="mousedown"
+							listener="#{registroUsuarios.crearEditarUsuario}"
+							onevent="guardarEstudiante" onerror="errorGuardarEstudiante"
+							render="  :idFormDatosUsuarios :idFormTablaBusquedaAlumnosPincipal" />
+					</h:commandButton>
+				</div>
+			</fieldset>
+		</h:panelGroup>
+	</h:form>
+	<br />
+	<br />
+	<div id="mensajeAlerta" class="ui-growl ui-widget"
+		style="z-index: 1002; display: none; margin: 0 auto;">
+		<div
+			class="ui-growl-item-container ui-state-highlight ui-corner-all ui-helper-hidden ui-shadow"
+			aria-live="polite" style="display: block;">
+			<div class="ui-growl-item">
+				<div class="ui-growl-icon-close ui-icon ui-icon-closethick"
+					style="display: none;"></div>
+				<span class="ui-growl-image ui-growl-image-info"> </span>
+				<div class="ui-growl-message">
+					<span class="ui-growl-title tituloAlert">Successful</span>
+					<p class="contenidoAlert labelSinResaltar">Welcome :ll</p>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

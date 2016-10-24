@@ -1,0 +1,333 @@
+/*Estilo de una tabla escondida
+.tablaEscondida{
+    display: none;
+}
+
+#####CSS DE LA TABLA DE LAS ASIGNATURAS
+.colTablaAsignaturas-1{
+    width: 30%;    
+    min-width: 30%;    
+    max-width: 30%;    
+}
+
++++TABLA DE LA TABLA DE LAS ASIGNATURAS
+.asiginaturasCol-1{
+    width: 60%;
+    min-width: 60%;
+    max-width: 60%;
+}
+
+.asiginaturasCol-2{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+.colTablaAsignaturas-2{
+
+}
+
+#####CSS DE LA TABLA DE LAS DIMENSIONES DE LAS ASIGNATURAS
+.colTablaDimensiones-1{
+    width: 35%;    
+    min-width: 35%;    
+    max-width: 35%;    
+}
+
+
++++TABLA DE LA TABLA DE LAS DIMENSIONES
+.dimensionesCol-1{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.dimensionesCol-2{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;    
+}
+
+.colTablaDimensiones-2{
+
+}
+
+#####CSS DE LA TABLA DE LAS DIMENSIONES DE LOS ESTUDIANTES
+.colNotasDimensionesEstudiantes-1{
+    width: 50%;    
+    min-width: 50%;    
+    max-width: 50%;    
+}
+
+.notasDimensionesEstudiantes-1{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.notasDimensionesEstudiantes-3{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+.colNotasDimensionesEstudiantes-2{
+
+}
+
+#####CSS DE LA TABLA DE LAS ACTIDADES DE LAS NOTAS
+.colNotasActividades-1{
+    width: 100%;   
+    min-width: 100%;   
+    max-width: 100%;   
+}
+*/
+
+
+.labelClick{
+    font-weight: bolder; 
+    font-size: 22px; 
+    cursor: pointer;
+}
+
+/*###Formulario principal*/
+#notasPrincipal{
+    width: 1200px;
+    min-width: 1150px;
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+
+
+.tablaEscondida{
+    display: none;
+}
+
+
+
+.asiginaturasCol-1{
+    width: 60%;
+    min-width: 60%;
+    max-width: 60%;
+}
+
+.asiginaturasCol-2{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+
+.filaPrincipalAsignaturas{
+    /*display: block;*/ 
+    background: #E0D38F; 
+    min-height: 35px; 
+    width: 100%; 
+    color: green;
+    webkit-border-radius: 6px;
+    padding: 5px 10px;
+    color: black;
+    text-decoration: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    -webkit-user-select: none;
+
+}
+
+
+.mostrarTablaDimensiones, .esconderTablaDimensiones{
+    font-weight: bolder; 
+    font-size: 22px; 
+    cursor: pointer;
+}
+
+/*//####TABLA DE LAS DIMENSIONES*/
+/*#####CSS DE LA TABLA DE LAS DIMENSIONES DE LAS ASIGNATURAS*/
+
+.tablaDimensiones{
+    width: 100%; 
+    min-width: 100%; 
+    max-width: 100%; 
+    padding: 0 10px 5px 10px;
+}
+
+.tablaDimensionesMitad{
+    width: 98%; 
+    min-width: 98%; 
+    max-width: 98%; 
+    margin: 0 auto;
+    background: #F7F5EA;
+}
+
+.tablaDimensionesInterno{
+    width: 99%;
+    min-width: 99%;
+    max-width: 99%;
+    margin: 0 auto;
+}
+
+.filasDimensiones{
+    background: #deb397;    
+    min-height: 30px;
+}
+
+
+.colTablaDimensiones-1{
+    width: 35%;    
+    min-width: 35%;    
+    max-width: 35%;    
+}
+
+
+/*+++TABLA DE LA TABLA DE LAS DIMENSIONES*/
+.dimensionesCol-1{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.dimensionesCol-2{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;    
+}
+
+.mostrarTablaNotas, .esconderTablaNotas{
+    font-weight: bolder; 
+    font-size: 22px; 
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+
+
+
+/*#####TABLA NOTAS*/
+.tablaNotas{
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.tablaNotasMedio{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.tablaNotasInterno{
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.filaItems{
+    background: #AABDE6;
+}
+
+.mostrarTablaActividades, .esconderTablaActividades{
+    font-weight: bolder; 
+    font-size: 22px; 
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+
+.colNotasDimensionesEstudiantes-1{
+    width: 50%;    
+    min-width: 50%;    
+    max-width: 50%;    
+}
+
+.notasDimensionesEstudiantes-1{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.notasDimensionesEstudiantes-3{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+
+/*####ACTIVIDADES*/
+
+.colActividades-2{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.colActividades-3{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+
+}
+
+
+.borderInferior{
+/*    
+    webkit-border-radius: 6px;
+    padding: 5px 10px;
+    color: black;
+    text-decoration: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    */
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+/*    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);*/
+    -webkit-user-select: none;
+
+}
+
+
+/*###columas para los periodos*/
+.periodosCol-0{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+.periodosCol-1{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+
+/*###TABLA DONDE VAN LAS CALIFICACIONES*/
+/*TABLA DONDE VA EL NOMBRE Y LAS CALIFICACIONES*/
+.colregistroMatriculas-1{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
+}
+
+.colregistroMatriculas-2{
+    width: 60%;
+    min-width: 60%;
+    max-width: 60%;
+}
+.colregistroMatriculas-3{
+/*    width: 5%;
+    min-width: 5%;
+    max-width: 5%;*/
+}
+

@@ -1,0 +1,152 @@
+*{
+    text-decoration: none;
+}
+
+a{
+    cursor: pointer;
+    color: blue;
+}
+
+#agregarProductos{
+    width: 500px;
+    border: 1px solid black;
+    height: 150px;
+    margin-top: 10px;
+}
+
+#agregarProductos #almacen{
+    float: left;
+    border-bottom: 1px solid black;
+    width: 250px;
+}
+
+#agregarProductos #bodega{
+    float: right;
+    text-align: right;
+    width: 250px;
+    border-bottom: 1px solid black;
+}
+
+
+
+
+#agregarAlmacen, #agregarBodega{
+    height: 120px;
+    width: 249px;
+}
+
+#agregarAlmacen{
+    border-right: 1px solid black;
+    float: left;
+}
+
+#agregarBodega{
+    float: right;
+}
+
+
+
+
+#agregarProductos input, #agregarProductos label{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.inputAgregar{
+    width: 50px;
+}
+
+#Productos label{
+    float: left;
+    width: 150px;
+    max-width: 140px;
+
+}
+
+#Productos label, #bodega, #almacen{
+    font-size: 12px;
+    font-family: Verdana, Helvetica, sans-serif;
+}
+
+.marcasRows td{
+    height: 16px;
+
+}
+
+.marcasRows td input{
+    border: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.yui-aci2{
+    margin-top: 9px;
+}
+
+.yui-aci2label{
+    margin-top: 9px;
+}
+
+.yui-aci{
+    margin-top: 4px;
+}
+
+.yui-acilabel{
+    margin-top: 6px;
+
+}
+caption{
+    caption-side: bottom;
+}
+
+/*Div que contiene la tabla de los proveedores*/
+#provTable{
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 12px;
+    font-family: sans-serif;
+}
+
+.rowP1{
+    height: 20px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.sinSeleccionar{
+    background: url('http://localhost:8080/sistemaRepuestos/media/images/sinSeleccionar.png') center no-repeat;
+}
+
+.sinSeleccionar:hover{
+    background: url('http://localhost:8080/sistemaRepuestos/media/images/seleccionado.png') center no-repeat;
+}
+
+.seleccionado{
+    background: url('http://localhost:8080/sistemaRepuestos/media/images/seleccionado.png') center no-repeat;
+}
+
+#radioImpuesto table tr td label{
+    width: auto;
+    margin: 0;
+}
+
+.nada{
+    font-size: 10px;
+}
+
+/*Css que se le aplica a los mensajes de error*/
+.error{
+    color: red;
+    font-size: small;
+    font-family: Verdana, Helvetica, sans-serif;
+    text-align: center;
+    margin-right: 100px;
+}
+
+#errorDiv{
+    width: 200px;
+    max-width: 400px;
+}

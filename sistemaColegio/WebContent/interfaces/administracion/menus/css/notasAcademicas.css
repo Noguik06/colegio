@@ -1,0 +1,184 @@
+
+
+/*##Configuración para las tablas##*/
+td {
+    vertical-align: top;
+}
+
+
+
+.labelEnlacesUniversal{
+    color: blue;     
+    cursor: pointer;    
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bolder;    
+}
+
+.inputAgregarPopUP{
+    width: 90%;
+}
+
+/*###Configuración para los div para agregar registros nuevos*/
+.divPopUPAgregar{
+    width: 20%;
+/*    margin-left: auto;
+    margin-right: auto;*/
+    /*z-index: 999;*/
+}
+
+.editarElelmento{
+    background: url("http://localhost:8080/sistemaColegio/resources/images/borrar.gif") no-repeat center;
+    width: 30%;
+    display: inline-block;
+}
+
+.rowsGeneral{
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+
+/*##TABLAS DE LOS CURSOS###*/
+/*++FILAS++*/
+.rowCursos{
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+
+/*+++COLUMNAS+++*/
+.colCursos-1{
+    width: 70%;
+}
+
+.colCursos-1 label{
+    width: 100%;
+}
+
+/*##TABLAS DE LAS ASIGNATURAS##*/
+.colAsignaturas-1{
+    width: 90%;
+}
+
+.colAsignaturas-1 label{
+    width: 100%;
+}
+
+
+/*##TABLAS DE LAS DIMENSIONES##
+.rowDimensiones{
+    height: 30px;
+    max-height: 30px;
+}*/
+
+.colDimensiones-1{
+    width: 5%;
+    min-width: 5%;
+    max-width: 5%;
+}
+
+.colDimensiones-2{
+    width: 50%
+}
+
+.colDimensiones-2 label{
+    /*width: 65%;*/
+}
+
+.colDimensiones-3{
+    width: 20%;
+}
+
+.colDimensiones-3 input, .colDimensiones-3 img{
+    /*margin-top: 5px;*/
+    /*margin-top: 15%;*/
+}
+.colDimensiones-3 img{
+    /*margin-top: 5px;*/
+    margin-top: 15%;
+}
+
+.colDimensiones-4{
+    
+}
+.colDimensiones-5{
+    
+}
+
+/*##TABLAS DE LOS PERIODOS*/
+.colPeriodos-1{
+    width: 100%;
+}
+
+.colPeriodos-1 label{
+    /*width: 100%;*/
+}
+
+/*##TABLAS DE LOS LOGROS*/
+.colLogros-1{
+    width: 5%;
+    min-width: 5%;
+    max-width: 5%;
+}
+.colLogros-2{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.colLogros-2 label{
+    min-width: 92%;
+    max-width: 92%;
+    width: 92%;
+}
+
+
+.colLogros-3{
+    width: 5%;
+    min-width: 5%;
+    max-width: 5%;
+}
+.colLogros-4{
+    
+}
+
+
+/*##Tablas de las notas*/
+.colNotas-1{
+    width: 5%;
+}
+
+.colNotas-2{
+    /*width: 40%;*/
+}
+
+.colNotas-2 label{
+/*    width: 90%;
+    min-width: 90%;
+    max-width: 90%;*/
+}
+
+.colNotas-3{
+    width: 10%;
+}
+
+.colNotas-3 input{
+    width: 100%;
+    max-width: 100%;
+    float: right;
+}
+
+
+.colNotas-4{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+    
+}
+
+.colNotas-5{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+}

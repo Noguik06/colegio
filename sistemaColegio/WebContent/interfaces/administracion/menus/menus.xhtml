@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<f:view contentType="text/html; charset=ISO-8859-1">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<!--Css locales-->
+	<link href="css/informes.css" rel="stylesheet" type="text/css" />
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+	<!--Js globales-->
+	<h:outputScript name="validaciones.js" library="universales/js" />
+	<!--Js locales-->
+	<script type="text/javascript" src="js/informes.js" />
+
+	<title>MENUS</title>
+</h:head>
+<h:body>
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<h:form id="formPrincipal" style="width: 100%; min-width: 100%;">
+		<table width="100%">
+			<tr>
+				<td valign="top" width="20%">
+					<h:outputLabel value="Agregar Menu">
+						<p:ajax event="click"
+							listener="#{menusManager.seleccionarModuloEditar(null)}"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionModulosDialog').show(); PF('statusDialog').hide()"
+							update=":edicionModulos:panelEdicionModulosDialog" />
+					</h:outputLabel> 
+					<p:dataTable id="tblModulos" value="#{menusManager.dataListModulos}" var="menu">
+						<p:column headerText="Nombre Men&#250;">
+							<h:outputLabel value="#{menu.descripcion}">
+								<p:ajax event="click" 
+								listener="#{menusManager.cargarInterfaces(menu)}"
+								onstart="PF('statusDialog').show()"
+								oncomplete="PF('statusDialog').hide()" 
+								process="@this"
+								update=":formPrincipal:tblInterfaces"/>
+							</h:outputLabel>
+						</p:column>
+						<p:column headerText="&nbsp;">
+							<h:outputLabel value="Editar">
+								<p:ajax event="click" listener="#{menusManager.seleccionarModuloEditar(menu)}" execute="@this"
+									onstart="PF('statusDialog').show()"
+									oncomplete="PF('edicionModulosDialog').show(); PF('statusDialog').hide()"
+									update=":edicionModulos:panelEdicionModulosDialog" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</td>
+				<td valign="top" width="80%">
+					<h:outputLabel value="Agregar Interfaz">
+						<p:ajax event="click"
+							listener="#{menusManager.seleccionarInterfazEditar(null)}"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionInterfacesDialog').show(); PF('statusDialog').hide()"
+							update=":edicionInterfaces:panelEdicionInterfacesDialog" />
+					</h:outputLabel>
+					<p:dataTable id="tblInterfaces" value="#{menusManager.dataListInterfaces}" var="menu" >
+						<p:column headerText="Nombre Interfaz" width="20%">
+							<h:outputText value="#{menu.descripcion}"></h:outputText>
+						</p:column>
+						<p:column headerText="Ruta" style="table-layout: fixed;" width="70%">
+							<h:outputText value="#{menu.ruta}"></h:outputText>
+						</p:column>
+						<p:column >
+							<h:outputLabel value="Editar">
+								<p:ajax event="click"
+									listener="#{menusManager.seleccionarInterfazEditar(menu)}"
+									onstart="PF('statusDialog').show()"
+									oncomplete="PF('edicionInterfacesDialog').show(); PF('statusDialog').hide()"
+									update=":edicionInterfaces:panelEdicionInterfacesDialog" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</td>
+			</tr>
+		</table>
+	</h:form>
+	<!--Formulario para agregar/editar Modulos-->
+	<h:form id="edicionModulos" onsubmit="return false;"
+		style="width:100%; min-width:100%; max-width:100%;">
+		<p:dialog id="edicionModulosDialog" header="Editar/Agregar Modulos"
+			widgetVar="edicionModulosDialog" modal="true" height="290px"
+			showEffect="fade" hideEffect="fade" closeOnEscape="true"
+			resizable="false" width="500px"
+			style="width:500px; max-width:500px;">
+			<h:panelGroup layout="block" id="panelEdicionModulosDialog"
+				style="width:100%:">
+				<table width="100%">
+					<tr>
+						<td><h:outputText value="Descripcion:"></h:outputText></td>
+						<td><p:inputText
+								value="#{menusManager.moduloSeleccionadoEditar.descripcion}" size="20"></p:inputText>
+						</td>
+					</tr>
+				</table>
+				<br />
+				<br />
+				<center>
+					<p:commandButton value="Guardar"
+						oncomplete="PF('edicionModulosDialog').hide()"
+						actionListener="#{menusManager.guardarModuloSeleccionado()}"
+						process="@form"
+						update=":formPrincipal:tblModulos">
+					</p:commandButton>
+					&nbsp;
+					<p:commandButton value="Eliminar"
+						oncomplete="PF('edicionModulosDialog').hide()"
+						actionListener="#{menusManager.eliminarEdicion()}"
+						update=":formPrincipal:tblModulos ">
+					</p:commandButton>
+
+				</center>
+			</h:panelGroup>
+			<p:ajax event="close" update="@none" />
+		</p:dialog>
+	</h:form>
+	<!--Formulario para agregar/editar Interfaces-->
+	<h:form id="edicionInterfaces" onsubmit="return false;"
+		style="width:100%; min-width:100%; max-width:100%;">
+		<p:dialog id="edicionInterfacesDialog" header="Editar/Agregar Interfaces"
+			widgetVar="edicionInterfacesDialog" modal="true" height="290px"
+			showEffect="fade" hideEffect="fade" closeOnEscape="true"
+			resizable="false" width="500px"
+			style="width:500px; max-width:500px;">
+			<h:panelGroup layout="block" id="panelEdicionInterfacesDialog"
+				style="width:100%:">
+				<table width="100%">
+					<tr>
+						<td><h:outputText value="Descripcion:"></h:outputText></td>
+						<td><p:inputText
+								value="#{menusManager.interfazSeleccionadaEditar.descripcion}" size="20"></p:inputText>
+						</td>
+					</tr>
+					<tr>
+						<td><h:outputText value="Ruta:"></h:outputText></td>
+						<td><p:inputText
+								value="#{menusManager.interfazSeleccionadaEditar.ruta}" size="20"></p:inputText>
+						</td>
+					</tr>
+				</table>
+				<br />
+				<br />
+				<center>
+					<p:commandButton value="Guardar"
+						oncomplete="PF('edicionInterfacesDialog').hide()"
+						actionListener="#{menusManager.guardarEdicionInterfaz()}"
+						process="@form"
+						update=":formPrincipal:tblInterfaces">
+					</p:commandButton>
+					&nbsp;
+					<p:commandButton value="Eliminar"
+						oncomplete="PF('edicionInterfacesDialog').hide()"
+						actionListener="#{menusManager.eliminarInterfaz()}"
+						update=":formPrincipal:tblInterfaces">
+					</p:commandButton>
+
+				</center>
+			</h:panelGroup>
+			<p:ajax event="close" update="@none" />
+		</p:dialog>
+	</h:form>
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<p:graphicImage name="/imagenes/ajax-loader.gif" />
+	</p:dialog>
+</h:body>
+</f:view>
+</html>

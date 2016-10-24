@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <!--Css globales-->        
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+        <h:outputStylesheet name="botones.css" library="universales/css"/>
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="letras.css" library="universales/css"/>
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+        <h:outputScript name="hoverIntent.js" library="menuPrincipal/js"/>
+        <h:outputScript name="superfish.js" library="menuPrincipal/js"/>
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+
+
+        <!--Css locales-->        
+        <link href="css/notasAcademicas.css" rel="stylesheet" type="text/css" />
+
+        <!--Js globales-->
+        <h:outputScript name="validaciones.js" library="universales/js"/>
+
+        <!--Js locales-->
+        <script type="text/javascript"  src="js/notasAcademicas.js"/>
+
+
+        <title>CONFIGURACION NOTAS ESTUDIANTES</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <div style="width: auto;" >
+                <ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:panelGroup rendered="#{rolesManager.administrarNotas()}">
+            <h:form id="formPrincipalVG" style="width: 100%;">
+                <fieldset class="fieldSetUniversal" style="width: 95%;  margin-left: auto; margin-right: auto;">
+                    <div class="divTablaHeader" style="width: 100%;">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr style="height: 30px;">
+                                    <th class=" bordesHeader" width="10%">
+                                        Curso
+                                    </th>
+                                     <th class=" bordesHeader" width="15%">
+                                        Asignatura
+                                    </th>
+                                    <th>
+                                    	&nbsp;
+                                    </th>
+                                    
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <table cellpadding="0" cellspacing="0" border="0">
+                    	<tr>
+                    		<td class=" bordesHeader" width="10%">
+                    
+                                    <h:panelGroup id="contenedorCursos">
+                                        <h:dataTable id="tablaCursos" value="#{configuracionNotas.dataListCursos}" var="cursos" width="70%" cellpadding="0" cellspacing="0" border="0" styleClass="border2" 
+                                                     columnClasses="colCursos-1">
+                                            <h:column>
+
+                                                <h:outputLabel value="#{cursos.grados.nombre}" styleClass="botonGrisClaro-Verde labelSinResaltar">
+                                                    <f:ajax event="click" render=":formPrincipalVG:tablaRelacionAsignaturasPeriodos" execute="@this" listener="#{configuracionNotas.escogerCurso(cursos)}"
+                                                            onevent="seleccionarCursos"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td class=" bordesHeader" width="15%">
+                                    <h:panelGroup id="contenedorAsignaturas">
+                                        <h:dataTable id="tablaRelacionAsignaturasPeriodos" value="#{configuracionNotas.dataListRelacionasignaturaperiodos}" var="relacionAsignaturaPeriodo" styleClass="border2" 
+                                                     cellpadding="0" cellspacing="0" border="0" width="80%" columnClasses="colAsignaturas-1" style="margin-left: 5%;">
+                                            <h:column>
+                                                <h:outputLabel value="#{relacionAsignaturaPeriodo.asignaturas.nombre}" styleClass="botonGrisClaro-Verde labelSinResaltar">
+                                                	<f:ajax event="click" execute="@this" render=":formPrincipalVG:panelFundaNotas :formPrincipalVG:estudiantes" listener="#{configuracionNotas.escogerAsiganturaVG_1(relacionAsignaturaPeriodo)}"
+                                                            onevent="seleccionarAsignaturas"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+								</td>
+								<td>
+
+									<table cellpadding="0" cellspacing="0" width="100%" >
+										<tr >
+											<td style="border-bottom: 1px solid black; border-right: 1px solid black" width="5%">
+												<div style="height: 50px;">
+													Periodos
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="border-bottom: 1px solid black; border-right: 1px solid black" width="5%">
+												<div style="height: 50px;">
+													Dimensiones
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="border-bottom: 1px solid black; border-right: 1px solid black" width="5%">
+												<div style="height: 100px;">
+													Items
+												</div>
+											</td>
+										</tr>
+										<tr style="height: 100px">
+											<td style="border-bottom: 1px solid black; border-right: 1px solid black" width="5%">
+												Actividades</td>
+										</tr>
+										<tr>
+											<td style="border-bottom: 1px solid black; border-right: 1px solid black" width="5%">
+												<p:dataTable id="estudiantes"
+													value="#{configuracionNotas.dataListRegistromatriculasVG}"
+													var="registroMatriculas">
+													<p:column>
+														<h:outputLabel
+															value="#{registroMatriculas.estudiantes.usuarios.apellidos}">
+															<f:converter converterId="minusculasjava" />
+														</h:outputLabel>
+														<h:outputLabel
+															value="#{registroMatriculas.estudiantes.usuarios.nombres}">
+															<f:converter converterId="minusculasjava" />
+														</h:outputLabel>
+													</p:column>
+												</p:dataTable></td>
+										</tr>
+									</table>
+									</td>
+									<td>
+										<h:panelGroup id="panelFundaNotas" layout="block"
+										style="max-width:500px; overflow-x:scroll;">
+	                                	<h:panelGroup rendered="#{configuracionNotas.dataListPeriodosVG!=null}" id="panelFundaNotasInterno" layout="block" style="width:4000px;">	
+	                                	<table cellpadding="0" cellspacing="0" border="0">
+	                                			<tr>
+                                				<!-- Recorremos la lista de los periodos -->
+                                				<ui:repeat value="#{configuracionNotas.dataListPeriodosVG}"  var="periodosVF" 
+                                					varStatus="periodosVFIndex">
+                                					<td valign="top" style="border-right: 1px solid black;">
+                                						<center>
+                                							<div id="periodosDiv" style="height: 50px">
+                                								<h:outputLabel value="#{periodosVF.periodos.nombre}"/>
+                                							</div>
+                                						</center>
+                                						<table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid black; ">
+                                							<tr>
+                                								<!-- Recorremos la lista de la lista de las dimensiones -->
+                                								<ui:repeat value="#{periodosVF.dataListRelaciondimensionesasignaturasanosVG}" var="dimensionVF"
+                                									varStatus="dimensionVFIndex">
+	                                								<td style="border-right: #{dimensionVFIndex.last?'none':'1px solid black;'}" width="10%">
+	                                									<center>
+	                                										<div id="dimensionesDiv" style="height: 50px">
+	                                											<h:outputLabel value="#{dimensionVF.dimensiones.nombre}"></h:outputLabel>
+	                                										</div>
+	                                									</center>
+	                                									<table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid black;">
+		                                									<tr>
+				                                								<!--Recorremos la lista de los items por dimension y periodo -->
+				                                								<ui:repeat value="#{dimensionVF.relacionnotasdimensionList}" var="itemsVG"
+				                                									varStatus="itemsVGIndex">
+					                                								<td style="border-right: #{itemsVGIndex.last?'none':'1px solid black'}" width="5%">
+																					<center>
+																						<div style="height: 100px;">
+																							<h:outputLabel value="#{itemsVG.nombrenotas}">
+																							</h:outputLabel>
+																						</div>
+																					</center>
+																					<table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid black;">
+																							<tr>
+																								<!--Recorremos la lista de los items por dimension y periodo -->
+																								<ui:repeat value="#{itemsVG.relacionnotaslogrosdimensionboletinList}" 
+																									var="actividadVG"  varStatus="actividadVGIndex">
+																									<td style="border-right: #{actividadVGIndex.last?'none':'1px solid black'}">
+																										<div style="height: 100px;">
+																											<h:outputLabel value="#{actividadVG.nombre}"
+																												style=" writing-mode: vertical-lr;"></h:outputLabel>
+																										</div>
+																										<p:dataTable value="#{actividadVG.notascalificablesList}" var="notaCalificable">
+																											<p:column>
+																												<h:inputText value="#{notaCalificable.valor}" style="width:100%;">
+																													<p:ajax update="@this :messages" listener="#{configuracionNotas.prueba}" 
+																													oncomplete="PF('statusDialog').hide();" onstart="PF('statusDialog').show();"/>
+																												</h:inputText>
+																											</p:column>
+																										</p:dataTable>
+																									</td>
+																								</ui:repeat>
+																							</tr>
+																						</table>
+																					</td>
+			                                									</ui:repeat>
+		                                									</tr>
+                                										</table>
+	                                								</td>
+                                								</ui:repeat>
+                                							</tr>
+                                						</table>
+                                					</td>
+                                				</ui:repeat>
+                                				</tr>
+                                			</table>
+                                			</h:panelGroup>
+                                			</h:panelGroup>
+                                		</td>		
+	                         </tr>       	
+                    </table>
+                </fieldset>
+            </h:form>
+            <div id="backgroundPopup" style="display: none; z-index: 0; width: 1400px;" onclick="escongerPopUP()"/>
+            <br/>
+
+			<p:growl id="messages" showDetail="true" widgetVar="messages" />
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage name="/imagenes/ajaxloadingbar.gif" />
+			</p:dialog>
+	</h:panelGroup>
+    </h:body>
+</html>

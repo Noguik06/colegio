@@ -1,0 +1,274 @@
+
+
+/*##Configuración para las tablas##*/
+td {
+    vertical-align: top;
+}
+
+#formPrincipal{
+    width: 1270px;
+    min-width: 1270px;
+    max-width: 1270px;
+}
+
+.labelEnlacesUniversal{
+    color: blue;     
+    cursor: pointer;    
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bolder;    
+}
+
+.inputAgregarPopUP{
+    width: 90%;
+}
+
+/*###Configuración para los div para agregar registros nuevos*/
+.divPopUPAgregar{
+    width: 20%;
+/*    margin-left: auto;
+    margin-right: auto;*/
+    /*z-index: 999;*/
+}
+
+.divPopUPAgregarEstudiantes{
+    width: 40%;
+/*    margin-left: auto;
+    margin-right: auto;*/
+    /*z-index: 999;*/
+}
+
+.editarElelmento{
+    background: url("http://localhost:8080/sistemaColegio/resources/images/borrar.gif") no-repeat center;
+    width: 30%;
+    display: inline-block;
+}
+
+.rowsGeneral{
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+
+/*###TABLA PRINCIPAL*/
+.colTablaNotasPrincipal-1{
+    width: 9%;
+    min-width: 9%;
+    max-width: 9%;
+}
+
+.colTablaNotasPrincipal-2{
+    width: 12%;
+    min-width: 12%;
+    max-width: 12%;
+}
+
+.colTablaNotasPrincipal-3{
+    width: 20%;
+    min-width: 20%;
+    max-width: 20%;
+}
+
+.colTablaNotasPrincipal-4{
+    width: 8%;
+    min-width: 8%;
+    max-width: 8%;
+}
+
+.colTablaNotasPrincipal-5{
+    width: 16%;
+    min-width: 16%;
+    max-width: 16%;
+}
+
+.colTablaNotasPrincipal-6{
+    width: 18%;
+    min-width: 18%;
+    max-width: 18%;
+}
+
+
+/*##TABLAS DE LOS CURSOS###*/
+/*++FILAS++*/
+.rowCursos{
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+
+/*+++COLUMNAS+++*/
+.colCursos-1{
+    width: 90%;
+}
+
+.colCursos-1 label{
+    width: 100%;
+}
+
+/*##TABLAS DE LAS ASIGNATURAS##*/
+.colAsignaturas-1{
+    width: 90%;
+}
+
+.colAsignaturas-1 label{
+    width: 100%;
+}
+
+
+/*##TABLAS DE LAS DIMENSIONES##
+.rowDimensiones{
+    height: 30px;
+    max-height: 30px;
+}*/
+
+.colDimensiones-1{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+    vertical-align: middle;
+}
+
+.colDimensiones-2{
+    width: 50%;
+    min-width: 50%;
+    max-width: 50%
+}
+
+.colDimensiones-2 label{
+    width: 80%;
+}
+
+.colDimensiones-3{
+    width: 20%;
+    min-width: 20%;
+    max-width: 20%;
+    vertical-align: middle;
+}
+
+.colDimensiones-4{
+    width: 8%;
+    min-width: 8%;
+    max-width: 8%;
+    vertical-align: middle;
+}
+.colDimensiones-5{
+    vertical-align: middle;
+    
+}
+
+/*##TABLAS DE LOS PERIODOS*/
+.colPeriodos-1{
+    width: 100%;
+}
+
+.colPeriodos-1 label{
+    /*width: 100%;*/
+}
+
+/*##TABLAS DE LOS LOGROS*/
+.colLogros-1{
+    width: 5%;
+    min-width: 5%;
+    max-width: 5%;
+}
+.colLogros-2{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.colLogros-2 label{
+    min-width: 85%;
+    max-width: 85%;
+    width: 85%;
+}
+
+
+.colLogros-3{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+    vertical-align: middle;
+}
+.colLogros-4{
+    vertical-align: middle;
+}
+
+
+/*##Tablas de las notas*/
+.colNotas-1{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+    vertical-align: middle;
+}
+
+.colNotas-2{
+    width: 70%;
+}
+
+.colNotas-2 label{
+    width: 70%;
+    min-width: 70%;
+    max-width: 70%;
+    overflow: hidden;
+}
+
+.colNotas-3{
+    width: 20%;
+    vertical-align: middle;
+}
+
+.colNotas-3 input{
+    width: 100%;
+    max-width: 100%;
+    float: right;
+}
+
+
+.colNotas-4{
+    width: 12%;
+    min-width: 12%;
+    max-width: 12%;
+    vertical-align: middle;
+    
+}
+
+.colNotas-5{
+/*    width: 10%;
+    min-width: 10%;*/
+    /*max-width: 10%;*/
+    vertical-align: middle;
+}
+
+
+
+/*###ESTILOS DE LA TABLA DE LAS ACTIVIDADES###*/
+.colActividades-1{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.colActividades-2{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+}
+
+.colActividades-3{
+    
+}
+
+
+
+/*###TABLA EN LA QUE SE REGISTRAN LAS NOTAS###*/
+.tablasEstudiantesCol-1{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.tablasEstudiantesCol-2{
+    
+}

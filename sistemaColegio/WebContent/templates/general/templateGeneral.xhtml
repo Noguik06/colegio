@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputScript name="jquery.js" library="jquery"/>
+        <h:outputScript name="hoverIntent.js" library="menuPrincipal/js"/>
+        <h:outputScript name="superfish.js" library="menuPrincipal/js"/>
+
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+
+
+        <h:outputScript name="ui.core.js" library="dataPicker/js"/>
+        <h:outputScript name="ui.datepicker.js" library="dataPicker/js"/>
+        <h:outputStylesheet name="demos.css" library="dataPicker/css"/>
+
+        <h:outputStylesheet name="ui.theme.css" library="dataPicker/css"/>
+        <h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css"/>
+        <h:outputScript name="ui.datepicker.js" library="dataPicker/js"/>
+
+
+
+        <h:outputScript name="jquery.scrollTo-1.4.2-min.js" library="jquery"/>
+        <h:outputScript name="jquery.localscroll-1.2.7-min.js" library="jquery"/>
+
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+        <!--<h:outputStylesheet name="claseScrollUniversal.css" library="universales/css"/>-->
+        <h:outputStylesheet name="ui.core.css" library="dataPicker/css"/>
+
+        <h:outputStylesheet name="ui.theme.css" library="dataPicker/css"/>
+        <h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css"/>
+
+
+        <h:outputStylesheet name="antiscroll.css" library="antiscroll"/>
+        
+        
+        
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="primefaces.css" library="universales/css/"/>
+        <h:outputStylesheet name="botones.css" library="universales/css/"/>
+
+
+
+        <h:form>
+            <ui:insert name="title">
+                <title>Inicio</title>
+            </ui:insert>
+        </h:form>
+    </h:head>
+
+    <h:body>
+        <h:form>
+            <div style="width: auto;" >
+                <ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml"/>
+            </div>
+        </h:form>
+        <div id="maiContainer">
+
+            <div id="content">
+
+                <ui:insert name="content">
+
+                </ui:insert>
+            </div>
+
+
+
+
+        </div>
+    </h:body>
+</html>

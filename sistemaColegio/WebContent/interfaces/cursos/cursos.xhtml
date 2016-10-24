@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Registro Notas Profesores</title>
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+	<!--Css locales-->
+	<link href="css/notasAcademicasProfesor.css" rel="stylesheet"
+		type="text/css" />
+
+	<!--Js globales-->
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+	<h:outputScript name="universaljs.js" library="universales/js" />
+
+	<!--Js locales-->
+	<script type="text/javascript" src="js/notasAcademicas.js" />
+
+	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+	<h:outputScript name="ui.datepicker.js" library="dataPicker/js" />
+	<script type="text/javascript">
+		$(function(){
+			
+			 
+		})
+	</script>
+</h:head>
+<h:body>
+
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<h:form id="idFormTablaBusquedaAlumnosPincipal">
+		<br />
+		<br />
+		<h:commandLink>
+			Excel
+			<p:dataExporter type="xls" target="est" fileName="Informe Pedidos"
+			pageOnly="true" selectionOnly="true"/>
+		</h:commandLink>
+		&nbsp;
+		<h:commandLink>
+			PDF
+			<p:dataExporter type="pdf" target="est" fileName="Informe Pedidos"
+				pageOnly="true" />
+		</h:commandLink>
+		<p:commandButton id="toggler" type="button" value="Columnas Visibles"
+			style="float:right" icon="ui-icon-calculator"  />
+		<p:columnToggler datasource="esta"  trigger="toggler">
+			<p:ajax event="toggle" update="est" listener="#{listasCursos.onToggle}"/>
+			<f:selectItem itemLabel="teto" itemValue="tato"></f:selectItem>
+		</p:columnToggler>
+		<p:dataTable value="#{listasCursos.dataListEstudiantesMatriculados}"
+			filteredValue="#{listasCursos.dataListEstudiantesMatriculadosSeleccionados}"
+			id="est" var="estudiante" widgetVar="provV"
+			emptyMessage="No hay registros" rowKey="#{estudiante[0]}">
+			<p:column headerText="Nombre" filterBy="#{estudiante[0]}"  width="12%"
+				 rendered="#{listasCursos.list[0]}"
+				sortBy="#{estudiante[0]}" filterMatchMode="contains"
+				filterFunction="#{listasCursos.filterByNombre}">
+				<h:outputText value="#{estudiante[0]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Apellido" filterBy="#{estudiante[1]}"  width="12%"
+				rendered="#{listasCursos.list[1]}"	
+				sortBy="#{estudiante[1]}" filterMatchMode="contains"
+				filterFunction="#{listasCursos.filterByNombre}">
+				<h:outputText value="#{estudiante[1]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Grado" filterBy="#{estudiante[2]}"  width="12%"
+				rendered="#{listasCursos.list[2]}"
+				sortBy="#{estudiante[2]}" filterMatchMode="contains"
+				filterFunction="#{listasCursos.filterByNombre}">
+				<h:outputText value="#{estudiante[2]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="TI" width="3%"
+				rendered="#{listasCursos.list[3]}">
+				<h:outputText value="#{estudiante[3]}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Documento"
+				rendered="#{listasCursos.list[4]}">
+				<h:outputText value="#{estudiante[4]}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Teléfono"
+				rendered="#{listasCursos.list[5]}">
+				<h:outputText value="#{estudiante[5]}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Fecha Nac."
+				rendered="#{listasCursos.list[6]}">
+				<h:outputText value="#{estudiante[6]}"
+					style="text-transform: capitalize;">
+					<f:convertDateTime pattern="dd/MM/yyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Sexo" width="4%"
+				rendered="#{listasCursos.list[7]}">
+				<h:outputText value="#{estudiante[7]=='Femenino'?'F':'M'}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Dirección"
+				rendered="#{listasCursos.list[8]}">
+				<h:outputText value="#{estudiante[8]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="EPS"
+				rendered="#{listasCursos.list[9]}">
+				<h:outputText value="#{estudiante[9]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+		<div style="height: 1px; width: 1px; overflow: hidden;" >
+		<p:dataTable value="#{listasCursos.dataListEstudiantesMatriculados}"
+			id="esta" var="estudiante" widgetVar="provVi"
+			emptyMessage="No hay registros" rowKey="#{estudiante[0]}">
+			<p:column headerText="Nombre" filterBy="#{estudiante[0]}"  width="12%"
+				 rendered="#{listasCursos.list[0]}"
+				sortBy="#{estudiante[0]}" filterMatchMode="contains"
+				filterFunction="#{listasCursos.filterByNombre}">
+				<h:outputText value="#{estudiante[0]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Apellido" filterBy="#{estudiante[1]}"  width="12%"
+				rendered="#{listasCursos.list[1]}"	
+				sortBy="#{estudiante[1]}" filterMatchMode="contains"
+				filterFunction="#{listasCursos.filterByNombre}">
+				<h:outputText value="#{estudiante[1]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Grado" filterBy="#{estudiante[2]}"  width="12%"
+				rendered="#{listasCursos.list[2]}"
+				sortBy="#{estudiante[2]}" filterMatchMode="contains"
+				filterFunction="#{listasCursos.filterByNombre}">
+				<h:outputText value="#{estudiante[2]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="TI" width="3%"
+				rendered="#{listasCursos.list[3]}">
+				<h:outputText value="#{estudiante[3]}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Documento"
+				rendered="#{listasCursos.list[4]}">
+				<h:outputText value="#{estudiante[4]}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Teléfono"
+				rendered="#{listasCursos.list[5]}">
+				<h:outputText value="#{estudiante[5]}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Fecha Nac."
+				rendered="#{listasCursos.list[6]}">
+				<h:outputText value="#{estudiante[6]}"
+					style="text-transform: capitalize;">
+					<f:convertDateTime pattern="dd/MM/yyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Sexo" width="4%"
+				rendered="#{listasCursos.list[7]}">
+				<h:outputText value="#{estudiante[7]=='Femenino'?'F':'M'}"
+					style="text-transform: capitalize;">
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Dirección"
+				rendered="#{listasCursos.list[8]}">
+				<h:outputText value="#{estudiante[8]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="EPS"
+				rendered="#{listasCursos.list[9]}">
+				<h:outputText value="#{estudiante[9]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+		</div>
+	</h:form>
+</h:body>
+</html>

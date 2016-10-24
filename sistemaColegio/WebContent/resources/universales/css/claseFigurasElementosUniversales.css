@@ -1,0 +1,39 @@
+.claseOvaloUniversal {        
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;    
+    border-radius: 100%;
+    text-align: center;
+    padding: 0.5em;
+    /*float: left;*/
+}
+
+.claseCirculoUniversal {        
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.claseCeldaColorDesactivada{
+    background: #b3ad9e;    
+    text-shadow: 0 2px 1px rgba(0,0,0,0.2);    
+}
+
+.claseCeldaColorDesactivadaTotal{
+    background: #7b6867;
+    text-shadow: 0 2px 1px rgba(0,0,0,0.2);    
+}
+
+
+.claseCeldaColorDesactivadaAsignaturasByano{
+    /*background: #b3ad9e;*/
+    background: #e6c397;
+    /*color: white;*/
+    text-shadow: 0 2px 1px rgba(0,0,0,0.2);
+    /*text-align: center;*/
+}
+
+.claseCeldaSeleccionada{
+    background: #359C46;
+    border: 1px solid green;
+}

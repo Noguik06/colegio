@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <!--Css globales-->        
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+        <h:outputStylesheet name="botones.css" library="universales/css"/>
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="letras.css" library="universales/css"/>
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+        <!--Css locales-->        
+        <link href="css/tareasAlumnos.css" rel="stylesheet" type="text/css" />
+
+        <!--Js globales-->
+
+        <h:outputScript name="validaciones.js" library="universales/js"/>
+
+        <!--Js locales-->
+        <script type="text/javascript"  src="js/notasAcademicas.js"/>
+
+        <title>TAREAS ESTUDIANTES</title>
+    </h:head>
+
+    <h:body>
+
+
+
+        <br/>
+
+
+        <fieldset class="fieldSetUniversal" style="width: 97%;  margin-left: auto; margin-right: auto;">
+            <div class="divTablaHeader" style="width: 100%;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr style="height: 30px;">
+                            <th class="colTablaNotasPrincipal-1 bordesHeader">
+                                Curso
+                            </th>
+                            <th class="colTablaNotasPrincipal-2 bordesHeader">
+                                Asignatura
+                            </th>
+                            <th>
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="colTablaNotasTareas-1 bordesHeader ubicacionCeldaMitad">
+                                            Nombre
+                                        </td>
+                                        <td class="colTablaNotasTareas-2 bordesHeader ubicacionCeldaMitad">
+                                            Descripción
+                                        </td>
+                                        <td class="colTablaNotasTareas-3 bordesHeader ubicacionCeldaMitad">
+                                            Fecha
+                                        </td>
+                                        <td class="ubicacionCeldaMitad">
+                                            Archivo
+                                        </td>
+                                    </tr>
+                                </table>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tbody style="width: 100%">
+                    <tr>
+
+                        <td class="colTablaNotasPrincipal-1 bordesHeader">
+                            <h:form id="formCuros" style="width: 100%;">
+                                <h:panelGroup id="contenedorCursos">
+                                    <h:dataTable id="tablaCursos" value="#{staticVariables.dataListCursosTotatales}" var="cursos" width="100%" cellpadding="0" cellspacing="0" border="0"
+                                                 columnClasses="colCursos-1" styleClass="border2">
+                                        <h:column>
+
+                                            <h:outputLabel value="#{cursos.grados.nombre}" styleClass="#{tareasAlumnos.cursoSeleccionado(cursos)?'botonSeleccionadoVerde':'botonGrisClaro-Verde'} labelSinResaltar">
+                                                <f:ajax event="click" render=":formPrincipal :formCuros :formTareas" execute="@this" listener="#{tareasAlumnos.escogerCurso(cursos)}"/>
+                                            </h:outputLabel>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </h:form>
+                        </td>
+                        <td  class="colTablaNotasPrincipal-2 bordesHeader">
+                            <h:form id="formPrincipal" style="width: 100%;">
+                                <h:panelGroup id="contenedorAsignaturas">
+                                    <h:dataTable id="tablaRelacionAsignaturasPeriodos" value="#{tareasAlumnos.dataListRelacionasignaturaperiodos}" var="relacionAsignaturaPeriodo"
+                                                 cellpadding="0" cellspacing="0" border="0" width="100%" columnClasses="colAsignaturas-1 ubicacionCeldaMitad, ubicacionCeldaMitad" styleClass="border2" style="margin-left: 5%;">
+                                        <h:column>
+                                            <h:outputLabel value="#{relacionAsignaturaPeriodo.relacionasignaturaperiodos.asignaturas.nombre}" styleClass="#{tareasAlumnos.asignaturaSeleccionada(relacionAsignaturaPeriodo)?'botonSeleccionadoVerde':'botonGrisClaro-Verde'} labelSinResaltar"
+                                                           style="text-align:  left;">
+                                                <f:ajax event="click" execute="@this" render=":formPrincipal:contenedorAsignaturas :formTareas:panelTareas" listener="#{tareasAlumnos.escogerAsignatura(relacionAsignaturaPeriodo)}"/>
+                                            </h:outputLabel>
+                                        </h:column>
+                                        <h:column>
+                                            <div  style=" #{tareasAlumnos.numeroTareasCurso(relacionAsignaturaPeriodo) > 0 ?'color: red; font-weight:bold':'color: black'}">
+                                                <h:outputLabel value="#{tareasAlumnos.numeroTareas}" style="text-align: left;">
+                                                    <f:convertNumber/>
+                                                </h:outputLabel>
+                                            </div>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </h:form>
+                        </td>
+                        <td>
+
+                            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                                <p:graphicImage value="/resources/imagenes/ajaxloadingbar.gif" />
+                            </p:dialog>
+
+                            <h:form id="formTareas">
+                                <h:panelGroup id="panelTareas">
+                                    <h:dataTable id="tablaTareas" value="#{tareasAlumnos.dataListTareas}" var="tareas" 
+                                    rendered="#{tareasAlumnos.dataListTareas!=null and tareasAlumnos.dataListTareas.size() > 0}" 
+                                    rowClasses="fila1, fila2"
+                                                 width="100%" cellpadding="0" cellspacing="0" border="0" columnClasses="colTablaNotasTareas-1 ubicacionCeldaMitad bordesHeader, ubicacionCeldaMitad colTablaNotasTareas-2 bordesHeader, colTablaNotasTareas-3 ubicacionCeldaMitad bordesHeader, ubicacionCeldaMitad colTablaNotasTareas-4">
+                                        <h:column>
+                                            <h:outputText value="#{tareas.nombre}" styleClass="marginIzquierdo"/>
+                                        </h:column>
+                                        <h:column>
+                                            <div class="marginIzquierdo" style="padding: 20px 0;">
+                                                <h:outputText value="#{tareas.descripcion}"/>
+                                            </div>
+                                        </h:column>
+                                        <h:column>
+                                            <div class="marginIzquierdo">
+                                                <h:outputText value="#{tareas.fecha}">
+                                                    <f:convertDateTime type="both" dateStyle="full" locale="es_ES" pattern="d MMMM 'de' yyyy h:mm a" timeZone="America/Bogota"/>
+                                                </h:outputText>
+                                                -
+                                                <h:outputText value="#{tareas.fin}">
+                                                    <f:convertDateTime type="both" dateStyle="full" locale="es_ES" pattern="d MMMM 'de' yyyy h:mm a" timeZone="America/Bogota"/>
+                                                </h:outputText>
+                                            </div>
+                                        </h:column>
+                                        <h:column>
+                                            <center>
+                                                <p:commandButton id="downloadLink" value="Descargar" ajax="false"
+                                                                 rendered="#{tareas.archivo!=null}"  action="#{tareasAlumnos.prueba()}">
+                                                </p:commandButton>
+                                            </center>
+                                        </h:column>
+                                    </h:dataTable>
+                                    <h:panelGroup rendered="#{tareasAlumnos.dataListTareas!=null and tareasAlumnos.dataListRelacionasignaturaperiodos!= null and tareasAlumnos.dataListRelacionasignaturaperiodos.size() > 0 and tareasAlumnos.dataListTareas.size()== 0}">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tr class="row2" style="height: 30px; min-height:  30px;">
+                                                <td class="ubicacionCeldaMitad" style="text-align: center">
+                                                    <h:outputLabel value="NO HAY TAREAS PENDIENTES EN ESTA ASIGNATURA" class="labelResaltado"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+                            </h:form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </h:body>
+</html>

@@ -1,0 +1,49 @@
+.claseTdCodigo{
+    width: 70%;
+    min-width: 70%;
+    max-width: 70%;
+}
+.claseTdNombres{
+    width: 20%;
+    min-width: 20%;
+    max-width: 20%;
+}
+.claseTdGrado{
+    /*width: 20%;*/
+}
+
+/*##ACUDIENTES ESCOGIDOS*/
+.co1Acudientes{
+    width: 17%;
+    min-width: 17%;
+    max-width: 17%;
+}
+.co2Acudientes{
+    width: 17%;
+    min-width: 17%;
+    max-width: 17%
+}
+.co3Acudientes{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%
+}
+.co4Acudientes{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%
+}
+.co5Acudientes{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%
+}
+
+/*##Filas de las circulares*/
+/*.labelSinResaltar{
+    cursor: pointer;
+}*/
+.filaCircular:hover{
+    background: #ECFFB3;
+    cursor: pointer;
+}

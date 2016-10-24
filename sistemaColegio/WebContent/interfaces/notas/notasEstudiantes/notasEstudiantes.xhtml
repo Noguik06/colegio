@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<h:outputScript name="jquery.js" library="jquery" />
+
+	<!--Css locales-->
+	<link href="css/notasEstudiantes.css" rel="stylesheet" type="text/css" />
+
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+
+	<!--Js globales-->
+	<h:outputScript name="validaciones.js" library="universales/js" />
+	<h:outputScript name="universaljs.js" library="universales/js" />
+
+	<!--Js locales-->
+	<script type="text/javascript" src="js/notasEstudiantes.js" />
+
+	<title>NOTAS ESTUDIANTES</title>
+</h:head>
+<h:body>
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<h:form id="formPrincipal" style="width: 100%;">
+
+		<fieldset class="fieldSetUniversal"
+			style="width: 1200px; margin-left: auto; margin-right: auto;">
+			<!--Cuadramos primero toda la parte del header de las notas de los estudiantes-->
+			<div class="divTablaHeader" style="width: 100%;">
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<thead style="width: 100%">
+						<tr style="height: 30px;">
+							<th class="colTablaNotasPrincipal-1 bordesHeader">Curso</th>
+							<th class="colTablaNotasPrincipal-2 bordesHeader">
+								Asignatura</th>
+							<th class="colTablaNotasPrincipal-3 bordesHeader">Periodos</th>
+							<th class="colTablaNotasPrincipal-4">
+								<h:panelGroup id="headerEjemplo">
+									<table width="100%" cellpadding="0" cellspacing="0" border="0">
+										<tr>
+											<td class="colregistroMatriculas-1 ubicacionCeldaMitad bordesHeader">
+												Estudiante
+											</td>
+											<h:panelGroup
+												rendered="#{notasEstudiantes.periodoSeleccionado!=null and notasEstudiantes.periodoSeleccionado.tipo==0}">
+												<td class="colregistroMatriculas-2 bordesHeader">
+													<table width="100%" cellpadding="0" cellspacing="0">
+														<tr>
+															<ui:repeat
+																rendered="#{notasEstudiantes.banderaPeriodos and notasEstudiantes.dataListRegistroMatriculasEstudiantes != null}"
+																value="#{notasEstudiantes.dataListPeriodosEstudiantesHeader}"
+																var="headerEjemplo">
+																<td width="30%">
+																	<table cellpadding="0" cellspacing="0" width="100%">
+																		<tr>
+																			<td colspan="#{headerEjemplo.dataListDimensionesEstudiantes.size() + headerEjemplo.dataListRelacionrecuperacionregistromatriculas.size() +  1}" class="bordesBottom">
+																				<h:outputLabel value="#{headerEjemplo.periodos.nombre} Periodo" />
+																			</td>
+																		</tr>
+																		<tr>
+																			<ui:repeat
+																				value="#{headerEjemplo.dataListDimensionesEstudiantes}"
+																				var="dimensionesEjemplo">
+																				<td class="bordesHeader" width="18%"><h:outputLabel
+																						value="#{dimensionesEjemplo.dimensiones.nombre}" />
+																				</td>
+																			</ui:repeat>
+																			<ui:repeat
+																				value="#{headerEjemplo.dataListRelacionrecuperacionregistromatriculas}"
+																				var="recuperaciones">
+																				<td class="bordesHeader" width="12%"><h:outputLabel
+																						value="Rec. #{recuperaciones.recuperaciones.numero}" />
+																				</td>
+																			</ui:repeat>
+																			<td>Total</td>
+																		</tr>
+																	</table>
+																</td>
+															</ui:repeat>
+														</tr>
+													</table>
+												</td>
+												<td class="colregistroMatriculas-3">Ver</td>
+											</h:panelGroup>
+
+											<h:panelGroup
+												rendered="#{notasEstudiantes.periodoSeleccionado!=null and notasEstudiantes.periodoSeleccionado.tipo==1}">
+												<td class="colregistroMatriculas-2">
+													<table width="100%" cellpadding="0" cellspacing="0">
+														<tr>
+															<td
+																colspan="#{notasEstudiantes.dataListPeriodosFinal.size() + notasEstudiantes.dataListRecuperaciones.size() +  1}"
+																class="bordesBottom"><h:outputLabel
+																	value="Periodos" />
+															</td>
+														</tr>
+														<tr>
+															<ui:repeat value="#{notasEstudiantes.dataListPeriodosFinal}" var="defPeriodoFinal">
+																<td class="bordesHeader colNotasEstudiantesFinal-Header" width="20%">
+																	<h:outputLabel value="#{defPeriodoFinal.nombre}" />
+																</td>
+															</ui:repeat>
+															<ui:repeat value="#{notasEstudiantes.dataListRecuperaciones}" var="recuperaciones">
+																<td class="bordesHeader colRecEstudiantesFinal-Header" width="15%">
+																	<h:outputLabel value="REC - #{recuperaciones.numero}" />
+																</td>
+															</ui:repeat>
+															<td class="colregistroMatriculas-3">Final</td>
+														</tr>
+													</table>
+												</td>
+											</h:panelGroup>
+										</tr>
+									</table>
+								</h:panelGroup>
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tbody style="width: 100%">
+					<tr>
+						<td
+							class="colTablaNotasPrincipal-1 bordesHeader ubicacionCeldaArriba">
+							<h:panelGroup id="contenedorCursos" layout="block">
+								<h:dataTable id="tablaCursos"
+									value="#{notasEstudiantes.dataListCursos}" var="cursos"
+									width="100%" cellpadding="0" cellspacing="0" border="0"
+									class="ubicacionCeldaArriba border2">
+									<h:column>
+										<h:outputLabel value="#{cursos.grados.nombre}"
+											style="text-transform: capitalize;"
+											styleClass="botonCurso botonAsignaturas botonGrisClaro-Verde labelSinResaltar">
+											<f:ajax event="click" execute="@this"
+												render=" :formPrincipal:contenedorPeriodos :formPrincipal:contenedorAsignaturas :formPrincipal:contenedorEstudiantes :formPrincipal:headerEjemplo"
+												listener="#{notasEstudiantes.escogerCurso(cursos)}"
+												onevent="seleccionarCurso" />
+											<f:converter converterId="minusculasjava" />
+										</h:outputLabel>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup>
+						</td>
+						<td
+							class="colTablaNotasPrincipal-2 bordesHeader ubicacionCeldaArriba">
+							<h:panelGroup id="contenedorAsignaturas">
+								<h:dataTable id="tablaRelacionAsignaturasPeriodos"
+									value="#{notasEstudiantes.dataListAsignaturas}"
+									var="relacionAsignaturaPeriodo" cellpadding="0" cellspacing="0"
+									border="0" width="100%" columnClasses="colAsignaturas-1"
+									styleClass="border2" style="margin-left: 5%;">
+									<h:column>
+										<h:outputLabel
+											value="#{relacionAsignaturaPeriodo.asignaturas.nombre}"
+											styleClass="botonAsignaturas botonGrisClaro-Verde labelSinResaltar"
+											style="text-transform: capitalize;">
+											<f:ajax event="click" execute="@this"
+												render=":formPrincipal:contenedorPeriodos :formPrincipal:contenedorEstudiantes :formPrincipal:headerEjemplo"
+												listener="#{notasEstudiantes.escogerAsignatura(relacionAsignaturaPeriodo)}"
+												onevent="seleccionarAsignatura" />
+											<f:converter converterId="minusculasjava" />
+										</h:outputLabel>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup>
+						</td>
+						<td
+							class="colTablaNotasPrincipal-3 bordesHeader ubicacionCeldaArriba">
+							<h:panelGroup id="contenedorPeriodos">
+								<h:dataTable value="#{notasEstudiantes.dataListPeriodos}"
+									var="periodo" styleClass="border2" width="100%" cellpadding="0"
+									cellspacing="0"
+									rendered="#{notasEstudiantes.banderaPeriodos?true:false}">
+									<h:column>
+										<h:outputLabel value="#{periodo.nombre}"
+											styleClass="botonPeriodos botonGrisClaro-Verde labelSinResaltar">
+											<f:ajax event="click"
+												render=":formPrincipal:contenedorEstudiantes :formPrincipal:headerEjemplo"
+												listener="#{notasEstudiantes.escogerPeriodo(periodo)}"
+												onevent="seleccionarPeriodos" />
+										</h:outputLabel>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup>
+						</td>
+
+						<td class="colTablaNotasPrincipal-4 " style="vertical-align: top;">
+
+							<div id="backgroundCargando"></div> <h:panelGroup
+								id="contenedorEstudiantes" layout="block">
+								<!-- Tabla de la definitiva por periodo -->
+								<h:dataTable
+									value="#{notasEstudiantes.dataListRegistroMatriculasEstudiantes}"
+									var="rme"
+									columnClasses="colregistroMatriculas-1 bordesHeader, colregistroMatriculas-2 bordesHeader, colregistroMatriculas-3"
+									rowClasses="row1, row2" cellpadding="0" cellspacing="0"
+									border="0" width="100%"
+									style="display:#{notasEstudiantes.dataListRegistroMatriculasEstudiantes==null ?'none':'auto'}">>
+                                        <h:column>
+										<h:outputLabel
+											value="#{rme.registromatriculas.estudiantes.usuarios.apellidos} #{rme.registromatriculas.estudiantes.usuarios.nombres}"
+											style="text-transform: capitalize;"
+											styleClass="marginIzquierdo">
+											<f:converter converterId="minusculasjava" />
+										</h:outputLabel>
+									</h:column>
+									<h:column>
+										<table width="100%" cellpadding="0" cellspacing="0" border="0">
+											<tr>
+												<ui:repeat value="#{rme.dataListPeriodosEstudiantes}"
+													var="periodos">
+													<td width="20%">
+
+														<table width="100%" cellpadding="0" cellspacing="0"
+															border="0">
+															<tr>
+																<ui:repeat
+																	value="#{periodos.dataListDimensionesEstudiantes}"
+																	var="dimensiones">
+																	<td width="18%" class="bordesHeader"><h:outputLabel
+																			value="#{dimensiones.valor}"
+																			styleClass="marginIzquierdo">
+																			<f:convertNumber locale="es_ES" />
+																		</h:outputLabel></td>
+																</ui:repeat>
+																<ui:repeat
+																	value="#{periodos.dataListRelacionrecuperacionregistromatriculas}"
+																	var="recuperaciones">
+																	<td width="12%" class="bordesHeader"><h:outputLabel
+																			value="#{recuperaciones.valor==null?0:recuperaciones.valor}"
+																			styleClass="marginIzquierdo">
+																			<f:convertNumber locale="es_ES" />
+																		</h:outputLabel></td>
+																</ui:repeat>
+																<td><h:outputLabel
+																		value="#{periodos.valor == -1?'Error':periodos.valor}"
+																		styleClass="marginIzquierdo marginIzquierdo">
+																		<f:convertNumber locale="es_ES" />
+																	</h:outputLabel></td>
+															</tr>
+														</table>
+													</td>
+												</ui:repeat>
+											</tr>
+										</table>
+									</h:column>
+									<h:column>
+										<center>
+											<h:outputLabel value="Boletin" styleClass="labelResaltado"
+												style="cursor: pointer;">
+												<f:ajax event="click"
+													listener="#{notasEstudiantes.seleccionarEstudiantes(rme)}"
+													render=":formPrincipal:logrosBoletines :formPrincipal:estudianteLogrosBoletines"
+													onevent="cargarVerboletines" />
+											</h:outputLabel>
+										</center>
+									</h:column>
+								</h:dataTable>
+
+
+								<!-- Tabla de la definitiva de todo el año del estudiante -->
+								<h:dataTable value="#{notasEstudiantes.dataListDefinitivas}"
+									var="def"
+									columnClasses="colregistroMatriculas-1 bordesHeader, colregistroMatriculas-2 bordesHeader, colregistroMatriculas-3"
+									rowClasses="row1, row2" cellpadding="0" cellspacing="0"
+									border="0" width="100%">
+									<h:column>
+										<h:outputLabel
+											value="#{def.estudiantes.usuarios.apellidos} #{def.estudiantes.usuarios.nombres}"
+											style="text-transform: capitalize;"
+											styleClass="marginIzquierdo">
+											<f:converter converterId="minusculasjava" />
+										</h:outputLabel>
+									</h:column>
+									<h:column>
+										<table width="100%" cellpadding="0" cellspacing="0" border="0">
+											<tr>
+												<ui:repeat
+													value="#{def.dataListDefinitivasasignaturasperiodos}"
+													var="defperiodo">
+													<td width="20%" class="colNotasEstudiantesFinal-Body bordesHeader">
+														<h:outputLabel value="#{defperiodo.valor}" styleClass="marginIzquierdo">
+																<f:convertNumber locale="es_ES" />
+														</h:outputLabel>
+													</td>
+												</ui:repeat>
+												<ui:repeat
+													value="#{def.dataListRelacionrecuperacionregistromatriculas}"
+													var="recuperacionfinal">
+													<td width="15%"
+														class="colRecEstudiantesFinal-Body bordesHeader">
+														<h:outputLabel
+															value="#{recuperacionfinal.valor}" styleClass="marginIzquierdo">
+															<f:convertNumber locale="es_ES" />
+														</h:outputLabel>
+													</td>
+												</ui:repeat>
+												<td>
+													<h:outputLabel value="#{def.definitiva}"
+															styleClass="marginIzquierdo" style="color:#{65>def.definitiva?'red':''};">
+															<f:convertNumber locale="es_ES" />
+													</h:outputLabel>
+												</td>
+											</tr>
+										</table>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
+
+
+		<fieldset id="logrosBoletines"
+			class="fieldSetUniversal divLogrosBoletines" style="display: none;">
+			<legend style="text-transform: uppercase;">
+				<h:panelGroup id="estudianteLogrosBoletines">
+					<h:outputText
+						value="#{notasEstudiantes.estudiantesSeleccionado.usuarios.apellidos} #{notasEstudiantes.estudiantesSeleccionado.usuarios.nombres}" />
+				</h:panelGroup>
+			</legend>
+			<h:dataTable id="logrosBoletines"
+				value="#{notasEstudiantes.dataListAsignaturasBoletines}"
+				var="boletin" width="100%" cellpadding="0" cellspacing="0"
+				border="0">
+				<h:column>
+					<div class="divTablaHeader" style="width: 100%;">
+						<table width="100%" cellpadding="0" cellspacing="0" border="0">
+							<thead style="width: 100%">
+								<tr style="height: 30px;">
+									<th class="colVerLogrosBoletines-1 bordesHeader"><h:outputText
+											value="Indicador de Logro" /></th>
+									<th class="colVerLogrosBoletines-2"><h:outputText
+											value="Valor" /></th>
+								</tr>
+							</thead>
+						</table>
+
+						<div style="max-height: 500px; overflow-y: auto; color: black;">
+							<h:dataTable value="#{boletin.dataListLogros}"
+								var="logrosBoletin" width="100%;" cellpadding="0"
+								cellspacing="0" border="0"
+								columnClasses="colVerLogrosBoletines-1 bordesHeader, colVerLogrosBoletines-2"
+								rowClasses="filaMorado1, filaMorado2">
+								<h:column>
+									<div class="marginIzquierdo">
+										<h:outputText value="#{logrosBoletin.logro.logro}"
+											styleClass="labelSinResaltar" />
+									</div>
+								</h:column>
+								<h:column>
+									<h:outputText rendered="#{logrosBoletin.valor >= 0}"
+										value="#{logrosBoletin.valor}"
+										styleClass="labelSinResaltar marginIzquierdo">
+										<f:convertNumber locale="es_ES" />
+									</h:outputText>
+									<h:outputText rendered="#{0 > logrosBoletin.valor}"
+										value="Error" styleClass="labelResaltado marginIzquierdo">
+									</h:outputText>
+								</h:column>
+							</h:dataTable>
+						</div>
+					</div>
+				</h:column>
+			</h:dataTable>
+		</fieldset>
+
+
+		<div id="backgroundPopup" style="display: none; z-index: 0"
+			onclick="escongerPopUP()" />
+	</h:form>
+	<div id="mensajeAlerta" class="ui-growl ui-corner-all ui-widget"
+		style="z-index: 1002; display: none; margin: 0 auto;">
+		<div style="display: block;">
+			<div class="ui-growl-item">
+				<span class="ui-growl-image ui-growl-image-info"> </span> <span
+					class="ui-messages-error-icon" style=""> </span>
+				<div class="ui-growl-message">
+					<span class="ui-growl-title tituloAlert">Successful</span>
+					<p class="contenidoAlert labelSinResaltar">Welcome :ll</p>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

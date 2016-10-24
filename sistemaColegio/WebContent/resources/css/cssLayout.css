@@ -1,0 +1,91 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+    margin:0;
+    padding:0;
+}
+
+body{
+    /*background: url(/sistemaColegio/resources/imagenes/fondos/fondosInterfaces.jpeg);*/
+}
+
+
+#top {
+    position: relative;
+    background-color: #036fab;
+    color: white;
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+}
+
+#bottom {
+    position: relative;
+    background-color: #c2dfef;
+    padding: 5px;
+    margin: 10px 0px 0px 0px;
+}
+
+/*Logo de las páginas de las entidades*/
+#logo{
+/*    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: url("/sistemaContraloria/resources/images/logo2.jpg") white no-repeat;*/
+}
+
+tr{
+    height: 25px;
+}
+
+#logo label{
+    font-weight: bold;
+/*    float: left;
+    width: 80px;*/
+}
+
+#logo label:hover{
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+/*Css del container que cubre todo*/
+#maiContainer{
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+
+/*Css del contenedor de la tabla principal*/
+.tableBody{
+    max-width: 100%;
+    width: auto;
+    overflow: hidden;
+    padding-bottom: 30px;
+}
+
+.tableBody:hover{
+/*    width: 100%;*/
+    overflow-x: scroll;
+}
+
+
+
+
+/*css para que aparezca las opciones de borrar la tabla*/
+.borrarRegistro{
+    display: none;
+    position: absolute;
+    left: 2.5%;
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+
+
+body{
+    background: url(/sistemaColegio/resources/imagenes/fondos/fondosInterfaces.jpeg);
+    background-attachment: fixed;
+    /*background-position: center;*/
+    /*background-attachment: fixed;*/
+}

@@ -1,0 +1,43 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<body>
+	<h:form id="formMenu">
+		<div
+			style="width: 100%; height: 30px; z-index: 9999; background: #2D2D2D; position: fixed;">
+			<h:commandLink value="Cerrar Sesión"
+				action="#{sesiones.cerrarSesion}"
+				style="float: right; margin-top: 7px; margin-right: 20px; color: #CCC!important;">
+				<f:ajax render="@form" />
+			</h:commandLink>
+
+			<h:outputLabel
+				value="#{sesiones.usuarios.nombres}  #{sesiones.usuarios.apellidos}"
+				style="float: right; margin-right: 20%; margin-top: 7px; margin-right: 20px; color: #CCC!important; text-transform: capitalize;">
+				<f:converter converterId="minusculasjava" />
+			</h:outputLabel>
+
+			<ul class="sf-menu">
+				<ui:repeat value="#{sesiones.dataListPermisosModulos}" var="modulo">
+					<li><a class="linkLugar" href="#">#{modulo[1]}</a>
+						<ul class="sf-menu">
+							<ui:repeat value="#{sesiones.dataListPermisos}" var="interfaces">
+								<h:panelGroup rendered="#{modulo[0] == interfaces[2]}">
+									<li><a class="Ventas" href="#{request.contextPath}/#{interfaces[1]}">#{interfaces[0]}</a>
+									</li>
+								</h:panelGroup>
+							</ui:repeat>
+						</ul></li>
+				</ui:repeat>
+			</ul>
+		</div>
+		<br />
+		<br />
+	</h:form>
+</body>
+</html>
+
+

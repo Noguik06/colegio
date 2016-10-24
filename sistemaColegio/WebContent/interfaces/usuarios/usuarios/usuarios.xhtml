@@ -1,0 +1,641 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	
+	
+	<h:outputScript library="js" name="calendar_es.js" />
+
+	<link href="css/usuarios.css" rel="stylesheet" type="text/css" />
+
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<!--<h:outputStylesheet name="claseScrollUniversal.css" library="universales/css"/>-->
+	<h:outputStylesheet name="ui.core.css" library="dataPicker/css" />
+
+	<h:outputStylesheet name="ui.theme.css" library="dataPicker/css" />
+
+	<script type="text/javascript" src="js/usuarios.js" />
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+
+	<h:outputScript name="universaljs.js" library="universales/js" />
+	
+	
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+	
+	<title>Registro Usuarios</title>
+</h:head>
+<h:body>
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<br />
+	<br />
+	<h:form id="idFormTablaBusquedaAlumnosPincipal"
+		onsubmit="return false;">
+		<h:panelGroup layout="block" style="width: 70%; margin: 0 auto;">
+			<div id="idDivInputBuscarProveedor1" class="claseDivBuscarPrincipal"
+				style="float: right; width: 21.5%">
+				<table style="width: 100%;">
+					<tr>
+						<td>
+							<div class="claseDivLabelBuscarPrincipal">
+								<h:outputLabel value="Buscar:" class="claseLabelBuscarPrincipal" />
+							</div>
+						</td>
+
+						<td><h:inputText id="inputTextBuscar"
+								value="#{registroUsuarios.query}"
+								class="claseInputTextBuscarPrincipal"
+								onfocus="guardarValorEspecial(this); guardarValorLetras(this)"
+								onkeyup="recorrerListaBusquedaProductos(event.keyCode); if(validarLetras(this)) return false;">
+								<f:ajax event="keyup"
+									render="idPanelGroupLabelSeEncontro idPanelGroupContenedorTablaPrincipal"
+									onevent="onEventInputTextBuscarEstudiantes" />
+							</h:inputText></td>
+					</tr>
+				</table>
+			</div>
+			<br />
+
+			<table width="100%">
+				<tr>
+					<td><h:outputLabel value="¡Agregar Usuario!"
+							style="color: blue; margin-bottom: 5px; font-size: 15px; font-weight: bolder; cursor: pointer; font-style: italic; display: block">
+							<f:ajax event="click"
+								render=":idFormDatosUsuarios :idFormDatosUsuarios"
+								listener="#{registroUsuarios.nuevoUsuario()}"
+								onevent="onEventClickFilaTablaEstudiantes" />
+						</h:outputLabel></td>
+					<td><h:panelGroup id="idPanelGroupLabelSeEncontro"
+							layout="block" style="float: right">
+							<label style="color: #575757; font-style: italic;">Se
+								encontró </label>
+							<h:outputLabel
+								value=" #{registroUsuarios.dataListUsuarios==null or registroUsuarios.dataListUsuarios.size()==0?'0':registroUsuarios.dataListUsuarios.size()}"
+								style="color: #575757; font-style: italic; font-weight: bolder" />
+							<label style="color: #575757; font-style: italic;">Estudiantes</label>
+							<label style="color: #575757; font-style: italic;"> de </label>
+							<h:outputLabel
+								value=" #{registroUsuarios.dataListUsuariosTotales()}"
+								style="color: #575757; font-style: italic; font-weight: bolder" />
+						</h:panelGroup></td>
+				</tr>
+			</table>
+			<h:panelGroup id="idPanelGroupContenedorTablaPrincipal"
+				layout="block">
+				<!--<div class="headerClassUniversal2 claseDivContenedorHeaderPrincipal">-->
+				<div
+					class="divTablaHeader claseWidth100CompletoUniversal claseDivContenedorHeaderPrincipal"
+					style="width: 100%;">
+					<table style="width: 100%" cellpadding="0" cellspacing="0">
+						<thead>
+							<tr style="height: 35px">
+								<th class="claseTdCodigo colUsuariosHeader bordesHeader"><label>Usuario</label>
+								</th>
+								<th class="claseTdNombres colUsuariosHeader bordesHeader">
+									<label>Apellidos</label>
+								</th>
+								<th class="claseTdGrado"><label>Nombres</label></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="box-wrap antiscroll-wrap" style="width: 100%">
+					<div class="box" style="width: 100%">
+						<div class="antiscroll-inner" style="width: 100%">
+							<div class="box-inner"
+								style="width: 100%; margin: 0 auto; max-height: 200px; height: 200px; overflow-y: auto;"
+								id="contenedorEstudiantesBusqueda">
+								<h:panelGroup id="idPanelGroupTablaPedidosPrincipal"
+									class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal"
+									layout="block" style="width: 100%;">
+
+									<h:dataTable
+										rendered="#{registroUsuarios.dataListUsuarios.size() > 0}"
+										id="tablaDatosBusqueda"
+										styleClass="tablaLabelProductoProveedor tablaDatosUniversalRender"
+										style="width: 100%;"
+										value="#{registroUsuarios.dataListUsuarios}" var="usuarios"
+										columnClasses="claseTdCodigo bordesHeader colUsuariosBody, claseTdNombres bordesHeader colUsuariosBody, claseTdGrado"
+										rowClasses="fila1, fila2" cellpadding="0" cellspacing="0">
+										
+											<h:column>
+												<!-- Nombre Proveedor-->
+												<div id="#{usuarios.idusuarios}_id"></div>
+												<a class="baja" id="#{usuarios.idusuarios}"> </a>
+												<a class="sube"> </a>
+												<h:outputLabel value="#{usuarios.nombredeusuario}"
+													styleClass="labelSinResaltar marginIzquierdo">
+													<p:ajax event="click"
+														listener="#{registroUsuarios.seleccionarUsuario(usuarios)}"
+														update=":idFormDatosUsuarios"
+														onstart="PF('statusDialog').show()"
+														oncomplete="PF('statusDialog').hide()" />
+												</h:outputLabel>
+											</h:column>
+											<h:column>
+												<!-- Apelldidos Proveedor-->
+												<h:outputLabel
+													style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize;"
+													value="#{usuarios.apellidos}">
+													<p:ajax event="click"
+														listener="#{registroUsuarios.seleccionarUsuario(usuarios)}"
+														update=":idFormDatosUsuarios"
+														onstart="PF('statusDialog').show()"
+														oncomplete="PF('statusDialog').hide()" />
+													<f:converter converterId="minusculasjava" />
+												</h:outputLabel>
+											</h:column>
+											<h:column>
+												<h:outputLabel
+													style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize;"
+													value="#{usuarios.nombres}">
+														<f:converter converterId="minusculasjava" />
+													<p:ajax event="click"
+														listener="#{registroUsuarios.seleccionarUsuario(usuarios)}"
+														update=":idFormDatosUsuarios"
+														onstart="PF('statusDialog').show()"
+														oncomplete="PF('statusDialog').hide()" />
+												</h:outputLabel>
+											</h:column>
+									</h:dataTable>
+									<h:panelGroup layout="block" id="letrerobusqueda">
+										<h:panelGroup layout="block"
+											style=" width: 100%; background: #F7F7F7; font-size: 13px; width: 100%; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;">
+											<center>
+												<h:outputLabel
+													rendered="#{registroUsuarios.dataListUsuarios == null or registroUsuarios.dataListUsuarios.size() == 0}"
+													style="display: block;">
+													<div style="height: 30px;">
+														<table border="0" cellpadding="0" cellspacing="0"
+															width="100%">
+															<tr style="height: 30px;">
+																<th style="width: 100%; background: white;">
+																	¡BUSCAR USUARIO POR: Grado, Nombre, Apellidos!</th>
+															</tr>
+														</table>
+													</div>
+												</h:outputLabel>
+											</center>
+										</h:panelGroup>
+									</h:panelGroup>
+								</h:panelGroup>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+
+		</h:panelGroup>
+	</h:form>
+	<br />
+	<br />
+	<h:form id="idFormDatosUsuarios" onsubmit="return false"
+		style="width: 90%; margin: 0 auto;" enctype="multipart/form-data">
+		<h:panelGroup class="clasePanelGroupPrincipalDatosEstudiante"
+			style="width: 90%; margin: 0 auto" layout="block"
+			rendered="#{registroUsuarios.usuarioEscogido!= null}">
+			<fieldset class="fieldSetUniversal"
+				style="width: 100%; margin: 0 auto; background: #dadadd">
+				<legend>Información General</legend>
+				<div style="width: 50%; margin-left: 40px;"></div>
+				<fieldset class="fieldSetUniversal"
+					style="width: 50%; margin-left: 40px; background: #f0e6d9">
+					<legend>Información Alumno</legend>
+					<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td width="50%" valign="top">
+								<fieldset class="fieldSetUniversal"
+										style="width: 80%; margin: 0 auto; background: #f0e6d9">
+									<legend>Tipo Usuario</legend>
+									<h:panelGrid id="tiposDeUsuario" cellpadding="0"
+										cellspacing="0" width="100%" columns="2">
+										<h:outputText value="Estudiante" />
+										<h:selectBooleanCheckbox
+											value="#{registroUsuarios.tipoUsuarioEstudiante}">
+											<f:ajax execute="@this"
+												render="estudiantesGrados informacionEstudiante :idFormDatosUsuarios:tiposDeUsuario" />
+										</h:selectBooleanCheckbox>
+										<h:outputText value="Profesor" />
+										<h:selectBooleanCheckbox
+											value="#{registroUsuarios.tipoUsuarioProfesor}">
+											<f:ajax execute="@this"
+												render="estudiantesGrados informacionEstudiante :idFormDatosUsuarios:tiposDeUsuario" />
+										</h:selectBooleanCheckbox>
+										<h:outputText value="Otro" />
+										<h:selectBooleanCheckbox
+											value="#{registroUsuarios.tipoUsuarioOtros}" disabled="true" />
+									</h:panelGrid>
+								</fieldset>
+							</td>
+							<td valign="top">
+								<fieldset class="fieldSetUniversal"
+									style="width: 80%; margin: 0 auto; background: #f0e6d9">
+									<legend>Permisos</legend>
+									<h:dataTable width="100%" value="#{registroUsuarios.dataListPermisos}" var="permisos">
+										<h:column>
+											<h:outputText value="#{permisos[1]}"></h:outputText>
+										</h:column>
+										<h:column>
+											<p:selectBooleanCheckbox value="#{permisos[2]}">
+												<p:ajax></p:ajax>
+											</p:selectBooleanCheckbox>
+										</h:column>
+									</h:dataTable>
+								</fieldset>
+							</td>
+						</tr>
+					</table>
+					<br/><br/>
+					<table style="width: 100%">
+						<tr>
+							<td><h:outputLabel value="Foto" /></td>
+							<td>
+							<p:graphicImage id="fotoUsuario" cache="false" value="#{fotos.graphicText}" width="100px" height="100px"></p:graphicImage>
+							<br/>
+							<h:outputLabel rendered="#{registroUsuarios.usuarioEscogido.foto == null}" value="Agregar Imagen"
+							style="color:blue; cursor:pointer; text-decoration:underline;">
+								<p:ajax event="click"
+									onstart="PF('statusDialog').show()" 
+									oncomplete="PF('edicionImagenDialog').show(); PF('statusDialog').hide()" update=":edicionImagen"/>
+							</h:outputLabel>
+							<h:outputLabel rendered="#{registroUsuarios.usuarioEscogido.foto != null}" value="Cambiar Imagen"
+							style="color:blue; cursor:pointer; text-decoration:underline;">
+								<p:ajax event="click"
+									onstart="PF('statusDialog').show()" 
+									oncomplete="PF('edicionImagenDialog').show(); PF('statusDialog').hide()" update=":edicionImagen"/>
+							</h:outputLabel>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Usuario" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.nombredeusuario}"
+									styleClass="labelSinResaltar inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+
+						<tr>
+							<td><h:outputLabel value="Grado:"
+									styleClass="labelResaltado" /></td>
+							<td><h:panelGroup id="estudiantesGrados">
+									<h:panelGroup
+										rendered="#{registroUsuarios.tipoUsuarioEstudiante}">
+										<h:selectOneMenu value="#{registroUsuarios.grado}"
+											styleClass="inputEstudiantes"
+											disabled="#{registroUsuarios.matriculaActiva ? 'false':'true'}">
+											<f:selectItem itemLabel="--" itemValue="-10" />
+											<f:selectItems value="#{registroUsuarios.dataListGrados}"
+												var="grado" itemLabel="#{grado.nombre}"
+												itemValue="#{grado.idgrados}" />
+											<f:ajax event="valueChange" execute="@this" />
+										</h:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGroup></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Activo" /></td>
+							<td><p:selectBooleanCheckbox
+									value="#{registroUsuarios.usuarioEscogido.estado_activo}">
+								</p:selectBooleanCheckbox></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Apellidos:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.apellidos}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Nombres:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.nombres}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Tipo Identificación:" /></td>
+							<td><h:selectOneMenu
+									value="#{registroUsuarios.tipoIdentificacion}">
+									<f:selectItem itemLabel="T.I" itemValue="T.I" />
+									<f:selectItem itemLabel="C.C." itemValue="C.C" />
+									<f:selectItem itemLabel="Pasaporte" itemValue="Pasaporte" />
+								</h:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="No Identificación:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.numeroidentificacion}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Lugar Identificación:" /></td>
+							<td><h:selectOneMenu style="width: 92%"
+									value="#{registroUsuarios.ciudadIdentificacion}">
+
+									<f:selectItems value="#{registroUsuarios.dataListCiudades}"
+										var="ciudad" itemLabel="#{ciudad.nombre}"
+										itemValue="#{ciudad.nombre}" />
+								</h:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Fecha Nacimiento: " /> <h:outputLabel
+									style="color: grey" value="(dia-mes-año) " /></td>
+							<td><p:calendar pattern="dd-MM-yyyy"
+									style="width: 90%" locale="es"
+									value="#{registroUsuarios.usuarioEscogido.fechanacimiento}">
+									<f:convertDateTime pattern="dd-MM-yyyy"
+										timeZone="America/Bogota" />
+								</p:calendar></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Lugar Nacimiento:" /></td>
+							<td><h:selectOneMenu style="width: 92%"
+									value="#{registroUsuarios.lugarNacimiento}">
+
+									<f:selectItems value="#{registroUsuarios.dataListCiudades}"
+										var="ciudad" itemLabel="#{ciudad.nombre}"
+										itemValue="#{ciudad.nombre}" />
+								</h:selectOneMenu> <!--<h:inputText  style="width: 90%"  value="#estudiantesManager.estudianteEscogido.lugarnacimiento}">-->
+								<!--<f:ajax event="keyup" execute="@this"  />--> <!--</h:inputText>-->
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Sexo:" /></td>
+							<td><h:selectOneRadio
+									value="#{registroUsuarios.usuarioEscogido.sexo}">
+									<f:selectItem itemLabel="Masculino" itemValue="Masculino"></f:selectItem>
+									<f:selectItem itemLabel="Femenino" itemValue="Femenino"></f:selectItem>
+								</h:selectOneRadio></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Residencia:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.direccion}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Teléfono:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.telefono}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Tipo de Sangre:" /></td>
+							<td><h:selectOneMenu style="width: 90%"
+									value="#{registroUsuarios.tipoSangre}">
+									<f:selectItem itemLabel="A+" itemValue="A+" />
+									<f:selectItem itemLabel="A-" itemValue="A-" />
+									<f:selectItem itemLabel="B+" itemValue="B+" />
+									<f:selectItem itemLabel="B-" itemValue="B-" />
+									<f:selectItem itemLabel="AB+" itemValue="AB+" />
+									<f:selectItem itemLabel="AB-" itemValue="AB-" />
+									<f:selectItem itemLabel="O+" itemValue="O+" />
+									<f:selectItem itemLabel="O-" itemValue="O-" />
+								</h:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="EPS:" /></td>
+							<td><h:inputText style="width: 90%"
+									value="#{registroUsuarios.usuarioEscogido.eps}"
+									styleClass="inputEstudiantes">
+								</h:inputText></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Alergias:" /></td>
+							<td><h:inputTextarea style="width: 92%"
+									value="#{registroUsuarios.usuarioEscogido.alergias}"
+									styleClass="inputEstudiantes">
+								</h:inputTextarea></td>
+						</tr>
+						<tr>
+							<td><h:outputLabel value="Password" /></td>
+							<td><h:inputSecret style="width: 92%"
+									value="#{registroUsuarios.usuarioEscogido.password}"
+									styleClass="inputEstudiantes">
+								</h:inputSecret></td>
+						</tr>
+					</table>
+				</fieldset>
+
+
+				<br />
+
+				<h:panelGroup id="informacionEstudiante">
+					<h:panelGroup rendered="#{registroUsuarios.tipoUsuarioEstudiante}">
+						<!--                                    <fieldset class="fieldSetUniversal" style="width: 90%; margin-left: 40px; background: #f0e6d9">
+                                                                            <legend>ESTUDIANTE</legend>-->
+						<fieldset class="fieldSetUniversal"
+							style="width: 90%; margin: 0 auto; background: #f0e6d9">
+
+							<legend>Datos Acudiente(s)</legend>
+							<h:outputLabel value="Agregar Acudiente [+]"
+								style="color: blue; ">
+								<f:ajax event="click"
+									render="idtablaRelacionAcudientesEstudiantes"
+									listener="#{registroUsuarios.agregarAcudienteEstudiante()}" />
+							</h:outputLabel>
+							<div class="divTablaHeader" id="divTablaHeader"
+								style="width: 100%;">
+								<table style="float: right;" width="100%" cellspacing="0"
+									cellpadding="0" id="headerTablaBusquedaProductos">
+									<thead>
+										<tr>
+											<th class="co1Acudientes bordesHeader">Nombres</th>
+											<th class="co2Acudientes bordesHeader">Apellidos</th>
+											<th class="co3Acudientes bordesHeader">Telefono</th>
+											<th class="co4Acudientes bordesHeader">Ocupacion</th>
+											<th class="co5Acudientes bordesHeader">Parentesco</th>
+											<th class="co6Acudientes">CC</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+							<h:dataTable id="idtablaRelacionAcudientesEstudiantes"
+								cellpadding="0" cellspacing="0" border="0" width="100%"
+								value="#{registroUsuarios.dataListAcudientesEstudiantesAdministracion}"
+								var="acudiantes"
+								columnClasses="co1Acudientes, co2Acudientes, co3Acudientes, co4Acudientes, co5Acudientes, co6Acudientes">
+
+								<h:column class="co1Acudientes bordesHeader">
+									<center>
+										<h:inputText style="width: 90%"
+											value="#{acudiantes.acudientes.nombres}">
+											<f:ajax event="keyup" execute="@this" />
+										</h:inputText>
+									</center>
+								</h:column>
+								<h:column class="co2Acudientes bordesHeader">
+									<center>
+										<h:inputText style="width: 90%"
+											value="#{acudiantes.acudientes.apellidos}">
+											<f:ajax event="keyup" execute="@this" />
+										</h:inputText>
+									</center>
+
+								</h:column>
+								<h:column class="co3Acudientes bordesHeader">
+									<center>
+										<h:inputText style="width: 90%"
+											value="#{acudiantes.acudientes.telefonofijo}">
+											<f:ajax event="keyup" execute="@this" render="@this" />
+										</h:inputText>
+									</center>
+								</h:column>
+								<h:column class="co4Acudientes bordesHeader">
+									<center>
+										<h:inputText style="width: 90%"
+											value="#{acudiantes.acudientes.ocupacion}">
+											<f:ajax event="keyup" execute="@this" />
+										</h:inputText>
+									</center>
+								</h:column>
+								<h:column class="co5Acudientes bordesHeader">
+									<center>
+										<h:selectOneMenu style="width: 90%"
+											value="#{acudiantes.parentesco}"
+											styleClass="inputEstudiantes">
+											<f:selectItem itemLabel="Madre" itemValue="Madre" />
+											<f:selectItem itemLabel="Padre" itemValue="Padre" />
+											<f:selectItem itemLabel="Hermana" itemValue="Hermana" />
+											<f:selectItem itemLabel="Hermano" itemValue="Hermano" />
+											<f:selectItem itemLabel="Tia" itemValue="Tia" />
+											<f:selectItem itemLabel="Tio" itemValue="Tio" />
+											<f:selectItem itemLabel="Otro" itemValue="Otro" />
+											<f:ajax execute="@this" />
+										</h:selectOneMenu>
+									</center>
+								</h:column>
+								<h:column class="co5Acudientes">
+									<center>
+										<h:inputText style="width: 90%"
+											value="#{acudiantes.acudientes.numeroidentificacion}">
+											<f:ajax event="keyup" execute="@this" />
+										</h:inputText>
+									</center>
+								</h:column>
+
+								<h:column>
+									<h:graphicImage value="/resources/images/borrar.gif"
+										style="cursor: pointer;"
+										onmousedown="if(event.button == 2) return false; if(!confirm('Desea eliminar este acudiente?')) return false;">
+										<f:ajax event="mousedown" render="@form" execute="@this"
+											listener="#{registroUsuarios.eliminarAcudiente(acudiantes)}" />
+									</h:graphicImage>
+								</h:column>
+
+							</h:dataTable>
+
+						</fieldset>
+						<!--</fieldset>-->
+					</h:panelGroup>
+				</h:panelGroup>
+				<br />
+				<div style="margin: 0 auto; width: 40%">
+					<h:outputLabel
+						value="#{registroUsuarios.usuarioEscogido.idusuarios != 0?'Editar usuario':'Crear usuario'} "
+						class="botonVerde botonesFont">
+						<p:ajax event="mousedown"
+							listener="#{registroUsuarios.crearEditarUsuario()}"
+							process="@form"
+							update="@form :idFormTablaBusquedaAlumnosPincipal :messages" 
+							onstart="PF('statusDialog').show()" 
+							oncomplete="PF('statusDialog').hide()"/>
+					</h:outputLabel>
+					&nbsp;
+					<h:outputLabel value="Eliminar" class="botonRojo botonesFont">
+						<f:ajax event="mousedown" onerror="errorEliminarEstudiante"
+							listener="#{registroUsuarios.eliminarUsuarios()}"
+							onevent="eliminarEstudiante" execute="@form"
+							render=" @form :idFormTablaBusquedaAlumnosPincipal" />
+					</h:outputLabel>
+					&nbsp;
+					<h:outputLabel value="Desmatricular"
+						class="botonGrisClaro botonesFont"
+						rendered="#{registroUsuarios.desmatriculaActiva}">
+						<f:ajax event="mousedown" onerror="errorEliminarEstudiante"
+							listener="#{registroUsuarios.desmatricularUsuarios()}"
+							onevent="desmatricularEstudiante" execute="@form"
+							render=" @form :idFormTablaBusquedaAlumnosPincipal" />
+					</h:outputLabel>
+					&nbsp;
+					<h:outputLabel value="Matricular" class="botonAzul botonesFont"
+						rendered="#{registroUsuarios.matriculaActiva}">
+						<f:ajax event="mousedown" onerror="errorEliminarEstudiante"
+							listener="#{registroUsuarios.matricularUsuarios()}"
+							onevent="matricularEstudiante" execute="@form"
+							render=" @form :idFormTablaBusquedaAlumnosPincipal" />
+					</h:outputLabel>
+				</div>
+			</fieldset>
+		</h:panelGroup>
+	</h:form>
+	
+	<!--Formulario para agregar/editar Interfaces-->
+	<h:form id="edicionImagen" onsubmit="return false;"
+		style="width:100%; min-width:100%; max-width:100%;">
+		<p:dialog id="edicionImagenDialog" header="Editar/Agregar Imagen"
+			widgetVar="edicionImagenDialog" modal="true" height="290px"
+			showEffect="fade" hideEffect="fade" closeOnEscape="true"
+			resizable="false" width="60%"
+			style="width:500px; max-width:60%;">
+			<h:panelGroup layout="block" id="panelEdicionImagenDialog"
+				style="width:100%:">
+				 <p:fileUpload label="Escoger" uploadLabel="Cargar" cancelLabel="Cancelar" fileUploadListener="#{registroUsuarios.handleFileUpload}" mode="advanced" dragDropSupport="false"
+           			 sizeLimit="100000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+           			 update=":messages :idFormDatosUsuarios:fotoUsuario" oncomplete="PF('edicionImagenDialog').hide()"/>
+				<br />
+				<br />
+			</h:panelGroup>
+			
+		</p:dialog>
+	</h:form>
+	<br />
+	<br />
+	<div id="mensajeAlerta" class="ui-growl ui-widget"
+		style="z-index: 1002; display: none; margin: 0 auto;">
+		<div
+			class="ui-growl-item-container ui-state-highlight ui-corner-all ui-helper-hidden ui-shadow"
+			aria-live="polite" style="display: block;">
+			<div class="ui-growl-item">
+				<div class="ui-growl-icon-close ui-icon ui-icon-closethick"
+					style="display: none;"></div>
+				<span class="ui-growl-image ui-growl-image-info"> </span>
+				<div class="ui-growl-message">
+					<span class="ui-growl-title tituloAlert">Successful</span>
+					<p class="contenidoAlert labelSinResaltar">Welcome :ll</p>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+	</div>
+	<p:growl id="messages" showDetail="true" widgetVar="messages"/>
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+		<p:graphicImage name="/imagenes/ajaxloadingbar.gif" />
+	</p:dialog>
+</h:body>
+</html>

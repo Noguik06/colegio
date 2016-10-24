@@ -1,0 +1,117 @@
+
+
+/*##Configuracion para las tablas##*/
+td {
+    vertical-align: top;
+}
+
+
+
+.labelEnlacesUniversal{
+    color: blue;     
+    cursor: pointer;    
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bolder;    
+}
+
+.inputAgregarPopUP{
+    width: 90%;
+}
+
+/*###Configuracion para los div para agregar registros nuevos*/
+.divPopUPAgregar{
+    width: 20%;
+    /*    margin-left: auto;
+        margin-right: auto;*/
+    /*z-index: 999;*/
+}
+
+.editarElelmento{
+    background: url("http://localhost:8080/sistemaColegio/resources/images/borrar.gif") no-repeat center;
+    width: 30%;
+    display: inline-block;
+}
+
+.rowsGeneral{
+    height: 35px;
+    /*    min-height: 35px;
+        max-height: 35px;*/
+    padding-bottom: 10px;
+
+}
+
+/*###TABLA PRINCIPAL*/
+.colTablaNotasPrincipal-1{
+    width: 8%;
+    min-width: 8%;
+    max-width: 8%;
+}
+
+.colTablaNotasPrincipal-2{
+    width: 13%;
+    min-width: 13%;
+    max-width: 13%;
+}
+
+.colTablaNotasPrincipal-3{
+
+}
+
+.colTablaNotasPrincipal-4{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+/*COLUMNAS DE LA LISTA DE LAS TAREAS*/
+.colTablasNostaTareas-1{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+.colTablasNostaTareas-2{
+    width: 50%;
+    min-width: 50%;
+    max-width: 50%;
+}
+
+.colTablasNostaTareas-3{
+    
+}
+
+.colTablasNostaTareas-4{
+    width: 5%;
+    min-width: 5%;
+    max-width: 5%;
+}
+/*##TABLAS DE LAS DIMENSIONES##
+.rowDimensiones{
+    height: 30px;
+    max-height: 30px;
+}*/
+
+#javax_faces_developmentstage_messages{
+    display: none;
+}
+
+/*###columnas del formulario para subir las tareas###*/
+.colFormSubirTareas-1{
+    width: 30%;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+/*INPUTS DE LAS TAREAS*/
+.inputTextTareas{
+    width: 70%;
+    min-width: 70%;
+    max-width: 70%;
+}
+
+textArea{
+    height: 100px;
+    max-height: 100px;
+}
+

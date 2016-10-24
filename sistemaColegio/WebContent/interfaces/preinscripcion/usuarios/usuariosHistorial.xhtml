@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+    <ui:composition template="../../../templates/general/templateGeneral.xhtml">
+        <ui:define name="title">
+            <title>Usuarios Preinscritos</title>
+        </ui:define>
+        <ui:define name="content">
+            <h:body rendered="#{rolesManager.registrarUsuarios()}">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <h:form id="idFormTablaBusquedaAlumnosPincipal" onsubmit="return false;">
+                
+                    <link href="/sistemaColegio/resources/universales/css/tablas.css" rel="stylesheet" type="text/css"/>
+                    <!--<link href="/sistemaColegio/resources/universales/css/claseScrollUniversal.css" rel="stylesheet" type="text/css"/>-->
+                    <link href="/sistemaColegio/resources/universales/css/primefaces.css" rel="stylesheet" type="text/css"/>
+                    <link href="/sistemaColegio/resources/universales/css/claseTablasR.css" rel="stylesheet" type="text/css"/>
+                    <link href="/sistemaColegio/resources/universales/css/botones.css" rel="stylesheet" type="text/css"/>
+                    <link href="css/usuarios.css" rel="stylesheet" type="text/css"/>
+                    <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+                    <h:outputStylesheet name="ui.core.css" library="dataPicker/css"/>
+                    <h:outputStylesheet name="ui.theme.css" library="dataPicker/css"/>
+                    <h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css"/>
+                    
+                    
+                    <!--Css globales-->
+					<h:outputStylesheet name="default.css" library="css" />
+					<h:outputStylesheet name="cssLayout.css" library="css" />
+					<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+					<h:outputStylesheet name="botones.css" library="universales/css" />
+					<h:outputStylesheet name="tablas.css" library="universales/css" />
+					<h:outputStylesheet name="letras.css" library="universales/css" />
+					<h:outputStylesheet name="fieldset.css" library="universales/css" />
+					
+                    <!--<h:outputScript name="scrollUniversal.js" library="universales/js"/>-->
+                    <script type="text/javascript" src="js/usuarios.js"/>
+                    <h:outputScript name="validaciones.js" library="universales/js"/>
+                    <h:outputScript name="universaljs.js" library="universales/js"/>
+                    <!--Estilos para eventos de subir y bajar-->
+                    <h:outputScript name="jquery.scrollTo-1.4.2-min.js" library="jquery"/>
+                    <h:outputScript name="jquery.localscroll-1.2.7-min.js" library="jquery"/>
+                    
+                    <h:panelGroup layout="block" style="width: 70%; margin: 0 auto;">
+                        <h:panelGroup id="idPanelGroupContenedorTablaPrincipal" layout="block">
+                            <!--<div class="headerClassUniversal2 claseDivContenedorHeaderPrincipal">-->
+                            <div class="divTablaHeader claseWidth100CompletoUniversal claseDivContenedorHeaderPrincipal" style="width: 100%;">
+                                <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr style="height: 35px">
+                                            <th class="claseTdNombres colUsuariosHeader bordesHeader">                                    
+                                                <label>Apellidos</label>
+                                            </th>
+                                            <th class="claseTdGrado">
+                                                <label>Nombres</label>
+                                            </th>                                
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="box-wrap antiscroll-wrap" style="width: 100%">
+                                <div class="box" style="width: 100%">
+                                    <div class="antiscroll-inner" style="width: 100%">
+                                        <div class="box-inner" style="width: 100%; margin: 0 auto; max-height: 200px; height: 200px; overflow-y: auto;" id="contenedorEstudiantesBusqueda">
+                                            <h:panelGroup id="idPanelGroupTablaPedidosPrincipal" class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal" layout="block"
+                                                          style="width: 100%;">
+                                                <h:panelGroup layout="block" id="letrerobusqueda" >
+                                                    <h:panelGroup layout="block" style=" width: 100%; background: #F7F7F7; font-size: 13px; width: 100%; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;">
+                                                        <center>
+                                                            <h:outputLabel rendered="#{registroUsuarios.dataListUsuarios == null or registroUsuarios.dataListUsuariosPreinscritos.size() == 0}"  style="display: block;">
+                                                                <div style="height: 30px;">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                        <tr style="height: 30px;">
+                                                                            <th style="width: 100%; background: white;">
+                                                                                No hay usuarios preinscritos para mostrar
+                                                                            </th>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </h:outputLabel>
+                                                        </center>
+                                                    </h:panelGroup>
+                                                </h:panelGroup>
+                                                <h:dataTable id="tablaDatosBusqueda" styleClass="tablaLabelProductoProveedor tablaDatosUniversalRender" style="width: 100%;"  value="#{registroUsuarios.dataListUsuariosPreinscritos}" var="usuarios" columnClasses="claseTdNombres bordesHeader colUsuariosBody, claseTdGrado" rowClasses="fila1, fila2" cellpadding="0" cellspacing="0">
+                                                    <f:ajax  event="click" listener="#{registroUsuarios.seleccionarUsuarioPreinscrito(usuarios)}" render=":idFormDatosUsuarios" onevent="onEventClickFilaTablaEstudiantes">
+                                                        <h:column> <!-- Código Proveedor-->                                                                        
+                                                            <div id="#{usuarios.idpreinscritos}_id">
+                                                            </div>
+                                                            <a class="baja" id="#{usuarios.idpreinscritos}">
+                                                            </a>
+                                                            <a class="sube">
+                                                            </a>
+                                                            <h:outputLabel value="#{usuarios.nombres}" styleClass="labelUsuarios labelSinResaltar marginIzquierdo">
+                                                            </h:outputLabel>
+                                                        </h:column>
+                                                        <h:column> <!-- Código Proveedor-->                                                                        
+                                                            <h:outputLabel styleClass="labelUsuarios" style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize;" value="#{usuarios.apellidos}">
+                                                                <f:converter converterId="minusculasjava"/>
+                                                            </h:outputLabel>                                    
+                                                        </h:column>           
+                                                      
+                                                    </f:ajax>
+                                                </h:dataTable>
+                                            </h:panelGroup>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:form>
+                <br/>
+                <br/>
+				<h:form id="idFormDatosUsuarios">
+					<p:growl id="messages" showDetail="true"/>
+					<h:panelGroup class="clasePanelGroupPrincipalDatosEstudiante"
+						style="width: 60%; margin: 0 auto" layout="block">
+						<fieldset class="fieldSetUniversal"
+							style="width: 100%; margin: 0 auto; background: #dadadd">
+							<div style="width: 90%; margin-left: 40px;"></div>
+							<fieldset class="fieldSetUniversal"
+								style="width: 75%; margin-left: 40px; background: #f0e6d9">
+								<legend>Información del Alumno</legend>
+								<br /> <br />
+								<table style="width: 100%">
+									<tr>
+										<td><h:outputLabel value="Nombres:" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel id="nombre" style="width: 90%"
+												value="#{registroUsuarios.usuarioPreinscripcion.nombres}"
+												styleClass="inputEstudiantes" tabindex="1">
+											</h:outputLabel></td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="Apellidos:" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel style="width: 90%" 
+												value="#{registroUsuarios.usuarioPreinscripcion.apellidos}"
+												styleClass="inputEstudiantes">
+											</h:outputLabel></td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="Grado:" styleClass="labelResaltado"/></td>
+										<td><h:panelGroup id="estudiantesGrados">
+												<h:panelGroup>
+													<h:selectOneMenu disabled="true"
+														value="#{registroUsuarios.usuarioPreinscripcion.grado}"
+														styleClass="inputEstudiantes">
+														<f:selectItem itemLabel="--" itemValue="-10" />
+														<f:selectItems value="#{registroUsuarios.dataListGrados}"
+															var="grado" itemLabel="#{grado.nombre}"
+															itemValue="#{grado.idgrados}" />
+														<f:ajax event="valueChange" execute="@this" />
+													</h:selectOneMenu>
+												</h:panelGroup>
+											</h:panelGroup></td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="Edad:" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel style="width: 90%"
+												value="#{registroUsuarios.usuarioPreinscripcion.edad}"
+												styleClass="inputEstudiantes">
+											</h:outputLabel></td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="Sexo:" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel style="width: 90%"
+												value="#{registroUsuarios.usuarioPreinscripcion.sexo}"
+												styleClass="inputEstudiantes">
+											</h:outputLabel></td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="Teléfono:" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel style="width: 90%"
+												value="#{registroUsuarios.usuarioPreinscripcion.telefono}"
+												styleClass="inputEstudiantes">
+											</h:outputLabel></td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="E-mail" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel style="width: 90%"
+												value="#{registroUsuarios.usuarioPreinscripcion.email}"
+												styleClass="inputEstudiantes">
+											</h:outputLabel>
+										</td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="Acudiente" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel style="width: 90%"
+												value="#{registroUsuarios.usuarioPreinscripcion.acudiente}"
+												styleClass="inputEstudiantes">
+											</h:outputLabel>
+										</td>
+									</tr>
+									<tr>
+										<td><h:outputLabel value="Colegio Anterior" styleClass="labelResaltado"/></td>
+										<td><h:outputLabel style="width: 90%"
+												value="#{registroUsuarios.usuarioPreinscripcion.colegioanterior}"
+												styleClass="inputEstudiantes">
+											</h:outputLabel>
+										</td>
+									</tr>
+								</table>
+							</fieldset>
+						
+						
+							<br />
+						
+							<h:panelGroup id="informacionEstudiante">
+							</h:panelGroup>
+							<br />
+							<center>
+								<div style="margin: 0 auto; width: 40%">
+								<h:commandButton styleClass="botonVerde botonesFont" rendered="#{registroUsuarios.usuarioPreinscripcion.idpreinscritos != 0}" 
+									actionListener="#{registroUsuarios.eliminarUsuariosPreinscritos}" value="Eliminar"> </h:commandButton>
+								</div>
+							</center>
+						</fieldset>
+					</h:panelGroup>
+				</h:form>
+           </h:body>
+        </ui:define>
+    </ui:composition>
+</html>

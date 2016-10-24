@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    
+        <!--Css globales-->        
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+        <h:outputStylesheet name="botones.css" library="universales/css"/>
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="letras.css" library="universales/css"/>
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+        <h:outputScript name="hoverIntent.js" library="menuPrincipal/js"/>
+        <h:outputScript name="superfish.js" library="menuPrincipal/js"/>
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+
+		<h:outputScript library="js" name="calendar_es.js" />
+
+        <!--Css locales-->        
+        <link href="css/bloqueshorarios.css" rel="stylesheet" type="text/css" />
+
+        <!--Js globales-->
+        <h:outputScript name="validaciones.js" library="universales/js"/>
+
+        <!--Js locales-->
+        <script type="text/javascript"  src="js/bloquesHorarios.js"/>
+
+
+        <title>CONFIGURACION BLOQUES PERIODOS</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <div style="width: auto;" >
+                <ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml"/>
+            </div>
+        </h:form>
+        <br/>
+	<h:panelGroup>
+		<h:form id="formPrincipal" style="width: 1200px;">
+			<fieldset class="fieldSetUniversal"
+				style="width: 97%; margin-left: auto; margin-right: auto;">
+				<div class="divTablaHeader" style="width: 100%;">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<thead>
+							<tr style="height: 30px;">
+								<th class="colTablaNotasPrincipal-1 bordesHeader">
+									Bloques
+									<h:outputLabel
+										value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+										<p:ajax event="click" update=":edicionBloques"
+											listener="#{bloquesHorariosManager.seleccionarBloqueEditar(null)}"
+											onstart="PF('statusDialog').show()"
+											oncomplete="PF('statusDialog').hide(); PF('edicionBloquesDialog').show()" />
+									</h:outputLabel>
+								</th>
+								<th class="colTablaNotasPrincipal-3 bordesHeader">
+									 Horarios
+									<h:outputLabel
+										value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+										<p:ajax event="click" update=":edicionBloquesHorarios"
+											listener="#{bloquesHorariosManager.seleccionarBloquesHorariosEditar(null)}"
+											onstart="PF('statusDialog').show()"
+											oncomplete="PF('statusDialog').hide(); PF('edicionedicionBloquesHorariosDialog').show()" />
+									</h:outputLabel>
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<table width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tbody>
+						<tr>
+							<td class="colTablaNotasPrincipal-1 bordesHeader"><h:panelGroup
+									id="contenedorBloques">
+									<h:dataTable id="tblBloques"
+										value="#{bloquesHorariosManager.dataListBloques}"
+										var="bloque" width="100%" cellpadding="0" cellspacing="0"
+										border="0" styleClass="border2" >
+										<h:column>
+											<h:outputLabel value="#{bloque.nombre}"
+												styleClass="botonGrisClaro-Verde labelSinResaltar">
+												<p:ajax event="click" update=":formPrincipal:tblHorarios"
+													listener="#{bloquesHorariosManager.seleccionarBloque(bloque)}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide();" />
+											</h:outputLabel>
+										</h:column>
+										<h:column>
+											<h:outputLabel value="Editar"
+												styleClass="labelSinResaltar">
+												<p:ajax event="click" update=":edicionBloques"
+													listener="#{bloquesHorariosManager.seleccionarBloqueEditar(bloque)}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide(); PF('edicionBloquesDialog').show()" />
+											</h:outputLabel>
+										</h:column>
+									</h:dataTable>
+								</h:panelGroup>
+							</td>
+							<td class="colTablaNotasPrincipal-3 bordesHeader"><h:panelGroup
+									id="contenedorPeriodos">
+									<h:dataTable id="tblHorarios"
+										value="#{bloquesHorariosManager.dataListBloquesHorarios}"
+										var="horario" styleClass="border2" cellpadding="0"
+										cellspacing="0" border="0" width="100%" style="margin-left: 5%; vertical-align:middle;">
+										<h:column>
+											<h:outputLabel value="#{horario.horainicio}"  styleClass="labelSinResaltar">
+												<f:convertDateTime pattern="hh:mm"  timeZone="GMT-5"></f:convertDateTime>
+											</h:outputLabel>
+										</h:column>
+										<h:column>
+											<h:outputLabel value="#{horario.horafin}"  styleClass="labelSinResaltar">
+												<f:convertDateTime pattern="hh:mm" timeZone="GMT-5"></f:convertDateTime>
+											</h:outputLabel>
+										</h:column>
+										<h:column>
+											<p:commandButton actionListener="#{bloquesHorariosManager.seleccionarBloquesHorariosEditar(horario)}"
+												icon="ui-icon-pencil" 
+												styleClass="ui-btn-b"
+												update=":edicionBloquesHorarios"
+												onstart="PF('statusDialog').show()"
+												oncomplete="PF('statusDialog').hide(); PF('edicionedicionBloquesHorariosDialog').show()" >
+											</p:commandButton>
+										</h:column>
+										<h:column>
+											<p:commandButton actionListener="#{bloquesHorariosManager.eliminarBloquesHorariosEditar(horario)}"
+												icon="ui-icon-trash" 
+												styleClass="ui-btn-b"
+											 	onstart="PF('statusDialog').show()" 
+											 	oncomplete="PF('statusDialog').hide();" 
+											 	update=":formPrincipal:tblHorarios">
+											 		<p:confirm header="Confirmation" message="Desea eliminar este bloque?" icon="ui-icon-alert" />
+											</p:commandButton>
+										</h:column>
+									</h:dataTable>
+								</h:panelGroup>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		    </p:confirmDialog>
+		</h:form>
+
+		<!--Formulario para agregar/editar AnosAcademicos-->
+		<h:form id="edicionBloques" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="edicionBloquesDialog"
+				header="Editar/Agregar Bloques"
+				widgetVar="edicionBloquesDialog" modal="true"
+				height="290px" showEffect="fade" hideEffect="fade"
+				closeOnEscape="true" resizable="false" width="500px"
+				style="width:500px; max-width:500px;">
+				<h:panelGroup layout="block" id="panelEdicionBloquesDialog"
+					style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td><h:outputText value="Nombre: "></h:outputText></td>
+							<td>
+								<p:inputText value="#{bloquesHorariosManager.bloqueSeleccionadoEditar.nombre}"> </p:inputText>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Guardar"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionBloquesDialog').hide(); PF('statusDialog').hide()"
+							actionListener="#{bloquesHorariosManager.guardarBloqueSeleccionado()}"
+							process="@form" update=":formPrincipal:tblBloques">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+		
+		<!--Formulario para agregar/editar AnosAcademicos-->
+		<h:form id="edicionBloquesHorarios" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="edicionedicionBloquesHorariosDialog"
+				header="Editar/Agregar BloquesHorarios"
+				widgetVar="edicionedicionBloquesHorariosDialog" modal="true"
+				height="290px" showEffect="fade" hideEffect="fade"
+				closeOnEscape="true" resizable="false" width="500px"
+				style="width:500px; max-width:500px;">
+				<h:panelGroup layout="block" id="panelEdicionedicionBloquesHorariosDialog"
+					style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td><h:outputText value="Hora Inicio: "></h:outputText></td>
+							<td>
+        						<p:calendar id="timeFin" value="#{bloquesHorariosManager.bloquesHorariosSeleccionadoEditar.horainicio}" pattern="HH:mm" timeOnly="true"  />
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Hora Fin: "></h:outputText></td>
+							<td>
+        						<p:calendar id="timeInicio" value="#{bloquesHorariosManager.bloquesHorariosSeleccionadoEditar.horafin}" pattern="HH:mm" timeOnly="true"  />
+							</td>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Guardar"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionedicionBloquesHorariosDialog').hide(); PF('statusDialog').hide()"
+							actionListener="#{bloquesHorariosManager.guardarBloquesHorariosSeleccionado()}"
+							process="@form" update=":formPrincipal:tblHorarios">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+		
+
+		<div id="backgroundPopup"
+			style="display: none; z-index: 0; width: 1400px;"
+			onclick="escongerPopUP()" />
+		<br />
+		<p:growl id="messages" showDetail="true" widgetVar="messages" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/imagenes/ajaxloadingbar.gif" />
+		</p:dialog>
+	</h:panelGroup>
+</h:body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#index.xhtml" PATH="/index.xhtml"
+  SHAPE="80,78,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#index.xhtml:0" NAME="item"
+   PATH="/index.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="miUsuario::#interfaces#usuarios#miUsuario#miUsuario.xhtml"
+    NAME="output" PATH="/interfaces/usuarios/miUsuario/miUsuario.xhtml"
+    TARGET="rules:#interfaces#usuarios#miUsuario#miUsuario.xhtml"
+    TITLE="miUsuario" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#interfaces#usuarios#miUsuario#miUsuario.xhtml"
+  PATH="/interfaces/usuarios/miUsuario/miUsuario.xhtml"
+  SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

@@ -1,0 +1,440 @@
+.rowUsuariosBusqueda,.rowCursosBusqueda {
+	height: 10px;
+	min-height: 10px;
+	max-height: 10px;
+}
+
+.colCursosBusqueda {
+	vertical-align: middle;
+}
+
+.rowUsuariosBusqueda label {
+	display: block;
+}
+
+.rowUsuariosBusqueda:hover,.rowCursosBusqueda:hover {
+	background: #286e0f;
+}
+
+label {
+	z-index: 2;
+}
+
+/*##FORMULARIO PRINCIPAL*/
+#formPrincipal {
+	width: 100%;
+}
+
+/*###FORM DE LOS CORREOS*/
+#formCorreos {
+	width: 97%;
+	margin: 0 auto;
+}
+
+/*+++++Input de enviar*/
+.oj .vO {
+	padding-bottom: 3px;
+	padding-top: 5px;
+}
+
+.vO {
+	text-align: left;
+	/*height: 16px!important;*/
+	overflow: hidden;
+	padding: 6px 3px;
+	resize: none;
+	/*width: 40px;*/
+}
+
+.xi,.vO,.vO:focus {
+	font-size: 13px;
+	border: 0 !important;
+	margin: 0 !important;
+	outline: none;
+	box-shadow: none;
+}
+
+.vR {
+	font-size: 13px;
+	display: inline-block;
+	padding: 3px;
+	vertical-align: top;
+}
+
+.vN {
+	background-color: #F5F5F5;
+	border: 1px solid #D9D9D9;
+	cursor: default;
+	display: block;
+	height: 20px;
+	white-space: nowrap;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.vT {
+	display: inline-block;
+	color: #222;
+	margin: 2px 5px;
+	max-width: 325px;
+	max-height: 17px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	direction: ltr;
+}
+
+.vM {
+	display: inline-block;
+	width: 14px;
+	height: 20px;
+	background: no-repeat
+		url(//ssl.gstatic.com/apps/gadgets/contactarea/contactarea_sprite_2.gif)
+		-4px 0;
+	opacity: .6;
+	vertical-align: top;
+	cursor: pointer;
+}
+
+.vM:hover {
+	opacity: 1.6;
+}
+
+/*Estilo del popUp que cubre la parte del para cuando no estamos escribiendo a nadie*/
+.abajo {
+	height: 27px;
+	float: left;
+	max-height: 27px;
+	z-index: 1;
+}
+
+.arriba {
+	max-height: 27px;
+	height: 27px;
+	position: absolute;
+	overflow: hidden;
+	z-index: 2;
+	/*    width: 200px;*/
+}
+
+/*PopUp para cubrir todo menos la parte donde estamos escribiendo a quien va escrito el popUp*/
+/*Background del PopUp para pagar la venta*/
+#bakgroundPopUp {
+	display: none;  
+	z-index: 10;
+	position: fixed;
+	background:transparent;
+	background-repeat: repeat;
+	_position: fixed; /* hack for internet explorer 6*/
+	height: 500px;
+	width: 100%;
+	top: 0;
+	left: 0;
+	border: none;
+	background-attachment: fixed;
+}
+
+#panelUsuariosCorreo,#subPopUpBuscar {
+	background: white;
+	z-index: 1000;
+	position: relative;
+}
+
+.absolute {
+	overflow: auto;
+}
+
+.absolute2 {
+	overflow: hidden;
+}
+
+.el-rte,.ui-resizable {
+	/*z-index: -3;*/
+	
+}
+
+.inputEscribir {
+	border: 1px solid black;
+	outline: none;
+	height: 15px;
+	/*padding: 0;*/
+	/*margin: 0;*/
+	line-height: 15px;
+	width: 70%;
+	min-width: 70%;
+	/*font-size: 25px;*/
+}
+
+/*##Tabla de los correos enviados y por recibir*/
+/*Columnas*/
+.colTablaCorreos-1,.colTablaCorreosBody-1 {
+	width: 5%;
+	min-width: 5%;
+	max-width: 5%;
+	vertical-align: central;
+}
+
+.colTablaCorreos-2,.colTablaCorreosBody-2 {
+	width: 25%;
+	min-width: 25%;
+	max-width: 25%;
+	vertical-align: central;
+}
+
+.colTablaCorreos-3,.colTablaCorreosBody-3 {
+	width: 50%;
+	min-width: 50%;
+	max-width: 50%;
+	vertical-align: central;
+}
+
+.colTablaCorreos-4,.colTablaCorreosBody-4 {
+	/*    width: 20%;
+    min-width: 20%;
+    max-width: 20%;*/
+	vertical-align: central;
+}
+
+#tablaPrincipalCorreos {
+	width: 100%;
+	height: 100%;
+	max-height: 100%;
+	border-bottom: 1px solid black;
+	overflow: hidden;
+	overflow-y: auto;
+}
+
+#recibirLeerCorreos {
+	/* overflow-y:auto; */
+	
+}
+
+#leerCorreos {
+	height: 68%;
+}
+
+#messageheader.previewheader {
+	position: relative;
+	height: auto;
+	min-height: 52px;
+	padding: 0 0 3px 72px;
+}
+
+#messageheader,#partheader,#composeheaders {
+	position: relative;
+	padding: 3px 0;
+	background: #F9F9F9;
+	background: -moz-linear-gradient(top, #fff 0%, #f0f0f0 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #FFF),
+		color-stop(100%, #F0F0F0));
+	background: -o-linear-gradient(top, #fff 0%, #f0f0f0 100%);
+	background: -ms-linear-gradient(top, #fff 0%, #f0f0f0 100%);
+	background: linear-gradient(top, #fff 0%, #f0f0f0 100%);
+	border-bottom: 1px solid #DFDFDF;
+	height: 15%;
+	min-height: 15%;
+}
+
+.contenidoCorreo {
+	width: 98%;
+	height: 71%;
+	margin: 0 10px;
+	max-height: 71%;
+	overflow: hidden;
+	overflow-y: auto;
+	padding-top: 10px;
+}
+
+#contenidoCorreoBack {
+	height: 70%;
+}
+
+#contenidoCorreoBack {
+	display: none;
+	background: gray;
+	opacity: 0.4;
+	margin: 0;
+	padding: 10px;
+}
+
+.selected td {
+	color: #FFF !important;
+	background: #019BC6;
+	background: -moz-linear-gradient(top, #019bc6 0%, #017cb4 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #019BC6),
+		color-stop(100%, #017CB4));
+	background: -o-linear-gradient(top, #019bc6 0%, #017cb4 100%);
+	background: -ms-linear-gradient(top, #019bc6 0%, #017cb4 100%);
+	background: linear-gradient(top, #019bc6 0%, #017cb4 100%);
+}
+
+#statusbar {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 32px;
+	padding-left: 8px;
+	border-top: 1px solid #DDD;
+	border-radius: 0 0 4px 4px;
+	background: #EAEAEA;
+	background: -moz-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #EAEAEA),
+		color-stop(100%, #C8C8C8));
+	background: -o-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	background: -ms-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	background: linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#loading {
+	display: none;
+}
+
+.uibox {
+	border: 1px solid #EAEAEA;
+	border-radius: 4px;
+	overflow: hidden;
+	box-shadow: 0 0 2px #999;
+	-o-box-shadow: 0 0 2px #999;
+	-webkit-box-shadow: 0 0 2px #999;
+	-moz-box-shadow: 0 0 2px #999;
+	background: #FFF;
+}
+
+.adjuntos{
+	width: 90%;
+	min-width: 90%;
+	margin: 8px;
+	min-height: 200px;
+	background: #F0F0F0;
+	padding: 8px;
+	border-radius: 4px;
+}
+
+/*#####PARTE PARA CONTROLAR LOS MAILS*/
+.iconoCorreo {
+	width: 21px;
+	height: 21px;
+	opacity: 0.4;
+}
+
+.iconoCorreoActivo:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+
+#eliminarCorreo {
+	background: no-repeat
+		url(/sistemaColegio/resources/imagenes/imagenesmail.png) 0 -276px;
+}
+
+#responderCorreo {
+	background: no-repeat
+		url(/sistemaColegio/resources/imagenes/imagenesmail.png) 0 -256px;
+}
+
+.aDp {
+	background-color: #F5F5F5;
+	border: 1px solid #DCDCDC;
+	border-radius: 3px;
+	margin: 0 8px;
+	padding: 2px 4px;
+}
+
+.correoRow {
+	cursor: pointer;
+}
+
+.button.checkmail {
+	background-position: center -1176px;
+}
+
+.button.delete {
+	background-position: center -690px;
+}
+
+.button.disabled {
+	opacity: 0.4;
+	filter: alpha(opacity =     40);
+	cursor: default;
+}
+
+.button {
+	cursor: pointer;
+	text-align: center;
+	font-size: 10px;
+	color: #555;
+	min-width: 50px;
+	max-width: 75px;
+	height: 13px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 28px 2px 0 2px;
+	text-shadow: 0px 1px 1px #EEE;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	-o-box-shadow: none;
+	background: url(/sistemaColegio/resources/imagenes/buttons.png) -100px 0
+		no-repeat rgba(0, 0, 0, 0);
+	border: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.statusbar {
+	/*  */
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 32px;
+	padding-left: 8px;
+	border-top: 1px solid #DDD;
+	border-radius: 0 0 4px 4px;
+	background: #EAEAEA;
+	background: -moz-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #EAEAEA),
+		color-stop(100%, #C8C8C8));
+	background: -o-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	background: -ms-linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	background: linear-gradient(top, #eaeaea 0%, #c8c8c8 100%);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#tablaStatus,.loadingMail {
+	display: none;
+}
+
+/*CSS para el background que cubre el mail mientras esta enviando el correo*/
+#backEnviadoCorreo {
+	width: 100%;
+	height: 89%;
+	background: #000;
+	opacity: 0.1;
+	z-index: 1000;
+	display: none;
+}
+
+/* Css para un correo sin leer */
+.sinLeer {
+	font-weight: bold;
+}
+
+.ui-growl {
+	top: 10%;
+	z-index: 9999;
+}
+
+.uibox .ui-widget-content {
+	border: none;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.claseEsconder{
+	display: none;
+}

@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<f:view contentType="text/html; charset=ISO-8859-1">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<!--Css locales-->
+	<link href="css/informes.css" rel="stylesheet" type="text/css" />
+
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+
+	<!--Js globales-->
+	<h:outputScript name="validaciones.js" library="universales/js" />
+
+	<!--Js locales-->
+	<script type="text/javascript" src="js/informes.js" />
+
+	<title>NOTAS ESTUDIANTES</title>
+</h:head>
+<h:body>
+
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<br />
+	<br />
+	<h:form id="formPrincipal" style="width: 100%; min-width: 100%;" acceptcharset="ISO-8859-1">
+		<table width="50%" style="margin-left: 10px" align="center">
+			<tr >
+				<td valign="top" width="30%" >
+					<p:dataTable id="tablaCursos"
+						value="#{notasEstudiantes.dataListCursosBoletines}" var="cursos"
+						width="100%" cellpadding="0" cellspacing="0" border="0">
+						<p:column headerText="Cursos">
+							<h:outputLabel value="#{cursos.grados.nombre}"
+								style="text-transform: capitalize; color:blue; text-decoration: underline; cursor:pointer;">
+								<f:ajax event="click" execute="@this"
+									listener="#{votacionesManager.escogerCurso(cursos)}"
+									render=":formPrincipal:tablaEstudiantesPersonero :formPrincipal:tablaEstudiantesContralor"/>
+								<f:converter converterId="minusculasjava" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</td>
+				<td valign="top">
+					<p:dataTable id="tablaEstudiantesPersonero"
+						value="#{votacionesManager.dataListRegistromatriculasPersonero}" var="cursos"
+						width="100%" cellpadding="0" cellspacing="0" border="0"
+						rowStyleClass="#{cursos[2]!=null ?'filaBorrada':'consultaCreditosRow2'}">
+						<p:column headerText="Estudiantes votaron por Personero">
+							<h:outputLabel value="#{cursos[1]} #{cursos[0]}">
+								<f:converter converterId="minusculasjava" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</td>
+				<td valign="top">
+					<p:dataTable id="tablaEstudiantesContralor"
+						value="#{votacionesManager.dataListRegistromatriculasContralor}" var="cursos"
+						width="100%" cellpadding="0" cellspacing="0" border="0"
+						rowStyleClass="#{cursos[2]!=null ?'filaBorrada':'consultaCreditosRow2'}">
+						<p:column headerText="Estudiantes votaron por Contralor">
+							<h:outputLabel value="#{cursos[1]} #{cursos[0]}">
+								<f:converter converterId="minusculasjava" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataTable>
+				</td>
+			</tr>
+		</table>
+	</h:form>
+</h:body>
+</f:view>
+</html>

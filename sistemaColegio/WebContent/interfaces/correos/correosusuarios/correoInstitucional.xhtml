@@ -1,0 +1,587 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<link href="css/correo.css" rel="stylesheet" type="text/css" />
+
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<!--<h:outputStylesheet name="claseScrollUniversal.css" library="universales/css"/>-->
+	<h:outputStylesheet name="ui.core.css" library="dataPicker/css" />
+
+	<h:outputStylesheet name="ui.theme.css" library="dataPicker/css" />
+
+
+
+
+	<h:outputScript name="universaljs.js" library="universales/js" />
+	<script type="text/javascript" src="js/correo.js" />
+
+
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+
+	<title>CORREO INSTITUCIONAL</title>
+</h:head>
+<h:body>
+	<div id="bakgroundPopUp" onclick="esconderPopUppara()"></div>
+
+	<h:form id="menuPrincipal">
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+
+	<h:form id="formCorreos"  enctype="multipart/form-data"
+	acceptcharset="ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; ISO-8859-1" />
+	<p:growl id="messages" showDetail="true" />
+		<table style="margin-left: 12%">
+			<tr>
+				<td>
+					<h:outputLabel>
+						<div class="button checkmail"
+							title="Revisar si hay mensajes nuevos" id="rcmbtn111">Actualizar</div>
+						<f:ajax event="click"
+							listener="#{correosUsuarios.verCorreosRecibidos()}"
+							onevent="despuesActualizarListaCorreo" render="formCorreos" />
+					</h:outputLabel></td>
+				<td>
+					<h:outputLabel id="eliminarCorreos"
+						onclick="if(validarCorreosEliminar()) return false">
+						<div class="button delete disabled" title="Eliminar mensaje"
+							id="rcmbtn116">Eliminar</div>
+						<f:ajax event="click"
+							listener="#{correosUsuarios.eliminarCorreos()}"
+							onevent="eliminarCorreos" render="@form" />
+					</h:outputLabel>
+				</td>
+			</tr>
+		</table>
+		<div style="height: 100%; padding: 0 0 0 10px;">
+			<table id="tablaPrincipal" border="0" cellpadding="0" cellspacing="0"
+				width="100%;" style="height: 100%;">
+				<tr class="ubicacionCeldaArriba" style="height: 100%">
+					<td width="10%">
+						<div id="columnaIzquierda" class="fieldSetUniversal"
+							style="height: 100%;">
+							<table>
+								<tr class="ubicacionCeldaArriba">
+									<td><p:commandButton value="Nuevo" style="width:90%; text-align:center;"
+											oncomplete="terminar()" actionListener="#{correosUsuarios.reiniciarCorreo()}" onstart="empezar()"
+											update="editorPF :formCorreos:panelEscribirCorreos">
+										</p:commandButton></td>
+								</tr>
+								<tr class="ubicacionCeldaArriba">
+									<td>
+										<p:commandButton value="Recibidos" id="recibidos" style="width:90%; text-align:center;"
+											oncomplete="actualizarListaCorreoTerminar()" actionListener="#{correosUsuarios.verCorreosRecibidos()}" 
+											onstart="actualizarListaCorreoEmpezar()" update="formCorreos">
+										</p:commandButton>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+					<td width="1%">&nbsp;</td>
+					<td width="89%;">
+						<div id="columnaDerecha" style="height: 100%; width: 100%;">
+							<h:panelGroup layout="block" class="escribirCorreo"
+								id="panelEscribirCorreos"
+								style="width: 100%; height: 97%; min-heg padding: 0; margin: 0; max-height: 97%;">
+								<div class="uibox" style="height: 22%; min-height:22%: margin-bottom: 100px;">
+									<table width="100%" cellpadding="0" cellspacing="0"
+										style="vertical-align: top;">
+										<tr id="trPara" class="ubicacionCeldaArriba"
+											style="height: 100%;" onclick="seleccionarInputBuscar()">
+											<td width="10%;" style="vertical-align: bottom;"><h:outputText
+													value="Para" styleClass="labelResaltado marginIzquierdo" /></td>
+											<td width="90%;">
+
+
+												<div id="panelUsuariosCorreo" class="absolute"
+													style="border-bottom: 1px solid black; min-height: 30px; max-height: 90px; overflow-y: auto; cursor: text; max-width: 100%; min-width: 100%; width: 100%;"
+													onmousedown="desactivarEsconderUsuarios()"
+													onmouseup="activarBanderaEsconderUsuarios_false()">
+													<div id="sobreParaCorreo"></div>
+													<div id="fueraInput"
+														style="min-height: 34px; display: none;"
+														onclick="mostrarCorreos()">
+														<table cellpadding="0" cellspacing="0" border="0">
+															<tr style="height: 34px">
+																<td><h:panelGroup id="listaUsuariosParaFueraInput">
+																		<ui:repeat
+																			value="#{correosUsuarios.dataListUsuariosPara}"
+																			var="usuariosPara">
+																			<h:outputLabel class="emailclass"
+																				value="#{usuariosPara.nombres} #{usuariosPara.apellidos}, "
+																				style="text-transform: capitalize;">
+																				<f:ajax event="mousedown" onevent="escribirPara" immediate="true"/>
+																				<f:converter  converterId="minusculasjava" />
+																			</h:outputLabel>
+																		</ui:repeat>
+																	</h:panelGroup></td>
+															</tr>
+														</table>
+													</div>
+													<div id="bajoParaCorreo" style="min-height: 34px;">
+														<h:panelGroup id="listaUsuariosPara">
+															<table cellpadding="0" cellspacing="0" border="0" width="100%">
+																<tr style="height: 34px" onclick="mostrarPopUp()">
+																	<td width="100%">
+																		<h:panelGroup id="listaUsuariosParaExterno">
+																			<ui:repeat
+																				value="#{correosUsuarios.dataListUsuariosPara}"
+																				var="usuariosPara">
+																				<h:panelGroup id="lista2">
+																					<div class="vR">
+																						<span class="vN">
+	
+																							<div class="vT">
+																								<h:outputLabel
+																									value="#{usuariosPara.nombres} #{usuariosPara.apellidos}"
+																									style="text-transform: capitalize;">
+																									<f:converter converterId="minusculasjava" />
+																								</h:outputLabel>
+																							</div> <h:outputLabel>
+																								<div class="vM"
+																									onmousedown="activarBanderaEsconderUsuarios()">
+																									<f:ajax event="mousedown"
+																										onevent="despuesEliminarUsuario"
+																										listener="#{correosUsuarios.eliminarUsuario(usuariosPara)}"/>
+																								</div>
+																							</h:outputLabel>
+	
+																						</span>
+																					</div>
+																				</h:panelGroup>
+																			</ui:repeat>
+																		</h:panelGroup>
+																		<h:inputText id="inputBusquedaUsuarios"
+																			styleClass="inputEscribir vO"
+																			onfocus="guardarValorEspecial(this);"
+																			onblur="ocultarCorreos()"
+																			onkeyup="if(validarLetras(this)) return false;"
+																			value="#{correosUsuarios.queryUsuarios}"
+																			style="margin-top: 9px;" rows="1" name="to"
+																			spellcheck="false" autocomplete="off" tabindex="1"
+																			dir="ltr" aria-haspopup="false" role="combobox"
+																			aria-autocomplete="list">
+																			<f:ajax event="keyup" execute="@this"
+																				render="tablaUsuarios tablaCursos tablaGrupos"
+																				onevent="cargarUsuarios" />
+																			<f:ajax event="blur" render="@none"
+																			onevent="despuesValidarCorreoExterno" listener="#{correosUsuarios.validarCorreoExterno}"></f:ajax>
+																			<f:ajax event="select" onevent="prueba"></f:ajax>
+																		</h:inputText></td>
+																</tr>
+															</table>
+														</h:panelGroup>
+
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="vertical-align: bottom;"><h:outputText
+													value="Asunto" styleClass="labelResaltado marginIzquierdo" /></td>
+											<td width="20%"><h:inputText autocomplete="off"
+													value="#{correosUsuarios.correoNuevo.asunto}"
+													style="width: 100%; height: 30px; padding: 0; margin: 0; border: none; border-bottom: 1px solid #000;" />
+
+											</td>
+										</tr>
+									</table>
+
+									<br />
+									<table width="100%" cellpadding="0" cellspacing="0"
+										style="vertical-align: top;">
+										<tr id="trPara" class="ubicacionCeldaArriba"
+											onclick="seleccionarInputBuscar()">
+											<td width="10%;">&nbsp;</td>
+											<td><p:commandButton value="Enviar" type="submit" ajax="false"
+													action="#{correosUsuarios.enviarCorreo}">
+												</p:commandButton>
+											</td>
+											<td>
+												<p:fileUpload  mode="simple" styleClass="inputTextTareas"
+		                                                              sizeLimit="3000" validatorMessage="El tamaño a subir es mayor a lo permitido">
+												</p:fileUpload>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<div style="height: 2%; max-height: 2%;">
+									&nbsp;
+								</div>
+
+								<div style="width: 100%; height: 76%; max-height:78%; overflow: hidden;">
+									<div id="backEnviadoCorreo"
+										style="width: 100%; height: 100%; background: black; opacity: 0.5; z-index: 1000;">
+
+									</div>
+
+									<p:editor styleClass="uibox"
+										style="border-bottom-left-radius: 0; border-bottom: none; "
+										id="editorPF" value="#{correosUsuarios.value}" width="1000">
+
+									</p:editor>
+								</div>
+
+								<h:inputHidden id="contenido"
+									value="#{correosUsuarios.correoNuevo.contenido}" />
+
+								<div id="subPopUpBuscar" style="display: none;">
+									<h:panelGroup id="containerBuscarCliente">
+										<div id="containerBuscarClientePopUp"
+											onmousedown="desactivarEsconderUsuarios()"
+											style="width: 300px; max-height: 200px; overflow: hidden; overflow-y: auto; margin: 0 auto; position: relative; background: #EEF6FA;">
+											<h:dataTable id="tablaUsuarios"
+												value="#{correosUsuarios.dataListUsuariosBusqueda}"
+												var="usuario" rowClasses="rowUsuariosBusqueda" width="100%"
+												cellpadding="0" cellspacing="0">
+												<h:column>
+													<h:outputLabel
+														style="display: block; text-transform: capitalize;">
+														<table>
+															<tr>
+																<td><h:panelGroup
+																		rendered="#{usuario.foto != null}">
+																		<p:graphicImage value="#{fotos.imagen()}" width="50px"
+																			height="50px">
+																			<f:param name="imageID" value="#{usuario.idusuarios}" />
+																		</p:graphicImage>
+																	</h:panelGroup> <h:panelGroup rendered="#{usuario.foto == null}">
+																		<p:graphicImage
+																			value="http://localhost:8080/sistemaColegio/resources/imagenes/siluetaHombre.png"
+																			width="50px" height="50px">
+																			<f:param name="imageID" value="#{usuario.idusuarios}" />
+																		</p:graphicImage>
+																	</h:panelGroup></td>
+																<td><h:outputText
+																		value="#{usuario.nombres} #{usuario.apellidos}">
+																		<f:converter converterId="minusculasjava" />
+																	</h:outputText></td>
+															</tr>
+														</table>
+														<f:ajax event="mousedown"
+															render=":formCorreos:listaUsuariosPara :formCorreos:listaUsuariosParaFueraInput"
+															listener="#{correosUsuarios.agregarUsuario(usuario)}"
+															onevent="despuesEscoger" />
+													</h:outputLabel>
+												</h:column>
+											</h:dataTable>
+											<h:dataTable id="tablaCursos"
+												value="#{correosUsuarios.dataListCursosBusqueda}"
+												var="cursos" rowClasses="rowCursosBusqueda"
+												columnClasses="colCursosBusqueda" width="100%"
+												cellpadding="0" cellspacing="0">
+												<h:column>
+													<div style="padding: 20px;">
+														<h:outputLabel value="Curso: #{cursos.grados.nombre}"
+															style="display: block; text-transform: capitalize;">
+															<f:ajax event="mousedown"
+																render=":formCorreos:listaUsuariosPara :formCorreos:listaUsuariosParaFueraInput"
+																listener="#{correosUsuarios.agregarCurso(cursos)}"
+																onevent="despuesEscoger" />
+														</h:outputLabel>
+													</div>
+												</h:column>
+											</h:dataTable>
+											<h:dataTable id="tablaGrupos"
+												value="#{correosUsuarios.dataListGrupos}"
+												var="grupo" rowClasses="rowCursosBusqueda"
+												columnClasses="colCursosBusqueda" width="100%"
+												cellpadding="0" cellspacing="0">
+												<h:column>
+													<div style="padding: 20px;">
+														<h:outputLabel value="Grupo: #{grupo}"
+															style="display: block; text-transform: capitalize;">
+															<f:ajax event="mousedown"
+																render=":formCorreos:listaUsuariosPara :formCorreos:listaUsuariosParaFueraInput"
+																listener="#{correosUsuarios.agregarGrupo(grupo)}"
+																onevent="despuesEscoger" />
+														</h:outputLabel>
+													</div>
+												</h:column>
+											</h:dataTable>
+										</div>
+									</h:panelGroup>
+								</div>
+							</h:panelGroup>
+							<h:panelGroup layout="block" id="panelLeerLosCorreos"
+								style="height: 97%">
+								<div id="divCorreos" style="height: 100%;">
+									<div id="recibirLeerCorreos" class="correos uibox">
+										<div class="divTablaHeader uibox"
+											style="width: 100%; border: 0; background: #AABDE6;">
+											<table width="100%" cellpadding="0" cellspacing="0">
+												<thead style="width: 100%">
+													<tr style="height: 30px;">
+														<th class="bordesHeader colTablaCorreos colTablaCorreos-1">&nbsp;</th>
+														<th class="bordesHeader colTablaCorreos colTablaCorreos-2">De</th>
+														<th class="bordesHeader colTablaCorreos colTablaCorreos-3">Asunto</th>
+														<th class="colTablaCorreos-4">Fecha</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+										<div id="tablaPrincipalCorreos"
+											style="height: 83%; width: 100%;">
+											<h:dataTable id="tablaCorreosPara"
+												value="#{correosUsuarios.dataListCorreos}" var="correos"
+												border="0"
+												style="display:#{correosUsuarios.dataListCorreos == null or correosUsuarios.dataListCorreos.isEmpty() ? 'none':'auto'}"
+												columnClasses="bordesHeader colTablaCorreosBody-1 colTablaCorreosBody, bordesHeader colTablaCorreosBody-2 colTablaCorreosBody, bordesHeader colTablaCorreosBody-3 colTablaCorreosBody, prueba"
+												rowClasses="ubicacionCeldaMitad correoRow fila1, ubicacionCeldaMitad correoRow fila2"
+												cellpadding="0" cellspacing="0" width="100%">
+												<h:column>
+													<center>
+														<h:selectBooleanCheckbox styleClass="checkEliminarCorreo">
+															<f:ajax onevent="despuesSeleccionarEliminar"
+																listener="#{correosUsuarios.seleccionarCorreoEliminar(correos)}" />
+														</h:selectBooleanCheckbox>
+													</center>
+												</h:column>
+												<h:column>
+													<h:outputLabel escape="false"
+														value="#{correos.correo.idusuariosde.nombres} #{correos.correo.idusuariosde.apellidos}"
+														styleClass="#{correos.idrelacioncorreousuarios} marginIzquierdo correoRow #{correos.leido?'leido':'sinLeer'}"
+														style="text-transform: capitalize; display:block;">
+														<f:ajax event="click"
+															listener="#{correosUsuarios.seleccionarCorreo(correos)}"
+															render=":formCorreos:contenidoCorreo :formCorreos:asuntoCorreoseleccionado :formCorreos:descargarCorreoseleccionado :formCorreos:descargarCorreoseleccionado :formCorreos:nombreCorreoseleccionado
+                                                                    :formCorreos:recibidos :menuPrincipal"
+															onevent="despuesSeleccionarCorreo" />
+														<f:converter converterId="minusculasjava" />
+													</h:outputLabel>
+												</h:column>
+												<h:column>
+													<h:outputLabel escape="false"
+														value="#{correos.correo.asunto!=null and correos.correo.asunto.length() > 0 ?correos.correo.asunto:'Sin asunto'}"
+														styleClass="#{correos.idrelacioncorreousuarios} marginIzquierdo correoRow #{correos.leido?'leido':'sinLeer'}"
+														style="display:block;">
+														<f:ajax event="click"
+															listener="#{correosUsuarios.seleccionarCorreo(correos)}"
+															render=":formCorreos:contenidoCorreo :formCorreos:asuntoCorreoseleccionado :formCorreos:nombreCorreoseleccionado
+                                                                    :formCorreos:recibidos :menuPrincipal"
+															onevent="despuesSeleccionarCorreo" />
+													</h:outputLabel>
+												</h:column>
+												<h:column>
+													<h:outputLabel escape="false"
+														value="#{correos.correo.fecha}"
+														styleClass="#{correos.idrelacioncorreousuarios} marginIzquierdo correoRow #{correos.leido?'leido':'sinLeer'}"
+														style="display:block;">
+														<f:convertDateTime type="both" dateStyle="full"
+															locale="es_ES" pattern="dd/MM/yy h:mm a"
+															timeZone="America/Bogota" />
+														<f:ajax event="click"
+															listener="#{correosUsuarios.seleccionarCorreo(correos)}"
+															render=":formCorreos:contenidoCorreo :formCorreos:asuntoCorreoseleccionado :formCorreos:nombreCorreoseleccionado
+                                                                    :formCorreos:recibidos :menuPrincipal"
+															onevent="despuesSeleccionarCorreo" />
+													</h:outputLabel>
+												</h:column>
+											</h:dataTable>
+											<h:dataTable value="#{correosUsuarios.mensajes}" width="100%"
+												style="display:#{correosUsuarios.mensajes == null ? 'none':'auto'}"
+												cellpadding="0" cellspacing="0"
+												rowClasses="correoRow filaVerde1,correoRow filaVerde2"
+												columnClasses="bordesHeader colTablaCorreosBody-1 colTablaCorreosBody, bordesHeader colTablaCorreosBody-2 colTablaCorreosBody, bordesHeader colTablaCorreosBody-3 colTablaCorreosBody, prueba"
+												var="mensaje">
+												<h:column>
+													<center>
+														<h:selectBooleanCheckbox styleClass="checkEliminarCorreo">
+															<f:ajax onevent="despuesSeleccionarEliminar"
+																listener="#{correosUsuarios.seleccionarMensajeEliminar(mensaje)}" />
+														</h:selectBooleanCheckbox>
+													</center>
+												</h:column>
+												<h:column>
+													<h:outputLabel value="#{correosUsuarios.from(mensaje)}"
+														styleClass="#{mensaje.messageNumber} marginIzquierdo #{correosUsuarios.messageRead(mensaje)?'leido':'sinLeer'}"
+														style="display:block; cursor:pointer; ">
+														<f:ajax event="mouseup"
+															listener="#{correosUsuarios.seleccionarMensaje(mensaje)}"
+															render=":formCorreos:contenidoCorreo :formCorreos:asuntoCorreoseleccionado :formCorreos:nombreCorreoseleccionado
+                                                                    :formCorreos:recibidos :menuPrincipal :formCorreos:dataListAdjuntos"
+															onevent="despuesSeleccionarMensaje" />
+														<f:ajax event="click" render=":formCorreos:adjuntoCorreo">
+														</f:ajax>
+														<f:converter converterId="minusculasjava" />
+														<f:converter converterId="mailfrom" />
+													</h:outputLabel>
+												</h:column>
+												<h:column>
+													<h:outputLabel value="#{mensaje.subject}"
+														styleClass="#{mensaje.messageNumber} marginIzquierdo #{correosUsuarios.messageRead(mensaje)?'leido':'sinLeer'}"
+														style="display:block; cursor:pointer;">
+														<f:ajax event="mouseup"
+															listener="#{correosUsuarios.seleccionarMensaje(mensaje)}"
+															render=":formCorreos:contenidoCorreo :formCorreos:asuntoCorreoseleccionado :formCorreos:nombreCorreoseleccionado
+                                                                    :formCorreos:recibidos :menuPrincipal :formCorreos:dataListAdjuntos"
+															onevent="despuesSeleccionarMensaje" />
+														<f:ajax event="click" render=":formCorreos:contenidoCorreo">
+														</f:ajax>
+														<f:converter converterId="mailsubject" />
+													</h:outputLabel>
+												</h:column>
+												<h:column>
+													<h:outputLabel value="#{mensaje.sentDate}"
+														styleClass="#{mensaje.messageNumber} marginIzquierdo #{correosUsuarios.messageRead(mensaje)?'leido':'sinLeer'} marginIzquierdo"
+														style="display:block; cursor:pointer;">
+														<f:ajax event="click"
+															listener="#{correosUsuarios.seleccionarMensaje(mensaje)}"
+															render=":formCorreos:contenidoCorreo :formCorreos:asuntoCorreoseleccionado :formCorreos:nombreCorreoseleccionado
+                                                                    :formCorreos:recibidos :menuPrincipal :formCorreos:dataListAdjuntos"
+															onevent="despuesSeleccionarMensaje" />
+														<f:convertDateTime type="both" dateStyle="full"
+															locale="es_ES" pattern="dd/MM/yy h:mm a"
+															timeZone="America/Bogota" />
+													</h:outputLabel>
+												</h:column>
+											</h:dataTable>
+										</div>
+									</div>
+									<div style="height: 2%"></div>
+									<div id="leerCorreos" class="leerCorreos uibox"
+										style="background: white; padding: 0;">
+										<div id="mailview-bottom" style="top: 326px; height: 100%;">
+											<div id="messageheader">
+												<table width="100%" align="left">
+													<tr>
+														<td rowspan="2" width="2%">&nbsp;</td>
+														<td colspan="3"><b>Asunto: </b> <h:outputText
+																style="text-transform: capitalize;"
+																id="asuntoCorreoseleccionado"
+																value=" #{correosUsuarios.asunto}">
+																<f:converter converterId="minusculasjava" />
+															</h:outputText>
+														</td>
+														<td>
+															<h:panelGroup layout="block" id="descargarCorreoseleccionado">
+																<p:commandLink id="downloadLink" value="Descargar Adjunto"
+																	ajax="false" rendered="#{correosUsuarios.adjunto}">
+																	<p:fileDownload value="#{correosUsuarios.fileDownload}">
+																	</p:fileDownload>
+																</p:commandLink>
+															</h:panelGroup>
+														</td>
+													</tr>
+													<tr>
+														<td><b>Remitente: </b> <h:outputText
+																style="text-transform: capitalize;"
+																id="nombreCorreoseleccionado"
+																value=" #{correosUsuarios.remitente}">
+															</h:outputText></td>
+														<td>&nbsp;</td>
+														<td>&nbsp;</td>
+													</tr>
+												</table>
+											</div>
+											<h:panelGroup id="contenidoCorreo" layout="block" styleClass="contenidoCorreo">
+												<table width="100%;" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+													<tr style="height: 100%;">
+														<td>
+															<h:outputLabel
+																value="#{correosUsuarios.contenidoCorreo}"
+																escape="false">
+															</h:outputLabel>
+														</td>
+														<td width="#{correosUsuarios.dataListAdjuntos != null ? '35%':'0'}"
+																style="vertical-align: top;">
+															<h:panelGroup id="dataListAdjuntos" layout="block"
+																	styleClass="adjuntos"
+																	style="display:#{correosUsuarios.dataListAdjuntos != null ? 'block':'none'}">
+																	<h:outputLabel id="adjuntoCorreo">
+																		<h:dataTable id="dataTableAdjuntos"
+																			value="#{correosUsuarios.dataListAdjuntos}"
+																			var="adjunto">
+																			<h:column>
+																				<p:commandLink id="downloadLink"
+																					value="#{adjunto.fileName}" ajax="false">
+																					<p:fileDownload value="#{correosUsuarios.file}">
+																					</p:fileDownload>
+																					<f:ajax event="click" execute="@this" render="@form" />
+																				</p:commandLink>
+																			</h:column>
+																		</h:dataTable>
+																	</h:outputLabel>
+															</h:panelGroup>
+														</td>
+													</tr>
+												</table>
+											</h:panelGroup>
+											<div id="contenidoCorreoBack">
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</h:panelGroup>
+							<h:panelGroup layout="block" id="statusbar" styleClass="statusbar">
+								<table width="30%" id="tablaStatus" cellpadding="0"
+									cellspacing="0">
+									<tr style="height: 32px">
+										<td width="5%"><h:graphicImage id="cargandoImage"
+												value="/resources/imagenes/loading.gif">
+											</h:graphicImage></td>
+										<td><h:outputText id="cargandoMail"
+												class="loading loadingMail" value="Cargando...">
+											</h:outputText> <h:outputText id="actualizandoMail"
+												class="loading loadingMail"
+												value="Actualizando su lista de correos...">
+											</h:outputText> <h:outputText id="enviandoMail" class="loading loadingMail"
+												value="Enviando el correo...">
+											</h:outputText> <h:outputText id="borrandoMail" class="loading loadingMail"
+												value="Borrando correos...">
+											</h:outputText></td>
+									</tr>
+								</table>
+							</h:panelGroup>
+							<!-- <div id="statusbar">
+								<table width="30%" id="tablaStatus" cellpadding="0"
+									cellspacing="0">
+									<tr style="height: 32px">
+										<td width="5%"><h:graphicImage id="cargandoImage"
+												value="/resources/imagenes/loading.gif">
+											</h:graphicImage></td>
+										<td><h:outputText id="cargandoMail"
+												class="loading loadingMail" value="Cargando...">
+											</h:outputText> <h:outputText id="actualizandoMail"
+												class="loading loadingMail"
+												value="Actualizando su lista de correos...">
+											</h:outputText> <h:outputText id="enviandoMail" class="loading loadingMail"
+												value="Enviando el correo...">
+											</h:outputText> <h:outputText id="borrandoMail" class="loading loadingMail"
+												value="Borrando correos...">
+											</h:outputText></td>
+									</tr>
+								</table>
+							</div> -->
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</h:form>
+</h:body>
+</html>

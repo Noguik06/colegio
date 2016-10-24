@@ -1,0 +1,499 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <!--Css globales-->        
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+        <h:outputStylesheet name="botones.css" library="universales/css"/>
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="letras.css" library="universales/css"/>
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+        <h:outputScript name="hoverIntent.js" library="menuPrincipal/js"/>
+        <h:outputScript name="superfish.js" library="menuPrincipal/js"/>
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+
+		<h:outputScript library="js" name="calendar_es.js" />
+
+        <!--Css locales-->        
+        <link href="css/configuracionPeriodo.css" rel="stylesheet" type="text/css" />
+
+        <!--Js globales-->
+        <h:outputScript name="validaciones.js" library="universales/js"/>
+
+        <!--Js locales-->
+        <script type="text/javascript"  src="js/configuracionPeriodo.js"/>
+
+
+        <title>CONFIGURACION NOTAS ESTUDIANTES</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <div style="width: auto;" >
+                <ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml"/>
+            </div>
+        </h:form>
+        <br/>
+	<h:panelGroup>
+		<h:form id="formPrincipal" style="width: 1200px;">
+			<fieldset class="fieldSetUniversal"
+				style="width: 97%; margin-left: auto; margin-right: auto;">
+				<div class="divTablaHeader" style="width: 100%;">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<thead>
+							<tr style="height: 30px;">
+								<th class="colTablaNotasPrincipal-1 bordesHeader">Años
+									Académicos <h:outputLabel value="[+]"
+										styleClass="labelResaltado labelEnlacesUniversal">
+										<p:ajax event="click" update=":edicionAnosAcademicos"
+											listener="#{configuracionPeriodo.seleccionarAnoAcademicoEditar(null)}"
+											onstart="PF('statusDialog').show()"
+											oncomplete="PF('statusDialog').hide(); PF('edicionedicionAnosAcademicosDialog').show()" />
+									</h:outputLabel>
+								</th>
+								<th class="colTablaNotasPrincipal-2 bordesHeader">Periodos
+									<h:outputLabel value="[+]"
+										styleClass="labelResaltado labelEnlacesUniversal">
+										<p:ajax 
+											event="click" 
+											update=":edicionPeriodos"
+											listener="#{configuracionPeriodo.seleccionarPeriodoAcademicoEditar(null)}"
+											onstart="PF('statusDialog').show()"
+											oncomplete="PF('statusDialog').hide(); PF('edicionPeriodosDialog').show()"/>
+									</h:outputLabel>
+								</th>
+								<th class="colTablaNotasPrincipal-3 bordesHeader">
+									 Grados
+								</th>
+								<th class="colTablaNotasPrincipal-4 bordesHeader">Asignaturas <h:outputLabel
+										value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+										<p:ajax event="click" update=":edicionAsignaturas"
+													listener="#{configuracionPeriodo.seleccionarAsignataturasEditar(null)}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide(); PF('edicionAsignaturasDialog').show()"/>
+									</h:outputLabel>
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<table width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tbody>
+						<tr>
+							<td class="colTablaNotasPrincipal-1 bordesHeader"><h:panelGroup
+									id="contenedorAnosAcademicos">
+									<h:dataTable id="tablaAnosAcademicos"
+										value="#{configuracionPeriodo.dataListAnosAcademicos}"
+										var="anoacademico" width="100%" cellpadding="0" cellspacing="0"
+										border="0" styleClass="border2" >
+										<h:column>
+											<h:outputLabel value="#{anoacademico.fechainicio}"
+												styleClass="botonGrisClaro-Verde labelSinResaltar">
+												<p:ajax event="click"
+													update=":formPrincipal:tblPeriodos :formPrincipal:tblGrados"
+													listener="#{configuracionPeriodo.seleccionarAnoAcademico(anoacademico)}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide();" />
+												<f:convertDateTime pattern="yyyy" />
+											</h:outputLabel>
+										</h:column>
+										<h:column>
+											<p:selectBooleanCheckbox value="#{configuracionPeriodo.selectetAnoAcademico}"> 
+											<p:ajax process="@this" update="@form"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide()"></p:ajax>
+											</p:selectBooleanCheckbox>
+										</h:column>
+									</h:dataTable>
+								</h:panelGroup>
+							</td>
+							<td class="colTablaNotasPrincipal-2 bordesHeader"><h:panelGroup
+									id="contenedorPeriodos">
+									<h:dataTable id="tblPeriodos"
+										value="#{configuracionPeriodo.dataListPeriodos}"
+										var="peridodos" styleClass="border2" cellpadding="0"
+										cellspacing="0" border="0" width="100%" style="margin-left: 5%; vertical-align:middle;">
+										<h:column>
+											<h:outputLabel value="#{peridodos.nombre}"  styleClass="labelSinResaltar">
+											</h:outputLabel>
+										</h:column>
+										<h:column>
+											<h:outputLabel value="Editar" style="color:blue; cursor:pointer; vertical-align:middle;">
+												<p:ajax 
+												event="click" 
+												update=":edicionPeriodos"
+												listener="#{configuracionPeriodo.seleccionarPeriodoAcademicoEditar(peridodos)}"
+												onstart="PF('statusDialog').show()"
+												oncomplete="PF('statusDialog').hide(); PF('edicionPeriodosDialog').show()"/>
+											</h:outputLabel>
+										</h:column>
+									</h:dataTable>
+								</h:panelGroup>
+							</td>
+							<td class="colTablaNotasPrincipal-3 bordesHeader"><h:panelGroup
+									id="contenedorGrados">
+									<h:dataTable id="tblGrados"
+										value="#{configuracionPeriodo.dataListGrados}" var="grados"
+										styleClass="border2" width="100%" cellpadding="0"
+										cellspacing="0" border="0" columnClasses="colDimensiones-1">
+										<h:column>
+											<h:outputLabel value="#{grados.nombre}">
+												<p:ajax 
+													event="click" 
+													update=":formPrincipal:tblAsignaturas"
+													listener="#{configuracionPeriodo.seleccionarGrado(grados)}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide();"/>
+											</h:outputLabel>
+										</h:column>
+										<h:column>
+											<center>
+												<h:outputLabel value="Editar">
+													<p:ajax 
+													event="click" 
+													update=":edicionGrados"
+													listener="#{configuracionPeriodo.seleccionarEditarGrados(grados)}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide(); PF('edicionGradosDialog').show()"/>
+												</h:outputLabel>
+											</center>
+										</h:column>
+									</h:dataTable>
+								</h:panelGroup>
+							</td>
+							<td class="colTablaNotasPrincipal-4 bordesHeader"><h:panelGroup
+									id="contenedorAsignaturas">
+									<h:dataTable id="tblAsignaturas"
+										value="#{configuracionPeriodo.dataListAsignaturas}" var="asignaturas"
+										style="margin-left: 5%;" styleClass="border2" width="70%"
+										cellpadding="0" cellspacing="0" border="0"
+										columnClasses="colPeriodos-1">
+										<h:column>
+											<h:outputLabel value="#{asignaturas[1]}">
+												<p:ajax event="click" update=":edicionAsignaturas"
+													listener="#{configuracionPeriodo.seleccionarAsignataturasEditar(asignaturas[0])}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide(); PF('edicionAsignaturasDialog').show()"  />
+											</h:outputLabel>
+										</h:column>
+										<h:column>
+											<p:selectBooleanCheckbox disabled="true"
+												value="#{asignaturas[2] == -1? false:true}">
+											</p:selectBooleanCheckbox>
+										</h:column>
+										<h:column>
+											<h:outputLabel value="Editar">
+												<p:ajax event="click" update=":edicionAsignaturasCreadas"
+													listener="#{configuracionPeriodo.seleccionarAsignaturaEditarNombre(asignaturas[0])}"
+													onstart="PF('statusDialog').show()"
+													oncomplete="PF('statusDialog').hide(); PF('edicionAsignaturasCreadasDialog').show()"/>
+											</h:outputLabel>
+										</h:column>
+									</h:dataTable>
+								</h:panelGroup>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+		</h:form>
+
+		<!--Formulario para agregar/editar AnosAcademicos-->
+		<h:form id="edicionAnosAcademicos" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="edicionedicionAnosAcademicosDialog"
+				header="Editar/Agregar Años Académicos"
+				widgetVar="edicionedicionAnosAcademicosDialog" modal="true"
+				height="290px" showEffect="fade" hideEffect="fade"
+				closeOnEscape="true" resizable="false" width="500px"
+				style="width:500px; max-width:500px;">
+				<h:panelGroup layout="block" id="panelEdicionModulosDialog"
+					style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td><h:outputText value="Fecha Inicio: "></h:outputText></td>
+							<td><p:calendar
+									value="#{configuracionPeriodo.anosacademicoEditarSeleccionado.fechainicio}"
+									locale="es"></p:calendar></td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Fecha Fin: "></h:outputText></td>
+							<td><p:calendar styleClass="claseInputTextFechaNacimiento"
+									locale="es"
+									value="#{configuracionPeriodo.anosacademicoEditarSeleccionado.fechafin}"></p:calendar>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Guardar"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionedicionAnosAcademicosDialog').hide(); PF('statusDialog').hide()"
+							actionListener="#{configuracionPeriodo.guardarAnoAcademicoSeleccionado()}"
+							process="@form" update=":formPrincipal:tablaAnosAcademicos">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+		
+		<!--Formulario para agregar/editar AnosAcademicos-->
+		<h:form id="edicionPeriodos" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="edicionPeriodosDialog"
+				header="Editar/Agregar Periodos"
+				widgetVar="edicionPeriodosDialog" modal="true"
+				height="290px" showEffect="fade" hideEffect="fade"
+				closeOnEscape="true" resizable="false" width="500px"
+				style="width:500px; max-width:500px;">
+				<h:panelGroup layout="block" id="panelEdicionPeriodosDialog"
+					style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td><h:outputText value="Nombre: "></h:outputText></td>
+							<td>
+								<p:inputText value="#{configuracionPeriodo.periodoEditarSeleccionado.nombre}"></p:inputText>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Fecha Inicio: "></h:outputText></td>
+							<td><p:calendar
+									value="#{configuracionPeriodo.periodoEditarSeleccionado.fechainicio}"
+									locale="es"></p:calendar></td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Fecha Fin: "></h:outputText></td>
+							<td><p:calendar styleClass="claseInputTextFechaNacimiento"
+									locale="es"
+									value="#{configuracionPeriodo.periodoEditarSeleccionado.fechafin}"></p:calendar>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Fecha Entrega de Notas: "></h:outputText></td>
+							<td><p:calendar styleClass="claseInputTextFechaNacimiento"
+									locale="es"
+									value="#{configuracionPeriodo.periodoEditarSeleccionado.fechanotas}"></p:calendar>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Tipo: "></h:outputText></td>
+							<td>
+								<p:selectOneMenu>
+									<f:selectItem itemLabel="Parcial" itemValue="0"> 
+									</f:selectItem>
+									<f:selectItem itemLabel="Final" itemValue="1"> 
+									</f:selectItem>
+								</p:selectOneMenu>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Guardar"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionPeriodosDialog').hide(); PF('statusDialog').hide()"
+							actionListener="#{configuracionPeriodo.guardarPeriodoSeleccionado()}"
+							process="@form" update=":formPrincipal:tblPeriodos">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+		
+		
+		<!--Formulario para agregar/editar Grado-->
+		<h:form id="edicionGrados" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="edicionGradosDialog"
+				header="Editar/Agregar Grados"
+				widgetVar="edicionGradosDialog" modal="true"
+				height="290px" showEffect="fade" hideEffect="fade"
+				closeOnEscape="true" resizable="false" width="500px"
+				style="width:500px; max-width:500px;">
+				<h:panelGroup layout="block" id="panelEdicionGradosDialog"
+					style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td><h:outputText value="Profesor:"></h:outputText></td>
+							<td><p:autoComplete id="completeEmpleados"
+									value="#{configuracionPeriodo.cursoSeleccionadoEditar.profesor}"
+									completeMethod="#{configuracionPeriodo.completeThemeProfesores}"
+									style="width:70%" panelStyle="widht:100%;" maxResults="5"
+									var="profesor" itemLabel="#{profesor.usuarios.nombres} #{profesor.usuarios.apellidos}"
+									itemValue="#{profesor}" converter="profesoresConverter"
+									forceSelection="true" size="33">
+								</p:autoComplete>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Bloques
+							</td>
+							<td>
+								<p:selectOneMenu value="#{configuracionPeriodo.cursoSeleccionadoEditar.bloques.idbloques}">
+									<f:selectItems
+										value="#{configuracionPeriodo.dataListBloques()}"
+										var="bloques" itemLabel="#{bloques.nombre}"
+										itemValue="#{bloques.idbloques}">
+									</f:selectItems>
+								</p:selectOneMenu>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Guardar"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionGradosDialog').hide(); PF('statusDialog').hide()"
+							actionListener="#{configuracionPeriodo.guardarEdicionCurso()}"
+							process="@form" update=":formPrincipal:tblPeriodos">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+		
+		<!--Formulario para agregar/editar Una asignatura-->
+		<h:form id="edicionAsignaturas" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="edicionAsignaturasDialog"
+				header="Editar/Agregar Asignaturas"
+				widgetVar="edicionAsignaturasDialog" modal="true"
+				height="290px" showEffect="fade" hideEffect="fade"
+				closeOnEscape="true" resizable="false" width="500px"
+				style="width:500px; max-width:500px;">
+				<h:panelGroup layout="block" id="panelEdicionAsignaturasDialog"
+					style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td><h:outputText value="Nombre:"></h:outputText></td>
+							<td>
+								<p:inputText
+									value="#{configuracionPeriodo.relacionprofesoresasignaturaperiodoEditar.relacionasignaturaperiodos.asignaturas.nombre}">
+								</p:inputText>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Profesor:"></h:outputText></td>
+							<td><p:autoComplete id="completeEmpleados"
+									value="#{configuracionPeriodo.relacionprofesoresasignaturaperiodoEditar.profesores}"
+									completeMethod="#{configuracionPeriodo.completeThemeProfesores}"
+									style="width:70%" panelStyle="widht:100%;" maxResults="5"
+									var="profesor" itemLabel="#{profesor.usuarios.nombres} #{profesor.usuarios.apellidos}"
+									itemValue="#{profesor}" converter="profesoresConverter"
+									forceSelection="true" size="33">
+								</p:autoComplete>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Horas por semana:"></h:outputText></td>
+							<td>
+								<p:inputText value="#{configuracionPeriodo.relacionprofesoresasignaturaperiodoEditar.cantidadhorasporsemana}"> 
+									
+								</p:inputText>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Guardar"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionAsignaturasDialog').hide(); PF('statusDialog').hide()"
+							actionListener="#{configuracionPeriodo.guardarEdcionRelacionprofesoresasignaturaperiodoEditar()}"
+							process="@form" update=":formPrincipal:tblAsignaturas">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+		
+		<!--Formulario para agregar/editar Una asignatura-->
+		<h:form id="edicionAsignaturasCreadas" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="edicionAsignaturasCreadasDialog"
+				header="Editar/Agregar Asignaturas"
+				widgetVar="edicionAsignaturasCreadasDialog" modal="true"
+				height="400px" showEffect="fade" hideEffect="fade"
+				closeOnEscape="true" resizable="false" width="500px"
+				style="width:500px; max-width:500px;">
+				<h:panelGroup layout="block" id="panelEdicionAsignaturasCreadasDialog"
+					style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td><h:outputText value="Nombre:"></h:outputText></td>
+							<td>
+								<p:inputText
+									value="#{configuracionPeriodo.asignaturaSeleccionada.nombre}">
+								</p:inputText>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Tipo:"></h:outputText></td>
+							<td>
+								<p:selectOneMenu value="#{configuracionPeriodo.asignaturaSeleccionada.tipoasignatura}">>
+									<f:selectItem itemLabel="Principal" itemValue="#{0}">
+									</f:selectItem>
+									<f:selectItem itemLabel="Secundaria" itemValue="#{1}">
+									</f:selectItem>
+									<f:selectItem itemLabel="Comportamiento" itemValue="#{3}">
+									</f:selectItem>
+								</p:selectOneMenu>
+							</td>
+						</tr>
+						<tr>
+							<p:dataTable id="tblAgrupaAsignaturas" value="#{configuracionPeriodo.dataListAsignaturasGrupales}"
+							var="asignaturaSelected" style="max-height:100px; overflow:scroll;">
+								<p:column headerText="Asignatura">
+									<h:outputText value="#{asignaturaSelected[1]}">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="Relacion">
+									<p:selectBooleanCheckbox value="#{configuracionPeriodo.relacionAgrupa}">
+										<p:ajax onstart="PF('statusDialog').show();" oncomplete="PF('statusDialog').hide();"></p:ajax>
+									</p:selectBooleanCheckbox>
+								</p:column>
+							</p:dataTable>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Guardar"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('edicionAsignaturasCreadasDialog').hide(); PF('statusDialog').hide()"
+							actionListener="#{configuracionPeriodo.guardarAsignaturaSeleccionada()}"
+							process="@form" update=":formPrincipal:tblAsignaturas">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+
+
+		<div id="backgroundPopup"
+			style="display: none; z-index: 0; width: 1400px;"
+			onclick="escongerPopUP()" />
+		<br />
+		<p:growl id="messages" showDetail="true" widgetVar="messages" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/imagenes/ajaxloadingbar.gif" />
+		</p:dialog>
+	</h:panelGroup>
+</h:body>
+</html>

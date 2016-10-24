@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../../../templates/general/templateGeneral.xhtml">
+        <ui:define name="title">
+            <title>Matrículas Estudiantes</title>
+        </ui:define>
+        <ui:define name="content">
+            <h:body>
+                <h:panelGroup rendered="#{rolesManager.contabilidad()}">
+                    <h:form id="formPagos" style="width: 1200px; min-width: 1200px;">
+                        <h:outputScript name="jquery.js" library="jquery"/>
+                        <h:outputScript name="validaciones.js" library="universales/js"/>
+                        <h:outputScript name="universaljs.js" library="universales/js"/>
+
+                        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+                        <h:outputStylesheet name="botones.css" library="universales/css"/>
+                        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+                        <h:outputStylesheet name="letras.css" library="universales/css"/>
+                        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+
+                        <link href="css/tiposPagos.css" rel="stylesheet" type="text/css" />
+                        <script src="js/tiposPagos.js" type="text/javascript" charset="utf-8"></script>
+
+
+                        <h:messages id="mensajes" layout="table" errorClass="errorMensaje" infoClass="exitoMensaje" style="display: none;"/>
+
+                        <h:panelGroup layout="block" style="width: 70%; margin: 0 auto;">
+                            <div style="width: 100%">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td>
+                                            <h:outputLabel value="Agregar [+]" class="labelResaltado">
+                                                <f:ajax event="click" render=":formPagos:configuracionTiposPagos" listener="#{pagosManager.agregarNuevoTipo()}"/>
+                                            </h:outputLabel> 
+                                        </td>
+
+                                        <td>
+                                            <table style="float: right;">
+                                                <tr>
+                                                    <td>
+                                                        <div class="claseDivLabelBuscarPrincipal">
+                                                            <h:outputLabel value="Buscar:" class="claseLabelBuscarPrincipal"/>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <h:inputText  id="inputTextBuscar" class="claseInputTextBuscarPrincipal" onfocus="guardarValorEspecial(this); guardarValorLetras(this)" onkeyup="if(validarLetras(this)) return false;">
+                                                            <f:ajax event="keyup"  render="idPanelGroupContenedorTablaPrincipal" onevent="despuesBuscar"/>
+                                                        </h:inputText>                                
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>                
+
+
+                            <!--                        <table width="100%">
+                                                        <tr>
+                                                            <td>
+                                                                &nbsp;
+                                                            </td>
+                                                            <td>
+                                                                <h:panelGroup id="idPanelGroupLabelSeEncontro" layout="block" style="float: right">
+                                                                    <label style="color: #575757; font-style: italic;">Se encontró </label><h:outputLabel value=" {estudiantesManager.dataListEstudiantes==null or estudiantesManager.dataListEstudiantes.size()==0?'0':estudiantesManager.dataListEstudiantes.size()}" style="color: #575757; font-style: italic; font-weight: bolder"/> <label style="color: #575757; font-style: italic;">Estudiantes</label>
+                                                                    <label style="color: #575757; font-style: italic;"> de </label><h:outputLabel value=" {estudiantesManager.dataListEstudiantesTotales()}" style="color: #575757; font-style: italic; font-weight: bolder"/>
+                                                                </h:panelGroup>
+                            
+                                                            </td>
+                                                        </tr>-->
+                            <!--</table>-->
+                            <h:panelGroup id="idPanelGroupContenedorTablaPrincipal" layout="block" style="width: 100%;">
+                                <!--<div class="headerClassUniversal2 claseDivContenedorHeaderPrincipal">-->
+                                <div class="divTablaHeader" style="width: 100%; display: block;">
+                                    <table style="width: 100%" cellpadding="0" cellspacing="0">
+                                        <thead style="width: 100%;">
+                                            <tr style="height: 35px">
+                                                <th class="colTiposPagos-1 colTiposPagosHader bordesHeader"> 
+                                                    <label>Nombre</label>
+                                                </th>
+                                                <th class="colTiposPagos-2 ">
+                                                    <label>Tipo</label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <br/>
+                                <div style="width: 100%; overflow: auto; overflow-x:hidden;">
+                                    <div style="width: 100%; margin: 0 auto; height: 200px; max-height: 200px; overflow: hidden; overflow-x: hidden; overflow-y: auto;" id="contenedorEstudiantesBusqueda">
+                                        <h:panelGroup id="idPanelGroupTablaPedidosPrincipal" class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal" layout="block"
+                                                      style="width: 100%; overflow: hidden;">
+
+                                            <h:dataTable id="tablaDatosBusqueda" width="100%;" style="width: 100%; min-width: 100%; max-width: 100%;"  columnClasses="colTiposPagos-1 colTiposPagosBody bordesHeader, colTiposPagos-2" value="#{pagosManager.dataListTiposPagos}" var="pagos" rowClasses="fila1, fila2" cellpadding="0" cellspacing="0">
+                                                <f:ajax  event="click" listener="#{pagosManager.seleccionarTipopago(pagos)}" render=":formPagos:configuracionTiposPagos">
+                                                    <h:column> <!-- Código Proveedor-->                                                                        
+                                                        <div id="#{pagos.idtipopagos}_estudiantes">
+                                                        </div>
+                                                        <a class="bajaEstudiantes" id="#{pagos.idtipopagos}">
+                                                        </a>
+                                                        <a class="subeEstudiantes">
+                                                        </a>
+
+                                                        <h:outputLabel style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize;" value="#{pagos.nombre}" class="labelSinResaltar claseClickEstudiante">
+                                                            <f:converter converterId="minusculasjava"/>
+                                                        </h:outputLabel>
+                                                    </h:column>
+                                                    <h:column> <!-- Código Proveedor-->                                                                        
+                                                        <h:outputLabel style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize;" value="#{pagos.tipo == 0 ? 'Ingreso':'Egreso'}" class="labelSinResaltar">
+                                                            <f:converter converterId="minusculasjava"/>
+                                                        </h:outputLabel>                                    
+                                                    </h:column>
+                                                </f:ajax>
+                                            </h:dataTable>
+                                            <!--                                                <h:panelGroup layout="block" id="letrerobusqueda" >
+                                                                                                <h:panelGroup layout="block" style=" width: 100%; background: #F7F7F7; font-size: 13px; width: 100%; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;">
+                                                                                                    <center>
+                                                                                                        <h:outputLabel rendered="{estudiantesManager.dataListEstudiantes == null or estudiantesManager.dataListEstudiantes.size() == 0}"  style="display: block;">
+                                                                                                            <div style="height: 30px;">
+                                                                                                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                                                                    <tr style="height: 30px;">
+                                                                                                                        <th style="width: 100%; background: white;">
+                                                                                                                            ¡BUSCAR PRODUCTOS POR: Grado, Nombre, Apellidos!
+                                                                                                                        </th>
+                                                                                                                    </tr>
+                                                                                                                </table>
+                                                                                                            </div>
+                                                                                                        </h:outputLabel>
+                                                                                                    </center>
+                                                                                                </h:panelGroup>
+                                                                                            </h:panelGroup>-->
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <h:panelGroup id="configuracionTiposPagos">
+                                <h:panelGrid  columns="2" rendered="#{pagosManager. tipoPagosSeleccionado!=null}">
+                                    <h:outputLabel value="Nombre:"/>
+
+                                    <h:inputText value="#{pagosManager.tipoPagosSeleccionado.nombre}"/>
+
+                                    <h:outputLabel value="Tipo"/>
+
+                                    <h:selectOneMenu  value="#{pagosManager.tipoPagosSeleccionado.tipo}">
+                                        <f:selectItem itemValue="0" itemLabel="Ingreso"/>
+                                        <f:selectItem itemValue="1" itemLabel="Egreso"/>
+                                    </h:selectOneMenu>
+
+                                    <h:outputLabel value="Guardar" styleClass="botonAzul">
+                                        <f:ajax event="mousedown" render=":formPagos:idPanelGroupContenedorTablaPrincipal :formPagos:mensajes" execute=":formPagos:configuracionTiposPagos"  listener="#{pagosManager.guardarTiposPagos()}"
+                                                onevent="despuesEdicion"/>
+                                    </h:outputLabel>
+
+                                    &nbsp;
+                                </h:panelGrid>
+                            </h:panelGroup>
+
+                        </h:panelGroup>
+
+                    </h:form>
+                </h:panelGroup>
+                <div id="backgroundPopup" style="z-index: 0" onclick="escongerPopUP()"/>
+                <br/>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>

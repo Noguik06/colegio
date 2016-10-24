@@ -1,0 +1,39 @@
+/*ESTILOS REFERENTES A EL INPUTTEXT BUSCAR PEDIDOS QUE SE ENCUANTRA ENCIMA DE CADA TABLA PRINCIAPL*/
+
+.claseDivBuscarPrincipal{
+    float: right; 
+    width: 60%;
+}
+
+.claseDivLabelBuscarPrincipal{
+    width: 30%;float: left;
+    margin-top: 3px;
+}
+
+.claseLabelBuscarPrincipal{
+    float: right;
+}
+
+.claseDivInputTextBuscarPrincipal{
+    width: 70%;    
+    float: left;
+}
+
+.claseInputTextBuscarPrincipal{
+    float: right;
+    width: 90%;
+}
+
+
+/*ESTILOS PARA LA TABLA INTERNA QUE LLEVA LOS DATOS DE FACTURA*/
+.col1TablaInterFactura{    
+    width: 34%;
+    border-right: 1px solid white;
+}
+.col2TablaInterFactura{    
+    width: 34%;
+    border-right: 1px solid white;
+}
+.col3TablaInterFactura{    
+    width: 30%;    
+}

@@ -1,0 +1,21 @@
+/* 
+    Document   : botones
+    Created on : 29-jun-2012, 11:14:04
+    Author     : juannoguera
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.titulo{
+    font-size: 14px;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+.labelResaltado, .labelSinResaltar{
+    font:12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
+
+.labelResaltado{
+    font-weight: bold;
+}

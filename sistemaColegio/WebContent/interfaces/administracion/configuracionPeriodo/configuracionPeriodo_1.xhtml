@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>        
+        <link href="/sistemaColegio/resources/universales/css/cssUniversalRicardo.css" rel="stylesheet" type="text/css"/>
+        <link href="/sistemaColegio/resources/universales/css/botones.css" rel="stylesheet" type="text/css"/>
+        <link href="/sistemaColegio/resources/universales/css/sombrasUniversales.css" rel="stylesheet" type="text/css"/>
+        <link href="/sistemaColegio/resources/universales/css/claseFigurasElementosUniversales.css" rel="stylesheet" type="text/css"/>
+        <link href="/sistemaColegio/interfaces/administracion/configuracionPeriodo/css/configuracionPeriodo.css" rel="stylesheet" type="text/css"/>        
+        <script type="text/javascript" src="/sistemaColegio/resources/jquery/jquery.js"/>
+        <script type="text/javascript" src="/sistemaColegio/resources/universales/js/popUpUniversal.js"/>        
+        <script type="text/javascript" src="/sistemaColegio/resources/universales/js/jsUniversalRicardo.js"/>
+        <script type="text/javascript" src="/sistemaColegio/interfaces/administracion/configuracionPeriodo/js/configuracionPeriodo.js"/>                        
+        <title>Configuración: Año académico</title>
+    </h:head>
+    <h:body>
+        <fieldset class="claseSombrasPopUpUniversal" style="width: 80%; margin: 0 auto; background:  #F7F5EA">
+            <h:form id="idFormPrincipal" onsubmit="return false;">
+                <h:panelGroup layout="block">
+                    <legend>Información principal</legend>
+                    <h:panelGroup layout="block" style="width: 40%; margin: 0 auto; background: #f6eecf;" class="claseBordeUniversalRedondear">
+                        <h:panelGroup layout="block" rendered="#{configuracionPeriodo.anosacademicosActivo.idanosacademicos != null}">
+                            <div style="display: block">
+                                <h:outputLabel value="Años Académico Activo:" style=""/>                        
+                                <h:outputLabel value="#{configuracionPeriodo.anosacademicosActivo.fechainicio}" style="font-weight: bolder;">
+                                    <f:convertDateTime pattern="yyyy" timeZone="America/Bogota"/>
+                                </h:outputLabel>
+                            </div>
+                            <h:outputLabel value="Cerrar año académico" class="botonRojo botonesFont" style="margin-top: 10px;" onclick="if(!onClickBotonCerrarAñoAcademico()){return false;}">
+                                <f:ajax event="click" listener="#{configuracionPeriodo.metodoClickLabelCerrarAnoAcademico()}"/>
+                            </h:outputLabel>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" rendered="#{configuracionPeriodo.anosacademicosActivo.idanosacademicos == null}">
+                            <h:outputLabel value="Seleccione el año académico"/>
+                        </h:panelGroup>
+                    </h:panelGroup>                    
+                    <br/>
+                    <h:panelGroup layout="block" style="width: 50%; margin: 0 auto; background: #f6eecf;" class="claseBordeUniversalRedondear">
+                        <h:outputLabel value="Asignaturas para el presente Año Académico" style="display: block; text-align: center"/>
+                        <h:panelGroup id="idPanelGroupTablasAsignaturas" layout="block">                            
+                            <h:outputLabel value="Crear asignatura [+]" style="color: blue; cursor: pointer; display: block; text-align: right; font-style: italic;font-size: 16px; font-weight: bolder;">
+                                <f:ajax event="click" listener="#{configuracionPeriodo.metodoClickLabelCrearAsignatura()}" render=":idFormCrearAsignatura" onevent="onEventClickLabelCrearAsignatura"/>
+                            </h:outputLabel>
+                            <table style="width: 100%" border="1">
+                                <tr>
+                                    <td class="claseColumna1TablaTablaAsignaturaByAnoAcademico">
+                                        <h:panelGroup id="idPanelGroupContieneASignaturasParaAñoAcademico" layout="block">
+                                            <h:dataTable value="#{configuracionPeriodo.listaRelacionasignaturaperiodosByAnoAcademico}" var="asignaturaByAnoAcademico" style="width: 100%" rendered="#{configuracionPeriodo.listaRelacionasignaturaperiodosByAnoAcademico.size() > 0}">
+                                                <h:column class="claseColumna1TablaAsignaturaByAnoAcademico">
+                                                    <h:panelGroup layout="block" class="claseBordeUniversalRedondear claseCeldaColorDesactivadaAsignaturasByano" style="width: 90%; padding: 5px;">
+                                                        <h:outputLabel value="#{asignaturaByAnoAcademico.asignaturas.nombre}"/>
+                                                    </h:panelGroup>
+                                                </h:column>
+                                                <h:column class="claseColumna2TablaAsignaturaByAnoAcademico">
+                                                    <h:graphicImage value="/resources/imagenes/ricardoNuevas/flechaDerechaAzulRecta32.png" style="width: 18px; height: 18px; cursor: pointer">
+                                                        <f:ajax event="click" listener="#{configuracionPeriodo.metodoRemoverAsignaturaByAnoAcademico(asignaturaByAnoAcademico)}" render=":idFormPrincipal:idPanelGroupTablasAsignaturas :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaRelacionAsignaturaPeriodo" onerror="onErrorIMGRemoverAsignaturaByAnoAcademico" onevent="onEventIMGRemoverAsignaturaByAnoAcademico"/>
+                                                    </h:graphicImage>
+                                                </h:column>
+                                            </h:dataTable>
+                                            <h:outputLabel value="No hay asignaturas para este año académico." rendered="#{configuracionPeriodo.listaRelacionasignaturaperiodosByAnoAcademico.size() == 0}"/>
+                                        </h:panelGroup>
+                                    </td>
+                                    <td class="claseColumna2TablaTablaAsignaturaByAnoAcademico">                                        
+                                        <h:panelGroup id="idPanelGroupContieneAsignaturasGenerales" layout="block">                            
+                                            <h:outputLabel value="Todas las asignaturas agregadas" rendered="#{configuracionPeriodo.listaAsignaturasGenerales.size() == 0 and configuracionPeriodo.listaRelacionasignaturaperiodosByAnoAcademico.size() > 0}"/>
+                                            <h:outputLabel value="No hay asignaturas creadas." rendered="#{configuracionPeriodo.listaAsignaturasGenerales.size() == 0 and configuracionPeriodo.listaRelacionasignaturaperiodosByAnoAcademico.size() ==0}"/>
+                                            <h:dataTable value="#{configuracionPeriodo.listaAsignaturasGenerales}" var="asignaturasGenerales" style="width: 100%">
+                                                <h:column class="claseColumna1TablaAsignaturasGenerales">
+                                                    <h:graphicImage value="/resources/imagenes/ricardoNuevas/flechaIzquierdaAzulRecta32.png" style="width: 18px; height: 18px; cursor: pointer;">                                                                                                               
+                                                        <f:ajax event="click" listener="#{configuracionPeriodo.metodoAgregarAsignaturaByAnoAcademico(asignaturasGenerales)}" render=":idFormPrincipal:idPanelGroupTablasAsignaturas :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaRelacionAsignaturaPeriodo" onevent="onEventIMGAgregarASignaturaByAno"/>
+                                                    </h:graphicImage>
+                                                </h:column>
+                                                <h:column class="claseColumna2TablaAsignaturasGenerales">
+                                                    <h:panelGroup layout="block" class="claseBordeUniversalRedondear claseCeldaColorDesactivadaAsignaturasByano" style="width: 90%; padding: 5px;">
+                                                        <h:outputLabel value="#{asignaturasGenerales.nombre}"/>
+                                                    </h:panelGroup>
+                                                </h:column>
+                                                <h:column class="claseColumna3TablaAsignaturasGenerales">
+                                                    <h:graphicImage value="/resources/imagenes/borrar.png" style="cursor: pointer;" onclick="if(!onClickIMGEliminarAsignaturaGeneral()){return false}">
+                                                        <f:ajax event="click" listener="#{configuracionPeriodo.metodoEliminarAsignaturaGeneral(asignaturasGenerales)}" render=":idFormPrincipal:idPanelGroupContieneAsignaturasGenerales" onerror="onErrorIMGEliminarAsignaturaGeneral"/>
+                                                    </h:graphicImage>    
+                                                </h:column>
+                                            </h:dataTable>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+            <br/>
+            <h:form id="idFormTablaTablaCursosAsignaturaProfesor">
+                <h:panelGroup layout="block">
+                    <h:panelGroup id="idPanelGroupTablasAsignarCursosProfesoresAsignaturas" layout="block" style="width: 90%; margin: 0 auto; background: #f6eecf;" class="claseBordeUniversalRedondear">
+                        <h:outputLabel value="Cursos para el presente Año Académico" style="display: block; text-align: center;"/>
+                        <h:panelGroup layout="block">
+                            <h:outputLabel value="Agregar curso [+]" style="display: block; font-size: 16px; font-weight: bolder; color: blue; cursor: pointer; font-style: italic;">
+                                <f:ajax event="click" listener="#{configuracionPeriodo.metodoClickLabelAgregarCurso()}" render=":idFormCrearCurso" onevent="onEventClickLabelCrearCurso"/>
+                            </h:outputLabel>
+                            <table style="width: 100%;" border="1">
+                                <thead>
+                                    <th>Cursos</th>
+                                    <th>Asignaturas</th>
+                                    <th>Profesores</th>
+                                </thead>
+                                <tbody>
+                                    <tr>                                    
+                                        <td class="claseColumna1TablaTablasAsigCurProf">
+                                            <h:panelGroup id="idPanelGroupTablaCursosByAsignarGeneral" layout="block">
+                                                <h:dataTable value="#{configuracionPeriodo.listaCursosGenerales}" style="width: 100%" var="cursosGenerales" rendered="#{configuracionPeriodo.listaCursosGenerales.size() > 0}">
+                                                    <h:column>
+                                                        <table style="width: 100%" cellspacing="7">
+                                                            <tr>
+                                                                <td class="claseColumna1TablaCursos">
+                                                                    <h:panelGroup layout="block" class="claseCirculoUniversal" style="background: #ba1a0f; width: 100%; text-align: center; font-size: 14px;">
+                                                                        <h:outputLabel value="#{configuracionPeriodo.metodoCountAsingaturasByCursos(cursosGenerales)}" title="Asignaturas para el presente curso.">
+                                                                            <f:convertNumber/>
+                                                                        </h:outputLabel>
+                                                                    </h:panelGroup>
+                                                                </td>
+                                                                <td class="claseColumna2TablaCursos">
+                                                                    <table style="width: 100%">
+                                                                        <tr>
+                                                                            <td style="width: 80%">
+                                                                                <h:panelGroup id="idPanelGroupCursoByAsignarGeneral" layout="block" class="claseBordeUniversalRedondear claseCeldaColorDesactivada" style="width: 90%; padding: 5px;" >
+                                                                                    <h:outputLabel value="#{cursosGenerales.grados.nombre}: #{cursosGenerales.nombre}" style="cursor: pointer; display: block;">
+                                                                                        <f:ajax event="click" listener="#{configuracionPeriodo.metodoClickCursosAsignaturaByAsignarGeneral(cursosGenerales)}" render=":idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaCursosByAsignarGeneral :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaRelacionAsignaturaPeriodo :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaProfesoresByAsignarGeneral" onevent="onEventClickCeldaCursosBySelected"/>
+                                                                                    </h:outputLabel>
+                                                                                </h:panelGroup>
+                                                                            </td>
+                                                                            <td style="width: 15%">
+                                                                                <h:graphicImage value="/resources/imagenes/editar.png" style="width: 100%; cursor: pointer;">
+                                                                                    <f:ajax event="click" render=":idFormCrearCurso" listener="#{configuracionPeriodo.metodoClickIMGEditarCurso(cursosGenerales)}" onevent="onEventClickLabelCrearCurso"/>
+                                                                                </h:graphicImage>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    <h:outputLabel class="claseLabelMarcadoGreenDiv" style="display: none" rendered="#{configuracionPeriodo.cursosSelectedByAsignarGeneral.idcursos != null and configuracionPeriodo.cursosSelectedByAsignarGeneral.idcursos == cursosGenerales.idcursos}"/>
+                                                                </td>                      
+                                                                <td class="claseColumna3TablaCursos">
+                                                                    <h:graphicImage value="/resources/imagenes/borrar.png" rendered="#{configuracionPeriodo.metodoCountAsingaturasByCursos(cursosGenerales) == 0}" style="cursor: pointer;" onclick="if(!onClickIMGEliminaCurso()){return false;}">
+                                                                        <f:ajax event="click" listener="#{configuracionPeriodo.metodoClickIMGEliminarCurso(cursosGenerales)}" render=":idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaCursosByAsignarGeneral" onevent="onEventIMGEliminarCurso"/>
+                                                                    </h:graphicImage>
+                                                                </td>
+                                                            </tr>
+                                                        </table>                                                                                                        
+                                                    </h:column>
+                                                </h:dataTable>
+                                                <h:outputLabel value="No hay cursos creados"  rendered="#{configuracionPeriodo.listaCursosGenerales.size() == 0}"/>
+                                            </h:panelGroup>
+                                        </td>
+                                        <td class="claseColumna2TablaTablasAsigCurProf">
+                                            <h:panelGroup id="idPanelGroupTablaRelacionAsignaturaPeriodo" layout="block">
+                                                <h:dataTable value="#{configuracionPeriodo.listaRelacionProfesoresAsignaturaByAnoAcademico}" style="width: 100%" var="asignaturasByAnoAcademico">
+                                                    <h:column>                                                                                     
+                                                        <table style="width: 100%">
+                                                            <tr>
+                                                                <td class="claseColumna1TablaAsignaturas">
+                                                                    <h:graphicImage value="/resources/imagenes/ricardoNuevas/banderaAzul32.png" style="width: 25px; height: 25px;" rendered="#{asignaturasByAnoAcademico.idrelacionprofesoresasignaturaperiodo != null}"/>
+                                                                </td>
+                                                                <td class="claseColumna2TablaAsignaturas">
+                                                                    <table style="width: 100%">
+                                                                        <tr>
+                                                                            <td style="width: 80%">
+                                                                                <h:panelGroup id="idPanelGroupCursoByAsignarGeneral" layout="block" class="claseBordeUniversalRedondear claseCeldaColorDesactivada" style="width: 90%; padding: 5px;" >
+                                                                                    <h:outputLabel value="#{asignaturasByAnoAcademico.relacionasignaturaperiodos.asignaturas.nombre}" style="cursor: pointer; display: block">
+                                                                                        <f:ajax event="click" listener="#{configuracionPeriodo.metodoClickRelacionAsignaturaPeriodoSelectedGeneral(asignaturasByAnoAcademico)}" render=":idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaRelacionAsignaturaPeriodo :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaProfesoresByAsignarGeneral" onerror="onErrorClickAsignaturaByAsignarGeneral" onevent="onEventClickCeldaAsignaturaBySelected"/>
+                                                                                    </h:outputLabel>
+                                                                                </h:panelGroup>                                                                
+                                                                                <h:outputLabel class="claseLabelMarcadoGreenDiv" style="display: none" rendered="#{configuracionPeriodo.relacionasignaturaperiodosSelectedByAsignarGeneral.relacionasignaturaperiodos.idrelacionasignaturaperiodos == asignaturasByAnoAcademico.relacionasignaturaperiodos.idrelacionasignaturaperiodos}"/>
+                                                                            </td>
+                                                                            <td style="width: 20%">
+                                                                                <h:inputText value="#{asignaturasByAnoAcademico.cantidadhorasporsemana}" style="width: 80%">
+                                                                                    <f:ajax event="keyup" render="@this"/>
+                                                                                    <f:convertNumber/>
+                                                                                </h:inputText>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>                                                            
+                                                            </tr>
+                                                        </table>    
+                                                    </h:column>
+                                                </h:dataTable>
+                                                <h:outputLabel value="No hay Asignaturas Creadas." rendered="#{configuracionPeriodo.listaRelacionProfesoresAsignaturaByAnoAcademico.size() == 0}"/>
+                                            </h:panelGroup>
+                                        </td>
+                                        <td class="claseColumna3TablaTablasAsigCurProf">
+                                            <h:panelGroup id="idPanelGroupTablaProfesoresByAsignarGeneral" layout="block">
+                                                <h:dataTable value="#{configuracionPeriodo.listaProfesoresGeneral}" style="width: 100%" var="profesores" rendered="#{configuracionPeriodo.listaProfesoresGeneral.size() > 0}">
+                                                    <h:column>                                                    
+                                                        <table style="width: 100%">
+                                                            <tr>
+                                                                <td class="claseColumna1TablaProfesores">
+                                                                    <h:graphicImage value="/resources/imagenes/ricardoNuevas/banderaAzul32.png" style="width: 25px; height: 25px;" rendered="#{configuracionPeriodo.relacionasignaturaperiodosSelectedByAsignarGeneral.idrelacionprofesoresasignaturaperiodo != null and configuracionPeriodo.relacionasignaturaperiodosSelectedByAsignarGeneral.profesores.idprofesores == profesores.idprofesores}"/>
+                                                                </td>
+                                                                <td class="claseColumna2TablaProfesores">
+                                                                    <h:panelGroup id="idPanelGroupCursoByAsignarGeneral" layout="block" class="claseBordeUniversalRedondear claseCeldaColorDesactivada" style="width: 90%; padding: 5px;" >
+                                                                        <h:outputLabel value="#{profesores.usuarios.nombres} #{profesores.usuarios.apellidos}" style="cursor: pointer; display: block">                                                                        
+                                                                            <f:ajax event="click" listener="#{configuracionPeriodo.metodoClickLabelProfesor(profesores)}" render=":idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaCursosByAsignarGeneral :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaRelacionAsignaturaPeriodo :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaProfesoresByAsignarGeneral" onevent="onEventClickCeldaProfesoresSelected"/>
+                                                                        </h:outputLabel>
+                                                                    </h:panelGroup>
+                                                                    <h:outputLabel class="claseLabelMarcadoGreenDiv" style="display: none" rendered="#{configuracionPeriodo.profesoresSelectedByAsingarGeneral.idprofesores != null and configuracionPeriodo.profesoresSelectedByAsingarGeneral.idprofesores == profesores.idprofesores}"/>
+                                                                </td>
+                                                                <td class="claseColumna3TablaProfesores">                                                                
+                                                                    <h:graphicImage value="/resources/imagenes/borrar.png" rendered="#{configuracionPeriodo.relacionasignaturaperiodosSelectedByAsignarGeneral.idrelacionprofesoresasignaturaperiodo != null and configuracionPeriodo.relacionasignaturaperiodosSelectedByAsignarGeneral.profesores.idprofesores == profesores.idprofesores}">
+                                                                        <f:ajax event="click" listener="#{configuracionPeriodo.metodoEliminarRelacionProfesorAsignaturaPeriodo()}" render=":idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaCursosByAsignarGeneral :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaRelacionAsignaturaPeriodo :idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaProfesoresByAsignarGeneral"/>
+                                                                    </h:graphicImage>
+                                                                </td>
+                                                            </tr>
+                                                        </table>    
+                                                    </h:column>
+                                                </h:dataTable>
+                                                <h:outputLabel value="No hay profesores creados." rendered="#{configuracionPeriodo.listaProfesoresGeneral.size() == 0}"/>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>            
+                <br/>
+                <br/>
+                <br/>
+            </h:form>        
+        </fieldset>
+        <div class="clasePopUpCrearAsignatura claseHideByClickDivPantallaUniversal" style="position: fixed; min-height: 30%; width: 30%; z-index: 10; display: none;">
+            <h:form id="idFormCrearAsignatura" onsubmit="return false;">
+                <h:panelGroup layout="block" style="width: 100%; height: 100%">
+                    <fieldset class="claseSombrasPopUpUniversal" style="width: 100%; height: 100%; background:  white">
+                        <div class="claseBordeUniversalRedondear">Creando asignatura</div>
+                        <br/>
+                        <div>
+                            <label>Nombre: </label>
+                            <h:inputText id="idInputTextNombreAsignatura" value="#{configuracionPeriodo.asignaturasByCrear.nombre}">
+                                <f:ajax event="keyup"/>
+                            </h:inputText>
+                        </div>
+                        <br/>
+                        <div>
+                            <h:outputLabel value="Crear Asignatura" class="botonAzul botonesFont">
+                                <f:ajax event="click" execute="@this" listener="#{configuracionPeriodo.metodoBotonCrearAsignatura()}" render=":idFormPrincipal:idPanelGroupContieneAsignaturasGenerales" onerror="onErrorBotonCrearAsignatura" onevent="onEventBotonCrearAsignatura"/>
+                            </h:outputLabel>
+                            <h:outputLabel value="Cancelar" class="botonGris botonesFont" style="margin-left: 10px;" onclick="onClickDivPantallaUniversal()"/>
+                        </div>
+                    </fieldset>
+                </h:panelGroup>
+            </h:form>    
+        </div>
+
+        <div class="clasePopUpCrearCurso claseHideByClickDivPantallaUniversal" style="position: fixed; min-height: 30%; width: 30%; z-index: 10; display: none;">
+            <h:form id="idFormCrearCurso" onsubmit="return false;">
+                <h:panelGroup layout="block" style="width: 100%; height: 100%">
+                    <fieldset class="claseSombrasPopUpUniversal" style="width: 100%; height: 100%; background:  white">
+                        <div class="claseBordeUniversalRedondear">
+                            <h:outputLabel value="Editando Curso" rendered="#{configuracionPeriodo.cursosByCrear.idcursos != null}" style="display: block; text-align: center"/>
+                            <h:outputLabel value="Creando Curso" rendered="#{configuracionPeriodo.cursosByCrear.idcursos == null}" style="display: block; text-align: center"/>                                                                
+                        </div>
+                        <br/>
+                        <table style="width: 100%">
+                            <tr>
+                                <td>                                    
+                                    <label >Seleccione el grado: </label>                            
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 80%" value="#{configuracionPeriodo.varValueIdGradoSelectedNuevoCurso}">
+                                        <f:ajax event="change"/>
+                                        <f:selectItem itemLabel="Seleccione un grado"/>
+                                        <f:selectItems value="#{configuracionPeriodo.listaGradosByListaNuevoCurso}" var="gradosSelected" itemLabel="#{gradosSelected.nombre}" itemValue="#{gradosSelected.idgrados}"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label >Nombre curso:</label>                                    
+                                </td>
+                                <td>
+                                    <h:inputText style="width: 80%" value="#{configuracionPeriodo.cursosByCrear.nombre}">
+                                        <f:ajax event="keyup"/>
+                                    </h:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Director:
+                                </td>
+                                <td>
+                                    <h:selectOneMenu value="#{configuracionPeriodo.variableIdProfesorDirectorByCurso}">
+                                        <f:ajax event="change" execute="@this"/>
+                                        <f:selectItem itemLabel="Seleccione ..." itemValue="#{null}"/>
+                                        <f:selectItems value="#{configuracionPeriodo.listaProfesoresesBySelectedCordinadorCurso}" var="coordinadorCurso" itemLabel="#{coordinadorCurso.usuarios.nombres} #{coordinadorCurso.usuarios.apellidos}" itemValue="#{coordinadorCurso.idprofesores}"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+
+                        <h:outputLabel value="Editar curso" class="botonAzul botonesFont" rendered="#{configuracionPeriodo.cursosByCrear.idcursos != null}">
+                            <f:ajax event="click" listener="#{configuracionPeriodo.metodoBotonCrearCurso()}" render=":idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaCursosByAsignarGeneral" onerror="onErrorBotonCrearCurso" onevent="onEventBotonCrearCurso"/>
+                        </h:outputLabel>
+                        <h:outputLabel value="Crear curso" class="botonAzul botonesFont" rendered="#{configuracionPeriodo.cursosByCrear.idcursos == null}">
+                            <f:ajax event="click" listener="#{configuracionPeriodo.metodoBotonCrearCurso()}" render=":idFormTablaTablaCursosAsignaturaProfesor:idPanelGroupTablaCursosByAsignarGeneral" onerror="onErrorBotonCrearCurso" onevent="onEventBotonCrearCurso"/>
+                        </h:outputLabel>
+                        <h:outputLabel value="Cancelar" class="botonGris botonesFont" style="margin-left: 10px;" onclick="onClickDivPantallaUniversal()"/>
+                    </fieldset>
+                </h:panelGroup>
+            </h:form>
+        </div>
+        <div class="claseDivPantallaUniversal" onclick="onClickDivPantallaUniversal()"/>
+    </h:body>
+</html>
+

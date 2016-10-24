@@ -1,0 +1,118 @@
+<?php /* Whizzywig.php *100820
+- Whizzywig web page editor, demonstrating whizzyig.js from unverse.net 
+This script is in the Public Domain: it it free to use and modify, but... 
+IT IS NEITHER WARRANTED NOR SUPPORTED - Use at your own risk*/
+
+//CONFIGURE HERE ====================================================================
+$password = "WHIZZYWIG";              //CHANGE THIS OR ANYBODY CAN EDIT YOUR FILES!!!
+$whizzywig = "/whizzery/whizzywig.js";                            //path to Whizzywig
+$cssFile = "";                                        //path to your CSS
+$imageBrowse = "/whizzery/whizzybrowse.php";          //optional: path to pic browser
+$templateFile ="";    //optional: path to template file (else uses internal template)
+$toolbar = "all";   //or e.g. "formatblock bold italic bullet number link fullscreen" 
+$extension = ".html";      //file extension added to all saved files: .htm(l) is safe
+//Now the HTML template into which the edited text is placed: 
+// ##TITLE## is replaced with the Title and ##EDITABLE## is replaced with 
+// -if living dangerously and saving .php files, you can use PHP includes here
+//THE TEMPLATE: 
+if (is_file($templateFile)) $template=file_get_contents($templateFile);
+else $template=<<<TEMPLATE
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>##TITLE##</title>
+ <link rel="stylesheet" type="text/css" href="$cssFile" />
+ <style type="text/css">
+  body {font-family:Verdana,sans-serif}
+  div {padding:1%}
+  #header {text-align:right;background:#ddd;}
+  #main{float:left;width:75%;}
+  #narrow{float:right;background:#ddd;width:20%}
+  #menu{font-weight:bold;list-style:none}
+ </style>
+</head>
+<body>
+<div id="header">
+ <h1>WHIZZYWIG PLAYGROUND</h1>
+ <p>Editing and saving pages with Whizzywig here.</p>
+</div><!--header-->
+<div id="wide">
+ <div id="main">
+  <h1>##TITLE##</h1> 
+##EDITABLE##  
+ </div><!--main-->
+</div><!--wide-->
+<div id="narrow">
+ <ul id="menu">
+  <li><a href="index.html">Home</a></li>
+  <li><a href="http://unverse.net">Unverse</a></li>
+  <li><a href="http://jorogo.com">Jorogo</a></li>
+  <li><a href="whizzywig.php">Page editor</a></li>
+  <!--and so on-->
+ </ul>
+</div><!--narrow-->
+</body>
+</html>
+TEMPLATE;
+//Edit above with your preferred HTML... or use a separate file and set $templateFile
+//END CONFIG ========================================================================
+
+$f = $_REQUEST['f'];                              //Grab the file parameter, if given
+$f = str_replace('..','',$f);      // Security! Remove attempt to cross directories...
+if (strpos($f,$extension) != strlen($f)-strlen($extension))
+                              $f .= $extension;  //...and always add (safe) extension
+if ($_REQUEST['save']) {                    //SAVE REQUESTED: write page and go there
+ if ($_REQUEST['p'] != $password) {                             //Bad password, so...
+  sleep(2);die("<h1>INCORRECT PASSWORD</h1>");           //...wait 2 seconds and fail
+ }              //(The sleep is to slow down a "brute force" password cracker script)
+ $html=str_replace('##TITLE##',$_REQUEST['t'],$template); //Insert the title into HTML
+ $editable=stripslashes($_REQUEST['edited']);                   //Grab the edited HTML
+ $html=str_replace('##EDITABLE##', "\n<whizzywig>\n$editable\n</whizzywig>\n",$html);
+ $fsave = fopen($f, 'w');                                   //Open the file for write
+  fwrite($fsave, $html);                                          //Save the new HTML
+  fclose($fsave);                                                 //Close the file...
+ header("Location: $f");                                        //...and go there now
+//==================================================================IF NOT SAVE, EDIT
+} else if (file_exists($f)) {                                //Open the file for edit
+ $content = file_get_contents($f);              //Grab the file content into $content
+ preg_match('|<title>(.*)</title>|Ui',$content,$match);
+ $title = $match[1];                                   //Grab the title from the file
+ preg_match('|<whizzywig>(.*)</whizzywig>|Us',$content,$match);
+ $editable = $match[1];                        //Grab the editable HTML from the file
+}                                                          //Not a Save, so show form
+?>
+<html>
+<head>
+ <title>Whizzywig page editor</title>
+ <script language="JavaScript" type="text/javascript" src="<?= $whizzywig ?>"></script>
+ <script language="JavaScript" type="text/javascript">
+ var imageBrowse = "<?=$imageBrowse;?>", cssFile="<?=$cssFile;?>";
+ function reHeight(){            //Resizes Whizzywig to use the available window height
+  var tatop = o('edited').offsetTop;      //o(id) is a function defined in whizzywig.js
+  var nh = document.body.clientHeight-tatop-99; //subtract 99 pixels from window height
+  o('whizzyedited').style.height=nh+'px';          //change the height of the Whizzywig
+  o('edited').style.height=nh+'px';                //change the height of the HTML view
+ }
+ function checkform(){                            //Check filename and password present
+  if (o('f').value==""||o('f').value=="<?=$extension;?>"){alert("Filename!");return false;}
+  if (o('p').value==""){alert("Password!");return false;}
+ }
+ window.onload=reHeight;
+</script>
+</head>
+<body style="margin:0;padding:4px;background:buttonface;font-family:sans-serif">
+<form name="Whizzywig" method="post" onsubmit="return checkform(this);">
+<label for="f">Filename: </label><input name="f" id="f" type="text" value="<?=$f;?>">
+<input type="submit" name="open" value="Open">
+<label for="t">Title: </label><input id="t" name="t" id="t" type="text" size="30" value="<?=$title;?>">
+<label for="p">Password: </label><input name="p" id="p" type="password" size="10">
+<input type="submit" name="save" value="Save">
+<textarea name="edited" id="edited" style="width:100%;height:500px">
+<?=$editable;?>
+</textarea>
+<script>makeWhizzyWig('edited', '<?=$toolbar;?>');</script>
+<span style="font-size:xx-small">More about this free editor at <a href="http://www.unverse.net">unverse.net</a>. Affordable, supreme hosting at <a href="http://www.jorogo.com">Jorogo</a>.</span>
+</form>
+</body>
+</html>

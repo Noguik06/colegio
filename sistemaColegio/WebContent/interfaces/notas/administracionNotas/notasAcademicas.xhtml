@@ -1,0 +1,437 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <!--Css globales-->        
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+        <h:outputStylesheet name="botones.css" library="universales/css"/>
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="letras.css" library="universales/css"/>
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+        <h:outputScript name="hoverIntent.js" library="menuPrincipal/js"/>
+        <h:outputScript name="superfish.js" library="menuPrincipal/js"/>
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+
+
+        <!--Css locales-->        
+        <link href="css/notasAcademicas.css" rel="stylesheet" type="text/css" />
+
+        <!--Js globales-->
+        <h:outputScript name="validaciones.js" library="universales/js"/>
+
+        <!--Js locales-->
+        <script type="text/javascript"  src="js/notasAcademicas.js"/>
+
+
+        <title>CONFIGURACION NOTAS ESTUDIANTES</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <div style="width: auto;" >
+                <ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:panelGroup>
+            <h:form id="formPrincipal" style="width: 1200px;">
+                <fieldset class="fieldSetUniversal" style="width: 97%;  margin-left: auto; margin-right: auto;">
+                    <div class="divTablaHeader" style="width: 100%;">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr style="height: 30px;">
+                                    <th class="colTablaNotasPrincipal-1 bordesHeader">
+                                        Curso
+                                    </th>
+                                    <th class="colTablaNotasPrincipal-2 bordesHeader">
+                                        Asignatura
+                                    </th>
+                                    <th class="colTablaNotasPrincipal-3 bordesHeader">
+                                        Dimensión
+
+                                        <h:outputLabel value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+                                            <f:ajax event="mousedown" execute="@this" render=":dimensiones" listener="#{configuracionNotas.seleccionarEditarDimension(null)}" 
+                                                    onevent="mostrarElementoDimensiones"/>
+                                        </h:outputLabel>
+
+                                    </th>
+                                    <th class="colTablaNotasPrincipal-4 bordesHeader">
+                                        Período
+                                        <h:outputLabel value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+                                            <f:ajax event="mousedown" execute="@this" render=":periodos" listener="#{configuracionNotas.seleccionarEditarPeriodo(null)}" 
+                                                    onevent="mostrarElementoPeriodos"/>
+                                        </h:outputLabel>
+                                    </th>
+                                    <th class="colTablaNotasPrincipal-5 bordesHeader">
+                                        Logro
+                                        <h:outputLabel value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+                                            <f:ajax event="click" execute="@this" render=":logros" listener="#{configuracionNotas.seleccionarEditarLogro(null)}" 
+                                                    onevent="mostrarElementoLogros"/>
+                                        </h:outputLabel>
+
+                                    </th>
+                                    <th class="colTablaNotasPrincipal-6 bordesHeader">
+                                        Nota
+                                        <h:outputLabel value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+                                            <f:ajax event="click" execute="@this" render=":notasGlobales" listener="#{configuracionNotas.seleccionarEditarNotas(null)}" 
+                                                    onevent="mostrarElementoNotas"/>
+                                        </h:outputLabel>
+                                    </th>
+                                    <th class="colTablaNotasPrincipal-7">
+                                        Actividad
+                                        <h:panelGroup id="agregarNotaNueva">
+                                            <h:outputLabel value="[+]" styleClass="labelResaltado labelEnlacesUniversal">
+                                                <f:ajax event="click" render=":formCrearNotasCalificables" listener="#{configuracionNotas.seleccionarNotaCalificableEditar(null)}"
+                                                        onevent="mostrarElementoActividades"/>
+                                            </h:outputLabel>
+                                        </h:panelGroup>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+                            <tr>
+                                <td class="colTablaNotasPrincipal-1 bordesHeader">
+                                    <h:panelGroup id="contenedorCursos">
+                                        <h:dataTable id="tablaCursos" value="#{configuracionNotas.dataListCursos}" var="cursos" width="70%" cellpadding="0" cellspacing="0" border="0" styleClass="border2" 
+                                                     columnClasses="colCursos-1">
+                                            <h:column>
+
+                                                <h:outputLabel value="#{cursos.grados.nombre}" styleClass="botonGrisClaro-Verde labelSinResaltar">
+                                                    <f:ajax event="click" render=":formPrincipal:tablaRelacionAsignaturasPeriodos :formPrincipal:tablaPeriodos :formPrincipal:tablaDimensiones :formPrincipal:tablaLogros :formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin" execute="@this" listener="#{configuracionNotas.escogerCurso(cursos)}"
+                                                            onevent="seleccionarCursos"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+
+                                </td>
+                                <td class="colTablaNotasPrincipal-2 bordesHeader">
+                                    <h:panelGroup id="contenedorAsignaturas">
+                                        <h:dataTable id="tablaRelacionAsignaturasPeriodos" value="#{configuracionNotas.dataListRelacionasignaturaperiodos}" var="relacionAsignaturaPeriodo" styleClass="border2" 
+                                                     cellpadding="0" cellspacing="0" border="0" width="80%" columnClasses="colAsignaturas-1" style="margin-left: 5%;">
+                                            <h:column>
+                                                <h:outputLabel value="#{relacionAsignaturaPeriodo.asignaturas.nombre}" styleClass="botonGrisClaro-Verde labelSinResaltar">
+                                                    <f:ajax event="click" execute="@this" render=":formPrincipal:tablaDimensiones :formPrincipal:tablaPeriodos :formPrincipal:tablaLogros :formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin" listener="#{configuracionNotas.escogerAsigantura(relacionAsignaturaPeriodo)}"
+                                                            onevent="seleccionarAsignaturas"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+
+                                <td class="colTablaNotasPrincipal-3 bordesHeader">
+                                    <h:panelGroup id="contenedorDimensiones">
+                                        <h:dataTable id="tablaDimensiones" value="#{configuracionNotas.datalistDimensiones}" var="dimensiones" styleClass="border2" 
+                                                     width="100%" cellpadding="0" cellspacing="0" border="0"  columnClasses="colDimensiones-1, colDimensiones-2, colDimensiones-3, colDimensiones-4, colDimensiones-5" >
+                                            <h:column>
+                                                <center>
+                                                    <h:selectBooleanCheckbox value="#{configuracionNotas.valorDimensionAsignatura}">
+                                                        <f:ajax execute="@this" render="@this seleccionarDimension valorPorcentajeDimension"/>
+                                                    </h:selectBooleanCheckbox>
+                                                </center>
+                                            </h:column>
+                                            <h:column>
+                                                <h:outputLabel id="seleccionarDimension" value="#{dimensiones.nombre}"  styleClass="#{configuracionNotas.dimensionSeleccionada(dimensiones)?'botonSeleccionadoVerde':configuracionNotas.valorDimensionAsignatura?'botonGrisClaro-Verde':''} botonDimensionesSeleccionado botonGrisClaro botonWidth labelSinResaltar">
+                                                    <f:ajax event="click" render=":formPrincipal:tablaPeriodos :formPrincipal:tablaLogros :formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin" disabled="#{configuracionNotas.valorDimensionAsignatura?'false':'true'}" listener="#{configuracionNotas.seleccionarDimension(dimensiones)}"
+                                                            onevent="seleccionarDimensiones"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                            <h:column>
+                                                <h:inputText id="valorPorcentajeDimension" class="ValorPorcentajeDimension" value="#{configuracionNotas.valorPorcentajeAsignatura}" onfocus="guardarValor(this)"  disabled="#{configuracionNotas.valorDimensionAsignatura?'false':'true'}" style="width: 80%;">
+                                                    <f:ajax event="keyup" execute="@this" disabled="#{configuracionNotas.valorDimensionAsignatura?'false':'true'}"/>
+                                                </h:inputText>
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <h:graphicImage class="cargandoValorPorcentajeDimension" value="/resources/imagenes/finales/loadingCambios.gif" style="display: none;" width="50%" height="15%"/>
+                                                </center>
+                                                <h:graphicImage value="/resources/images/borrar.gif" class="eliminarValorPorcentajeDimension" style="cursor: pointer;">
+                                                    <f:ajax event="click" render=":formPrincipal:contenedorDimensiones" listener="#{configuracionNotas.eliminarDimensiones(dimensiones)}"/>
+                                                </h:graphicImage> 
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <h:graphicImage value="/resources/imagenes/botones/editar.png" style="cursor: pointer;" width="20px" height="20px">
+                                                        <f:ajax event="click" render=":dimensiones" listener="#{configuracionNotas.seleccionarEditarDimension(dimensiones)}"
+                                                                onevent="mostrarElementoDimensiones"/>
+                                                    </h:graphicImage> 
+                                                </center>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td class="colTablaNotasPrincipal-4 bordesHeader">
+                                    <h:panelGroup id="contenedorPeriodos">
+                                        <h:dataTable id="tablaPeriodos" value="#{configuracionNotas.datalistPeriodos}" var="periodos" style="margin-left: 5%;" styleClass="border2"
+                                                     width="70%" cellpadding="0" cellspacing="0" border="0" columnClasses="colPeriodos-1">
+                                            <h:column>
+                                                <h:outputLabel value="#{periodos.nombre}" styleClass="botonGrisClaro-Verde labelSinResaltar">
+                                                    <f:ajax event="click" render=":formPrincipal:tablaLogros  :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaNotas" listener="#{configuracionNotas.seleccionarPeriodos(periodos)}"
+                                                            onevent="seleccionarPeriodos"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td class="colTablaNotasPrincipal-5 bordesHeader">
+                                    <h:panelGroup id="contenedoresLogros">
+                                        <h:dataTable id="tablaLogros" value="#{configuracionNotas.datalistLogros}" var="logros" styleClass="border2"
+                                                     width="100%" cellpadding="2%" cellspacing="0" border="0" columnClasses="colLogros-2, colLogros-3, colLogros-4" rowClasses="rowsGeneral">
+                                            <h:column>
+                                                <h:outputLabel id="seleccionarLogro" value="#{logros.logro}" styleClass="#{configuracionNotas.logroSeleccionado(logros)?'botonSeleccionadoVerde':'botonGrisClaro-Verde'} labelSinResaltar marginIzquierdo" style="text-align: justify;">
+                                                    <f:ajax event="click" render=":formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin" disabled="#{configuracionNotas.valorLogroPeriodo?'false':'true'}" listener="#{configuracionNotas.seleccionarLogro(logros)}"
+                                                            onevent="seleccionarLogros"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <h:graphicImage value="/resources/images/borrar.gif" style="cursor: pointer;">
+                                                        <f:ajax event="click" render=":formPrincipal:contenedoresLogros" listener="#{configuracionNotas.eliminarLogro(logros)}"/>
+                                                    </h:graphicImage> 
+                                                </center>
+                                            </h:column>
+                                            <h:column>
+                                                <h:graphicImage value="/resources/imagenes/botones/editar.png" style="cursor: pointer;" width="20px" height="20px">
+                                                    <f:ajax event="click" render=":logros" listener="#{configuracionNotas.seleccionarEditarLogro(logros)}"
+                                                            onevent="mostrarElementoLogros"/>
+                                                </h:graphicImage> 
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td class="colTablaNotasPrincipal-6 bordesHeader">
+                                    <h:panelGroup id="contenedoresNotas">
+                                        <h:dataTable id="tablaNotas" value="#{configuracionNotas.dataListNotasRelacionLogrosDimension}" styleClass="border2" var="notas" border="0" cellpadding="0" cellspacing="0"
+                                                     width="100%" columnClasses="colNotas-2, colNotas-3, colNotas-4, colNotas-5">
+                                            <h:column>
+                                                <h:outputLabel value="#{notas.nombrenotas}" styleClass="marginIzquierdo #{configuracionNotas.notaSeleccionada(notas)?'botonSeleccionadoVerde':'botonGrisClaro-Verde'} labelSinResaltar">
+                                                    <f:ajax event="click" render=":formPrincipal:tablaRelacionlogrosdimensionboletin" listener="#{configuracionNotas.seleccionarNotaGlobal(notas)}"
+                                                            onevent="seleccionarNotaGlobal"/>
+                                                </h:outputLabel>
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <h:inputText id="valorPorcentajeNota" class="ValorPorcentajeNota" value="#{configuracionNotas.valorPorcentajeNota}" onfocus="guardarValor(this)" onkeyup="empezarEdicion(this); ponderId(this); if (validarTiempoBusquedaConTiempo(this, 800)) return false;">
+                                                        <f:ajax event="keyup" execute="@this" onevent="despuesEditarValor"/>
+                                                        <f:ajax event="blur" render="@this" execute="@none"/>
+                                                    </h:inputText>
+                                                </center>
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <center>
+                                                        <h:graphicImage class="cargandoValorPorcentajeNota" value="/resources/imagenes/finales/loadingCambios.gif" style="display: none;" width="50%" height="15%"/>
+                                                    </center>
+                                                    <center>
+                                                        <h:graphicImage class="eliminarValorPorcentajeNota" value="/resources/images/borrar.gif" style="cursor: pointer;">
+                                                            <f:ajax event="click" render=":formPrincipal:contenedoresNotas" listener="#{configuracionNotas.eliminarNotas(notas)}"/>
+                                                        </h:graphicImage> 
+                                                    </center>
+                                                </center>
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <h:graphicImage value="/resources/imagenes/botones/editar.png" style="cursor: pointer;" width="20px" height="20px">
+                                                        <f:ajax event="click" render=":notasGlobales" listener="#{configuracionNotas.seleccionarEditarNotas(notas)}"
+                                                                onevent="mostrarElementoNotas"/>
+                                                    </h:graphicImage> 
+                                                </center>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td class="bordesHeader">
+                                    <h:panelGroup id="contenedorNotasLogrosDimensionBoletin">
+                                        <h:dataTable id="tablaRelacionlogrosdimensionboletin" cellpadding="0" cellspacing="0" border="0"  value="#{configuracionNotas.dataListRelacionnotaslogrosdimensionboletin}"
+                                                     var="rld" columnClasses="colActividades-1, colActividades-2, colActividades-3" width="100%" styleClass="border2">
+                                            <h:column >
+                                                <h:outputLabel value="#{rld.nombre}" styleClass="marginIzquierdo botonGrisClaro-Verde labelSinResaltar" style="width: 80%;">
+                                                    <f:ajax event="click" execute="@this" render=":formRegistroMatricula" listener="#{configuracionNotas.seleccionarNotaCalificable(rld)}"
+                                                            onevent="mostrarElementoNotasCalificables"/>
+                                                </h:outputLabel>                                            
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <h:graphicImage value="/resources/images/borrar.gif" style="cursor: pointer;">
+                                                        <f:ajax event="click" render="@form" listener="#{configuracionNotas.eliminarNota(rld)}"/>
+                                                    </h:graphicImage> 
+                                                </center>
+                                            </h:column>
+                                            <h:column>
+                                                <center>
+                                                    <h:graphicImage value="/resources/imagenes/botones/editar.png" style="cursor: pointer;" width="20px" height="20px"
+                                                                    onmousedown="seleccionarElementoEditar('formCrearNotasCalificables', 'nombreNotaCalificar')">
+                                                        <f:ajax event="click" render=":formCrearNotasCalificables" listener="#{configuracionNotas.seleccionarNotaCalificableEditar(rld)}"
+                                                                onevent="cargarPopUPEditarElemento"/>
+                                                    </h:graphicImage> 
+                                                </center>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </h:form>
+
+
+
+
+
+            <!--Formulario para agregar las dimensiones-->
+            <h:form id="dimensiones" style="display: none; z-index: 999;"
+                    styleClass="fieldSetUniversal divPopUPAgregar">
+                <center>
+                    <h:outputText id="tituloPopUp"  styleClass="fieldSetUniversal labelResaltado" style="width: 90%"/>
+                </center>
+
+                <br/>
+                <br/>
+                <h:inputText id="nombreDimension" styleClass="inputAgregarPopUP" onclick="if(clickRender()) return false;" >
+                    <f:ajax event="keyup" execute="@this"/>
+                </h:inputText>
+                <br/>
+                <h:commandButton value="Agregar" styleClass="botonAzul" onclick="if(clickRender()) return false;">
+                    <f:ajax event="click" render=":formPrincipal:tablaDimensiones" execute="@form" listener="#{configuracionNotas.agregarDimension()}"
+                            onevent="terminarAgregarDimensiones"/>
+                </h:commandButton>
+            </h:form>
+
+            <!--Formulario para agregar los logros-->
+            <h:form id="logros" style="display: none;" styleClass="fieldSetUniversal divPopUPAgregar">
+
+                <center>
+                    <h:outputText id="tituloPopUp" styleClass="fieldSetUniversal labelResaltado" style="width: 90%"/>
+                </center>
+                <br/>
+                <br/>
+
+
+                <h:inputTextarea id="textoLogro" styleClass="inputAgregarPopUP" style="height: 60px;">
+                    <f:ajax event="keyup" execute="@this"/>
+                </h:inputTextarea>
+                <br/>
+                <h:commandButton value="Agregar" styleClass="botonAzul" onclick="if(clickRender()) return false;">
+                    <f:ajax event="click" execute="@this" render=":formPrincipal:tablaLogros" listener="#{configuracionNotas.agregarLogro()}" 
+                            onevent="terminarAgregarLogros"/>
+                </h:commandButton>
+            </h:form>
+            
+            
+            <!--Formulario para agregar los periodos-->
+            <h:form id="periodos" style="display: none; z-index: 999;"
+                    styleClass="fieldSetUniversal divPopUPAgregar">
+                <center>
+                    <h:outputText id="tituloPopUp"  styleClass="fieldSetUniversal labelResaltado" style="width: 90%"/>
+                </center>
+
+                <br/>
+                <br/>
+                <h:inputText id="nombrePeriodos" styleClass="inputAgregarPopUP" onclick="if(clickRender()) return false;" >
+                    <f:ajax event="keyup" execute="@this"/>
+                </h:inputText>
+                <br/>
+                <h:commandButton value="Agregar" styleClass="botonAzul" onclick="if(clickRender()) return false;">
+                    <f:ajax event="click" render=":formPrincipal:tablaPeriodos" execute="@form" listener="#{configuracionNotas.agregarPeriodos()}"
+                            onevent="terminarAgregarPeriodos"/>
+                </h:commandButton>
+            </h:form>
+
+            <!--Formulario para agregar las dimensiones-->
+            <h:form id="notasGlobales" style="display: none;" styleClass="fieldSetUniversal divPopUPAgregar">
+
+                <center>
+                    <h:outputText id="tituloPopUp" styleClass="fieldSetUniversal labelResaltado" style="width: 90%"/>
+                </center>
+
+                <br/>
+                <br/>
+
+                <h:inputText id="nombreNotaGlobal" styleClass="inputAgregarPopUP" onkeyup="if(validarLetras(this)) return false">
+                    <f:ajax event="keyup" execute="@this"/>
+                </h:inputText>
+                <br/>
+                <h:commandButton value="Agregar" styleClass="botonAzul" onclick="if(clickRender()) return false;">
+                    <f:ajax event="click" execute="@this" render=":formPrincipal:tablaNotas"  listener="#{configuracionNotas.agregarNotaGlobal()}"
+                            onevent="terminarAgregarNotasGlobales"/>
+                </h:commandButton>
+            </h:form>
+
+            <!--Formulario para agregar actividades-->
+            <h:form id="formCrearNotasCalificables" style="display: none;" class="divPopUPAgregar fieldSetUniversal" styleClass="divPopUPAgregar fieldSetUniversal">
+                <center>
+                    <h:outputText id="tituloPopUp" styleClass="fieldSetUniversal labelResaltado" style="width: 90%"/>
+                </center>
+
+                <br/>
+                <br/>
+
+                <h:inputText id="nombreNotaCalificar" styleClass="inputAgregarPopUP"> 
+                    <f:ajax event="keyup" execute="@this" />
+                </h:inputText>
+                <br/>
+                <h:commandButton value="Aceptar" styleClass="botonAzul">
+                    <f:ajax listener="#{configuracionNotas.agregarNotaCalificar()}" execute="@form" render=":formPrincipal:tablaRelacionlogrosdimensionboletin"
+                            onevent="terminarAgregarActividades"/>
+                </h:commandButton>
+            </h:form>
+
+
+            <!--Formulario para colocar las notas de cada estudiante-->
+            <h:form id="formRegistroMatricula"  style="display: none;" styleClass="divPopUPAgregar fieldSetUniversal">
+                <div class="divTablaHeader" style="width: 100%;">
+                    <table style="width: 100%" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr style="height: 35px">
+                                <th class="tablasEstudiantesCol-1 bordesHeader"> 
+                                    <label>Nombre</label>
+                                </th>
+                                <th class="tablasEstudiantesCol-2">                                    
+                                    <label>Nota</label>
+                                </th>                
+                            </tr>
+                        </thead>
+                    </table>
+                    <h:panelGroup layout="block" style="max-height: 500px; overflow: auto; color: black;">
+                        <h:dataTable id="tablaEstudiantes" value="#{configuracionNotas.dataListRegistroMatricula}" var="rm" rowClasses="fila1, fila2"
+                                     columnClasses="tablasEstudiantesCol-1  bordesBottom bordeIzquierdo bordesHeader ubicacionCeldaMitad, tablasEstudiantesCol-2 bordesBottom bordesHeader ubicacionCeldaMitad" width="100%" cellpadding="0" cellspacing="0">
+                            <h:column>
+                                <div style="width: 100%;" class="marginIzquierdo labelSinResaltar">
+                                    <h:outputText value="#{rm.estudiantes.usuarios.apellidos} #{rm.estudiantes.usuarios.nombres}" style="text-transform: capitalize;">
+                                        <f:converter converterId="minusculasjava"/>
+                                    </h:outputText>
+                                </div>
+                            </h:column>
+                            <h:column>
+                                <center>
+                                    <h:outputText value="#{configuracionNotas.notaCalificable}" styleClass="labelSinResaltar marginIzquierdo" style="text-transform: capitalize;">
+                                        <f:convertNumber />
+                                    </h:outputText>
+                                </center>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                </div>
+            </h:form>
+
+
+            <div id="backgroundPopup" style="display: none; z-index: 0; width: 1400px;" onclick="escongerPopUP()"/>
+            <br/>
+            <p:growl id="messages" showDetail="true" widgetVar="messages" />
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage name="/imagenes/ajaxloadingbar.gif" />
+			</p:dialog>
+        </h:panelGroup>
+    </h:body>
+</html>

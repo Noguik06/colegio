@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+
+        <h:outputScript name="jquery.js" library="jquery"/>
+
+        <!--Css locales-->        
+        <link href="css/notasRecuperaciones.css" rel="stylesheet" type="text/css" />
+
+        <!--Css globales-->        
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+        <h:outputStylesheet name="botones.css" library="universales/css"/>
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="letras.css" library="universales/css"/>
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+        <h:outputScript name="hoverIntent.js" library="menuPrincipal/js"/>
+        <h:outputScript name="superfish.js" library="menuPrincipal/js"/>
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+
+
+        <!--Js globales-->
+        <h:outputScript name="validaciones.js" library="universales/js"/>
+
+        <!--Js locales-->
+        <script type="text/javascript"  src="js/notasRecuperaciones.js"/>
+
+        <title>NOTAS ESTUDIANTES</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <div style="width: auto;" >
+                <ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml"/>
+            </div>
+        </h:form>
+        <br/>
+        <h:form id="formPrincipal" style="width: 100%;">
+
+            <fieldset class="fieldSetUniversal" style="width: 1200px;  margin-left: auto; margin-right: auto;">
+                <div class="divTablaHeader" style="width: 100%;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <thead style="width: 100%">
+                            <tr style="height: 30px;">
+                                <th class="colTablaRecupereaciones-1 bordesHeader">
+                                    Curso
+                                </th>
+                                <th class="colTablaRecupereaciones-2 bordesHeader">
+                                    Asignatura
+                                </th>
+                                <th class="colTablaRecupereaciones-3 bordesHeader">
+                                    Periodos
+                                </th>
+                                <th class="colTablaRecupereaciones-4">
+                                    <table width="100%;" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th width="40%" class="bordesHeader">
+                                                    Estudiantes
+                                                </th>
+                                                <th width="20%" class="bordesHeader">
+                                                    Recuperación
+                                                </th>
+                                                <th width="20%">
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tbody style="width: 100%">
+                        <tr>
+                            <td class="colTablaRecupereaciones-1 bordesHeader ubicacionCeldaArriba">
+                                <h:panelGroup id="contenedorCursos" layout="block">
+                                    <h:dataTable id="tablaCursos" value="#{notasRecuperaciones.dataListCursos}" var="cursos" width="100%" cellpadding="0" cellspacing="0" border="0"
+                                                 class="ubicacionCeldaArriba border2">
+                                        <h:column>
+                                            <h:outputLabel value="#{cursos.grados.nombre}" style="text-transform: capitalize;" styleClass="botonCurso botonAsignaturas botonGrisClaro-Verde labelSinResaltar">
+                                                <f:ajax event="click" execute="@this" render=" :formPrincipal:contenedorPeriodos :formPrincipal:contenedorAsignaturas :formPrincipal:contenedorListaEstudiantesARecuperar " listener="#{notasRecuperaciones.escogerCurso(cursos)}"
+                                                        onevent="seleccionarCurso"/>
+                                                <f:converter converterId="minusculasjava"/>
+                                            </h:outputLabel>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </td>
+                            <td  class="colTablaRecupereaciones-2 bordesHeader ubicacionCeldaArriba">
+                                <h:panelGroup id="contenedorAsignaturas">
+                                    <h:dataTable id="tablaRelacionAsignaturasPeriodos" value="#{notasRecuperaciones.dataListAsignaturas}" var="relacionAsignaturaPeriodo"
+                                                 cellpadding="0" cellspacing="0" border="0" width="100%" columnClasses="colAsignaturas-1" styleClass="border2" style="margin-left: 5%;">
+                                        <h:column>
+                                            <h:outputLabel value="#{relacionAsignaturaPeriodo.asignaturas.nombre}" styleClass="botonAsignaturas botonGrisClaro-Verde labelSinResaltar"
+                                                           style="text-transform: capitalize;">
+                                                <f:ajax event="click" execute="@this" render=":formPrincipal:contenedorPeriodos :formPrincipal:contenedorListaEstudiantesARecuperar" listener="#{notasRecuperaciones.escogerAsignatura(relacionAsignaturaPeriodo)}"
+                                                        onevent="seleccionarAsignatura"/>
+                                                <f:converter converterId="minusculasjava"/>
+                                            </h:outputLabel>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </td>
+                            <td class="colTablaRecupereaciones-3 bordesHeader ubicacionCeldaArriba">
+                                <h:panelGroup id="contenedorPeriodos"> 
+                                    <h:dataTable value="#{notasRecuperaciones.dataListPeriodos}" var="periodo" styleClass="border2" width="100%" cellpadding="0" cellspacing="0"
+                                                 rendered="#{notasRecuperaciones.banderaPeriodos?true:false}" onevent="seleccionarPeriodo">
+                                        <h:column>
+                                            <h:outputLabel value="#{periodo.nombre}" styleClass="botonPeriodos botonGrisClaro-Verde labelSinResaltar">
+                                                <f:ajax event="click" render=":formPrincipal:contenedorListaEstudiantesARecuperar"  onevent="seleccionarPeriodos"
+                                                        listener="#{notasRecuperaciones.escogerPeriodo(periodo)}"/>
+                                            </h:outputLabel>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </td>
+                            <td class="colTablaRecupereaciones-4" style="vertical-align: top;">
+
+                                <div id="backgroundCargando">
+                                </div>
+
+                                <h:panelGroup id="contenedorListaEstudiantesARecuperar">
+                                	<!-- Tabla que tiene la lista de los estudiantes a recuperar por periodo -->
+                                    <h:dataTable id="tablaEstudiantes" value="#{notasRecuperaciones.dataListListEstudiantes}" var="estudiante"
+                                                 width="100%" cellpadding="0" cellspacing="0" border="0" rowClasses="row1, row2">
+                                        <h:column>
+                                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                <tr>
+                                                    <td width="40%" class="bordesHeader">
+                                                        <h:outputLabel value="#{estudiante.registromatriculas.estudiantes.usuarios.apellidos} #{estudiante.registromatriculas.estudiantes.usuarios.nombres}"
+                                                                       style="text-transform: capitalize;" class="marginIzquierdo">
+                                                            <f:converter converterId="minusculasjava"/>
+                                                        </h:outputLabel>
+
+                                                    </td>
+                                                    <td width="20%" class="bordesHeader">                                                
+                                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <h:panelGroup id="valorRecuperaciones">
+                                                                    <ui:repeat id="tablaRecuperaciones" value="#{notasRecuperaciones.dataListRecuperaciones}" var="recuperaciones">
+                                                                        <td>
+                                                                            <center>
+                                                                                <h:inputText id="notaRecuperaciones" value="#{notasRecuperaciones.valorNotaRecuperaciones}" 
+                                                                                             style="width: 40%;">
+                                                                                    <f:ajax execute="@this" render=":formPrincipal:tablaEstudiantes:total :formPrincipal:contenedorListaEstudiantesARecuperar"/>
+                                                                                    <f:param id="estudiante" value="#{estudiante}"/>
+                                                                                    <f:param id="recuperaciones" value="#{recuperaciones}"/>
+                                                                                    <f:convertNumber />
+                                                                                </h:inputText>
+                                                                            </center>
+                                                                        </td>
+                                                                    </ui:repeat>
+                                                                </h:panelGroup>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="20%">
+                                                        <center>
+                                                            <h:panelGroup id="total">
+                                                                <h:outputText  value="#{notasRecuperaciones.valorPeriodo}">
+                                                                    <f:convertNumber locale="ES_es"/>
+                                                                </h:outputText>
+                                                            </h:panelGroup>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:column>
+                                    </h:dataTable>
+                                    <!-- Tabla que contien la lista de los estudiantes que van a recuperar al final -->
+                                    <h:dataTable id="tablaEstudiantesPeriodoFinal" value="#{notasRecuperaciones.dataListDefinitivas}" var="estudiante"
+                                                 width="100%" cellpadding="0" cellspacing="0" border="0" rowClasses="row1, row2">
+                                        <h:column>
+                                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                <tr>
+                                                    <td width="40%" class="bordesHeader">
+                                                        <h:outputLabel value="#{estudiante.estudiantes.usuarios.apellidos} #{estudiante.estudiantes.usuarios.nombres}"
+                                                                       style="text-transform: capitalize;" class="marginIzquierdo">
+                                                            <f:converter converterId="minusculasjava"/>
+                                                        </h:outputLabel>
+
+                                                    </td>
+                                                    <td width="20%" class="bordesHeader">                                                
+                                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <h:panelGroup id="valorRecuperaciones">
+                                                                    <ui:repeat id="tablaRecuperacionesFinales" value="#{notasRecuperaciones.dataListRecuperaciones}" var="recuperaciones">
+                                                                        <td>
+                                                                            <center>
+                                                                                <h:inputText id="notaRecuperacionesFinales" value="#{notasRecuperaciones.valorNotaRecuperacionesFinales}" 
+                                                                                             style="width: 40%;">
+                                                                                    <f:ajax execute="@this" render=":formPrincipal:tablaEstudiantesPeriodoFinal:total :formPrincipal:contenedorListaEstudiantesARecuperar"/>
+                                                                                    <f:param id="estudiante" value="#{estudiante}"/>
+                                                                                    <f:param id="recuperacionesFinales" value="#{recuperaciones}"/>
+                                                                                    <f:convertNumber />
+                                                                                </h:inputText>
+                                                                            </center>
+                                                                        </td>
+                                                                    </ui:repeat>
+                                                                </h:panelGroup>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="20%">
+                                                        <center>
+                                                            <h:panelGroup id="total">
+                                                                <h:outputText  value="#{notasRecuperaciones.valorPeriodoFinal()}">
+                                                                    <f:convertNumber locale="ES_es"/>
+                                                                </h:outputText>
+                                                            </h:panelGroup>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+        </h:form>
+        <div id="mensajeAlerta" class="ui-growl ui-corner-all ui-widget" style="z-index: 1002; display: none; margin: 0 auto;">
+            <div style="display: block;">
+                <div class="ui-growl-item">                   
+                    <span class="ui-growl-image ui-growl-image-info">
+                    </span>
+                    <span class="ui-messages-error-icon" style="">
+
+                    </span>
+                    <div class="ui-growl-message">
+                        <span class="ui-growl-title tituloAlert">Successful</span>
+                        <p class="contenidoAlert labelSinResaltar">Welcome :ll</p>
+                    </div>
+                    <div style="clear: both;">
+                    </div>                  
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

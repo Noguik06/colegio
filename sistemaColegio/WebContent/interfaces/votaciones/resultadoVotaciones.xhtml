@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+
+
+
+	<link href="css/circulares.css" rel="stylesheet" type="text/css" />
+
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<!--<h:outputStylesheet name="claseScrollUniversal.css" library="universales/css"/>-->
+	<h:outputStylesheet name="ui.core.css" library="dataPicker/css" />
+
+	<h:outputStylesheet name="ui.theme.css" library="dataPicker/css" />
+	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+	<!--<h:outputScript name="scrollUniversal.js" library="universales/js"/>-->
+	<script type="text/javascript" src="js/circulares.js" />
+
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+
+
+	<title>Votaciones</title>
+</h:head>
+<h:body>
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<!--<h:form id="idFormTablaBusquedaAlumnosPincipal" rendered="{rolesManager.registrarCirculares()}">-->
+	<h:form id="idFormTablaBusquedaAlumnosPincipal" onsubmit="return false" rendered="#{rolesManager.administracionVotaciones()}">
+		<p:growl id="messages" />
+		<h:panelGroup>
+			<center>
+				<h1>
+					<h:panelGroup styleClass="labelResaltado" style="font-size:100%;">
+						<h:outputText value="Resultado de las votaciones"></h:outputText>
+					</h:panelGroup>
+				</h1>
+			</center>
+			<br />
+			<center>
+				<h:panelGroup styleClass="labelResaltado" style="font-size:100%;">
+					<h:outputLabel value="Detener Votaciones" style="color:blue; text-decoration:underline; cursor:pointer;"  actionListener="#{votacionesManager.detenerVotaciones()}"
+						onclick="if(!confirm('Desea detener las votaciones?')){return false;}">
+						<f:ajax event="click" listener="#{votacionesManager.detenerVotaciones()}" render="@form"></f:ajax>
+	                </h:outputLabel>
+	                &nbsp;
+					<h:outputLabel value="Iniciar Votaciones" style="color:blue; text-decoration:underline; cursor:pointer;" actionListener="#{votacionesManager.iniciarVotaciones()}"
+						onclick="if(!confirm('Desea iniciar las votaciones?')){return false;}">
+						<f:ajax event="click" listener="#{votacionesManager.iniciarVotaciones()}" render="@form"></f:ajax>
+	                </h:outputLabel>
+	                &nbsp;
+					<h:outputLabel value="Reiniciar Votaciones" style="color:blue; text-decoration:underline; cursor:pointer;"
+					onclick="if(!confirm('Desea reiniciar las votaciones?')){return false;}">
+						<f:ajax event="click" listener="#{votacionesManager.reiniciarVotaciones()}" render="@form"></f:ajax>
+					</h:outputLabel>
+					&nbsp;
+					<h:commandLink value="Imprimir Resultados Personero" style="color:blue;"  actionListener="#{votacionesManager.generarResultadosPersonero()}">
+	                </h:commandLink>
+	                &nbsp;
+					<h:commandLink value="Imprimir Resultados Contralor" style="color:blue;"  actionListener="#{votacionesManager.generarResultadosContralor()}">
+	                </h:commandLink>
+				</h:panelGroup>
+			</center>
+			<br />
+			<table align="center" width="100%" border="0" cellspacing="20"
+				cellpadding="20px">
+				<tr>
+					<td width="50%">
+						<table width="100%">
+							<tr>
+								<td colspan="2">
+									<center>
+										<h3>
+											<h:outputText
+												value="Resultados Personero"></h:outputText>
+										</h3>
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td align="center"><h:graphicImage library="votaciones"
+										name="andres_rodriguez.jpg" width="60%">
+									</h:graphicImage> <br /> <h:panelGroup styleClass="labelSinResaltar">
+										<h:outputText value="Andres Santigo Rodríguez Calderón"
+											styleClass="labelResaltado">
+										</h:outputText>
+										<br />
+										<h:outputText value="#{votacionesManager.totalVotosPersonero(1)}"
+											styleClass="labelSinResaltar">
+										</h:outputText>
+									</h:panelGroup></td>
+								<td align="center"><h:graphicImage library="votaciones"
+										name="omar_rey.jpg" width="60%">
+									</h:graphicImage> <br /> <h:panelGroup styleClass="labelResaltado">
+										<h:outputText value="Omar Ernesto Rey Hurtado"></h:outputText>
+									</h:panelGroup> <br /> <h:outputText
+										value="#{votacionesManager.totalVotosPersonero(2)}"
+										styleClass="labelSinResaltar">
+									</h:outputText></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2"><h:graphicImage
+										library="votaciones" name="Blanco.jpg" width="30%">
+									</h:graphicImage> <br /> <h:panelGroup styleClass="labelResaltado">
+										<h:outputText value="Voto en Blanco"></h:outputText>
+									</h:panelGroup> <br /> <h:outputText
+										value="#{votacionesManager.totalVotosPersonero(3)}"
+										styleClass="labelSinResaltar">
+									</h:outputText></td>
+							</tr>
+						</table>
+					</td>
+					<td width="50%">
+						<table width="100%">
+							<tr>
+								<td colspan="2">
+									<center>
+										<h3>
+											<h:outputText
+												value="Resultados Contralor"></h:outputText>
+										</h3>
+									</center>
+								</td>
+							</tr>
+							<tr>
+								<td align="center"><h:graphicImage library="votaciones"
+										name="jhon_beltran.jpg" width="60%">
+									</h:graphicImage> <br /> <h:panelGroup styleClass="labelSinResaltar">
+										<h:outputText value="Jhon Jairo Beltrán Rodríguez"
+											styleClass="labelResaltado">
+										</h:outputText>
+										<br />
+										<h:outputText value="#{votacionesManager.totalVotosContralor(1)}"
+											styleClass="labelSinResaltar">
+										</h:outputText>
+									</h:panelGroup></td>
+								<td align="center"><h:graphicImage library="votaciones"
+										name="juan_espinal.jpg" width="60%">
+									</h:graphicImage> <br /> <h:panelGroup styleClass="labelResaltado">
+										<h:outputText value="Juan José Espinal Toro"></h:outputText>
+									</h:panelGroup> <br /> <h:outputText
+										value="#{votacionesManager.totalVotosContralor(2)}"
+										styleClass="labelSinResaltar">
+									</h:outputText></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2"><h:graphicImage
+										library="votaciones" name="Blanco.jpg" width="30%">
+									</h:graphicImage> <br /> <h:panelGroup styleClass="labelResaltado">
+										<h:outputText value="Voto en Blanco"></h:outputText>
+									</h:panelGroup> <br /> <h:outputText
+										value="#{votacionesManager.totalVotosContralor(3)}"
+										styleClass="labelSinResaltar">
+									</h:outputText></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</h:panelGroup>
+	</h:form>
+</h:body>
+</html>

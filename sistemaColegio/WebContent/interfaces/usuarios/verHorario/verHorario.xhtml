@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <link href="/sistemaColegio/interfaces/administracion/verHorario/css/verHorario.css" rel="stylesheet" type="text/css"/>                        
+        <link href="/sistemaColegio/resources/universales/css/cssUniversalRicardo.css" rel="stylesheet" type="text/css"/>
+        <link href="/sistemaColegio/resources/universales/css/botones.css" rel="stylesheet" type="text/css"/>
+        <link href="/sistemaColegio/resources/universales/css/sombrasUniversales.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="/sistemaColegio/resources/jquery/jquery.js"/>
+        <script type="text/javascript" src="/sistemaColegio/resources/universales/js/popUpUniversal.js"/>
+        <script type="text/javascript" src="/sistemaColegio/resources/universales/js/jsUniversalRicardo.js"/>
+        <script type="text/javascript" src="/sistemaColegio/interfaces/administracion/verHorario/js/verHorario.js"/>
+        <title>Horarios</title>
+    </h:head>
+    <h:body>
+        <h:form id="idFormularioLogueo" onsubmit="return false">
+            <div id="divLoguear">                
+                <h:panelGroup id="contenedorLoguear" rendered="#{sesiones.usuarios.idusuarios == null}" layout="block">                    
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <center>                        
+                        <fieldset style=" padding: 30px 50px 50px 50px; width: 20%; background: #e2e7ea;" class="fieldSetUniversal claseBordeUniversalRedondear">
+                            <div class="fieldSetUniversal claseBordeUniversalRedondear" style="margin-bottom: 20px; font-weight: bolder; font-size: 15px;">Ver Horario</div>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputText value="Usuario" styleClass="labelSinResaltar"/>
+                                <h:inputText id="usuario">
+                                </h:inputText>
+                                <h:outputText value="Contraseña" styleClass="labelSinResaltar"/>
+                                <h:inputSecret id="password" onkeydown="enterLoguear(event.keyCode)"/>
+                                <h:commandButton id="loguear" value="Iniciar" onclick="return false" styleClass="botonAzul botonesFont">
+                                    <f:ajax event="mousedown" execute="@form" render=":idFormPrincial" listener="#{sesiones.loguear()}"/>
+                                    <!--onerror="errorLoguear" onevent="onEventClickLoggearVer"-->         
+                                </h:commandButton>
+                            </h:panelGrid>
+                        </fieldset>
+                    </center>
+                </h:panelGroup>
+            </div>            
+        </h:form>
+        <h:form id="idFormPrincial" onsubmit="return false;">            
+            <h:outputLabel value="#{verHorarioManager.metodoCheckedLogueoInicio()}"/>                        
+            <h:panelGroup id="idPanelGroupSaludoInicial" layout="block">                
+                <h:panelGroup class="claseBordeUniversalRedondear" style="background: #f7f5e8" layout="block" rendered="#{verHorarioManager.usuarioLogueado.idusuarios != null}">
+                    <h:outputLabel value="!HOLA¡"/>
+                    <h:outputLabel value="#{verHorarioManager.usuarioLogueado.nombres} #{verHorarioManager.usuarioLogueado.apellidos}"/>
+                </h:panelGroup>
+            </h:panelGroup>            
+            <br/>
+            <h:panelGroup layout=" block" rendered="#{verHorarioManager.usuarioLogueado.idusuarios != null}">
+                <h:panelGroup layout="block">
+                    <h:commandButton value="Ver Horarios" class="botonAzul botonesFont">
+                        <f:ajax event="click" listener="#{verHorarioManager.metodoBotonVerPedidoByUsuario()}" render=":idFormHorario"/>
+                    </h:commandButton>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+
+        <h:form id="idFormHorario">
+            <h:panelGroup layout="block" style="width: 100%">                
+                <h:panelGroup layout="block" rendered="#{verHorarioManager.listaHorariosRender.size() > 0}">
+                    <table style="width: 100%" border="1">
+                        <thead>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miercoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h:panelGroup layout="block">
+                                        <h:dataTable value="#{verHorarioManager.listaHorariosRender}" var="horarioByBloques" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                            <h:column>
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 1}">
+                                                    <div>
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horainicio}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>-
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horafin}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>                                                        
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:column>
+                                            <h:column>                                                                                
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 1}">                                                    
+                                                    <h:outputLabel value="#{horarioByBloques.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="display: block;"/>
+                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="display: block" value="#{horarioByBloques.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                </h:panelGroup>                                                                
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+
+                                <td>
+                                    <h:panelGroup layout="block">
+                                        <h:dataTable value="#{verHorarioManager.listaHorariosRender}" var="horarioByBloques" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                            <h:column>
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 2}">
+                                                    <div>
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horainicio}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>-
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horafin}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>                                                        
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:column>
+                                            <h:column>                                                                                
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 2}">
+                                                    <h:outputLabel value="#{horarioByBloques.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="display: block;"/>
+                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="display: block" value="#{horarioByBloques.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                </h:panelGroup>                                                                
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td>
+                                    <h:panelGroup layout="block">
+                                        <h:dataTable value="#{verHorarioManager.listaHorariosRender}" var="horarioByBloques" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                            <h:column>
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 3}">
+                                                    <div>
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horainicio}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>-
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horafin}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>                                                        
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:column>
+                                            <h:column>                                                                                
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 3}">
+                                                    <h:outputLabel value="#{horarioByBloques.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="display: block;"/>
+                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="display: block" value="#{horarioByBloques.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                </h:panelGroup>                                                                
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td>
+                                    <h:panelGroup layout="block">
+                                        <h:dataTable value="#{verHorarioManager.listaHorariosRender}" var="horarioByBloques" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                            <h:column>
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 4}">
+                                                    <div>
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horainicio}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>-
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horafin}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>                                                        
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:column>
+                                            <h:column>                                                                                
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 4}">
+                                                    <h:outputLabel value="#{horarioByBloques.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="display: block;"/>
+                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="display: block" value="#{horarioByBloques.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                </h:panelGroup>                                                                
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                                <td>
+                                    <h:panelGroup layout="block">
+                                        <h:dataTable  value="#{verHorarioManager.listaHorariosRender}" var="horarioByBloques" rowClasses="claseDisplayNoneTrHorarios" style="width: 100%">
+                                            <h:column>
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 5}">
+                                                    <div>
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horainicio}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>-
+                                                        <h:outputLabel value="#{horarioByBloques.relacionbloquescursos.bloques.horafin}">
+                                                            <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                                        </h:outputLabel>                                                        
+                                                    </div>
+                                                </h:panelGroup>
+                                            </h:column>
+                                            <h:column>                                                                                
+                                                <h:panelGroup class="clasePanelGroupValidoRender" style="width: 100%; display: block; cursor: pointer;" layout="block" rendered="#{horarioByBloques.estadodias == 5}">
+                                                    <h:outputLabel value="#{horarioByBloques.relacionprofesoresasignaturaperiodo.relacionasignaturaperiodos.asignaturas.nombre}" style="display: block;"/>
+                                                    <h:outputLabel class="claseNombresProfesorByAsignatura"  style="display: block" value="#{horarioByBloques.relacionbloquescursos.cursos.grados.nombre}"/>
+                                                </h:panelGroup>                                                                
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                    <br/>                        
+                </h:panelGroup>      
+                <h:panelGroup layout="block" rendered="#{verHorarioManager.listaHorariosRender.size() == 0}">
+                    <h:outputLabel value="No hay Horario establecido usted."/>
+                </h:panelGroup>
+                <br/>
+                <br/>                        
+            </h:panelGroup>               
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,289 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+
+        <!--Css globales-->        
+        <h:outputStylesheet name="default.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+        <h:outputStylesheet name="cssJuan.css" library="universales/css"/>
+        <h:outputStylesheet name="botones.css" library="universales/css"/>
+        <h:outputStylesheet name="tablas.css" library="universales/css"/>
+        <h:outputStylesheet name="letras.css" library="universales/css"/>
+        <h:outputStylesheet name="fieldset.css" library="universales/css"/>
+
+        <h:outputScript name="hoverIntent.js" library="menuPrincipal/js"/>
+        <h:outputScript name="superfish.js" library="menuPrincipal/js"/>
+        <h:outputStylesheet name="superfish.css" library="menuPrincipal/css"/>        
+
+
+        <!--Css locales-->        
+        <link href="css/tareasRevisar.css" rel="stylesheet" type="text/css" />
+
+        <!--Js globales-->
+
+        <h:outputScript name="validaciones.js" library="universales/js"/>
+
+        <!--Js locales-->
+        <script type="text/javascript"  src="js/tareasRevisar.js"/>
+
+        <title>Tareas Online</title>
+    </h:head>
+
+    <h:body>
+        <h:form>
+            <div style="width: auto;">
+                <ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+            </div>
+        </h:form>
+
+
+
+
+        <br/>
+
+
+        <fieldset class="fieldSetUniversal" style="width: 97%;  margin-left: auto; margin-right: auto;">
+            <div class="divTablaHeader" style="width: 100%;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr style="height: 30px;">
+                            <th class="colTablaNotasPrincipal-2 bordesHeader">
+                                Asignatura
+                            </th>
+                            <th>
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="colTablaNotasTareas-1 bordesHeader ubicacionCeldaMitad">
+                                            Nombre
+                                        </td>
+                                        <td class="colTablaNotasTareas-2 bordesHeader ubicacionCeldaMitad">
+                                            Descripción
+                                        </td>
+                                        <td class="colTablaNotasTareas-3 bordesHeader ubicacionCeldaMitad">
+                                            Fecha
+                                        </td>
+                                        <td class="colTablaNotasTareas-4 bordesHeader ubicacionCeldaMitad">
+                                            Nota Calificable
+                                        </td>
+                                        <td class="ubicacionCeldaMitad">
+                                            Archivo
+                                        </td>
+                                    </tr>
+                                </table>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tbody style="width: 100%">
+                    <tr>
+                        <td  class="colTablaNotasPrincipal-2 bordesHeader">
+                            <h:form id="formPrincipal" style="width: 100%;">
+                                <h:panelGroup id="contenedorAsignaturas">
+                                    <h:dataTable id="tablaRelacionAsignaturasPeriodos" value="#{tareasAlumnos.dataListRelacionasignaturaperiodosOnline}" var="relacionAsignaturaPeriodo"
+                                                 cellpadding="0" cellspacing="0" border="0" width="100%" columnClasses="colAsignaturas-1 ubicacionCeldaMitad, ubicacionCeldaMitad" styleClass="border2" style="margin-left: 5%;">
+                                        <h:column>
+                                            <h:outputLabel value="#{relacionAsignaturaPeriodo.relacionasignaturaperiodos.asignaturas.nombre}" styleClass="#{tareasAlumnos.asignaturaSeleccionada(relacionAsignaturaPeriodo)?'botonSeleccionadoVerde':'botonGrisClaro-Verde'} labelSinResaltar"
+                                                           style="text-align:  left;">
+                                                <f:ajax event="click" execute="@this" render=":formPrincipal:contenedorAsignaturas :formTareas:panelTareas" listener="#{tareasAlumnos.escogerAsignatura(relacionAsignaturaPeriodo)}"/>
+                                            </h:outputLabel>
+                                        </h:column>
+                                        <h:column>
+                                            <div  style="color: #{tareasAlumnos.numeroTareasOnline(relacionAsignaturaPeriodo) > 0 ?'red':'black'}">
+                                                <h:outputLabel value="#{tareasAlumnos.numeroTareasOnline(relacionAsignaturaPeriodo)}" style="text-align: left;">
+                                                    <f:convertNumber/>
+                                                </h:outputLabel>
+                                            </div>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:panelGroup>
+                            </h:form>
+                        </td>
+                        <td>
+
+                            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                                <p:graphicImage value="/resources/imagenes/ajaxloadingbar.gif" />
+                            </p:dialog>
+
+                            <h:form id="formTareas">
+                                <h:panelGroup id="panelTareas">
+                                    <h:dataTable id="tablaTareas" value="#{tareasAlumnos.dataListTareasOnline}" var="tareas" rendered="#{tareasAlumnos.dataListTareasOnline!=null and tareasAlumnos.dataListTareasOnline.size() > 0}" rowClasses="fila1, fila2"
+                                                 width="100%" cellpadding="0" cellspacing="0" border="0" columnClasses="colTablaNotasTareas-1 ubicacionCeldaMitad bordesHeader, ubicacionCeldaMitad colTablaNotasTareas-2 bordesHeader, colTablaNotasTareas-3 ubicacionCeldaMitad bordesHeader, colTablaNotasTareas-4 ubicacionCeldaMitad bordesHeader, colTablaNotasTareas-5 ubicacionCeldaMitad bordesHeader, colTablaNotasTareas-6">
+                                        <h:column>
+                                            <h:outputText value="#{tareas.nombre}" styleClass="marginIzquierdo"/>
+                                        </h:column>
+                                        <h:column>
+                                            <table width="100%">
+                                                <tr>
+                                                    <td width="80%">
+                                                        <div class="marginIzquierdo" style="padding: 20px 0;">
+                                                            <h:outputText value="#{tareas.descripcion}"/>
+                                                        </div>
+                                                    </td>
+                                                    <td class="ubicacionCeldaMitad">
+                                                        <p:commandButton id="downloadLink" value="Descargar" ajax="false"
+                                                                         rendered="#{tareas.archivo!=null}" >
+                                                            <p:fileDownload value="#{tareasAlumnos.fileDownload}">
+                                                            </p:fileDownload>
+                                                            <f:ajax event="click" execute="@this" render="@form"/>
+                                                        </p:commandButton>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </h:column>
+                                        <h:column>
+                                            <div class="marginIzquierdo">
+                                                <center>
+                                                    <h:outputText value="#{tareas.fecha}">
+                                                        <f:convertDateTime type="both" dateStyle="full" locale="es_ES" pattern="d MMMM 'de' yyyy h:mm a" timeZone="America/Bogota"/>
+                                                    </h:outputText>
+                                                    <br/>
+                                                    -
+
+                                                    <br/>
+                                                    <h:outputText value="#{tareas.fin}">
+                                                        <f:convertDateTime type="both" dateStyle="full" locale="es_ES" pattern="d MMMM 'de' yyyy h:mm a" timeZone="America/Bogota"/>
+                                                    </h:outputText>
+                                                </center>
+                                            </div>
+                                        </h:column>
+                                        <h:column>
+                                            <table width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <center>
+                                                            <h:outputText value="#{tareasAlumnos.notaCalificable(tareas)}">
+                                                        		<f:convertNumber></f:convertNumber>
+                                                    		</h:outputText>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:column>             
+                                        <h:column>
+                                            <table width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <center>
+                                                            <h:panelGroup rendered="#{tareas.online and tareasAlumnos.validarEliminarSubirTarea(tareas)}" style="color:blue; cursor:pointer; text-decoration:underline;">
+                                                                <h:outputLabel value="Ingresar Tarea" style="cursor: pointer;" rendered="#{tareasAlumnos.validarTareaSubida(tareas)}">                                                                
+                                                                    <f:ajax render="@none" listener="#{tareasAlumnos.asignarTarea(tareas)}" execute="@this" event="click" onevent="cargarSubirTarea"/>
+                                                                </h:outputLabel>
+                                                                <h:outputLabel value="Eliminar Tarea" style="cursor: pointer;" rendered="#{!tareasAlumnos.validarTareaSubida(tareas)}">                                                                
+                                                                    <p:ajax update="@form" listener="#{tareasAlumnos.eliminarTarea(tareas)}" process="@this" event="click" 
+                                                                    onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"/>
+                                                                </h:outputLabel>
+                                                            </h:panelGroup>
+                                                             <h:panelGroup rendered="#{tareas.online and !tareasAlumnos.validarEliminarSubirTarea(tareas)}" style="color:blue; cursor:pointer; text-decoration:underline;">
+                                                                <h:outputLabel value="Verificar Nota" style="cursor: pointer;" >                                                                
+                                                                    <p:ajax update="@form :verResultadoNota:panelResultadoNotaDDialog" listener="#{tareasAlumnos.seleccionarVerificarNota(tareas)}" process="@this" event="click" 
+                                                                    onstart="PF('statusDialog').show(); PF('verResultadoNotaDialog').show()" oncomplete="PF('statusDialog').hide()"/>
+                                                                </h:outputLabel>
+                                                            </h:panelGroup>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:column>                                        
+                                    </h:dataTable>
+                                </h:panelGroup>
+
+                            </h:form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+
+
+        <div id="backgroundPopup" style="display: none; z-index: 0"
+             onclick="escongerPopUP()" />
+        <br />
+
+        <!--Formulario para agregar las dimensiones-->
+        <h:form id="subirArhivoTareas" style="display: none; width:50%;" enctype="multipart/form-data"
+                styleClass="fieldSetUniversal divPopUPAgregar">
+
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td width="30%">
+						Archivo:
+					</td>
+					<td >
+						<p:fileUpload value="#{tareasAlumnos.file}" mode="simple" 
+                          sizeLimit="3000"  validatorMessage="El tamaño a subir es mayor a lo permitido"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Comentarios:
+					</td>
+					<td>
+						<p:inputTextarea value="#{tareasAlumnos.relaciontareasestudiantes.comentarios}" style="width:80%">
+						
+						</p:inputTextarea>
+					</td>
+				</tr>
+			</table>
+            <br/>
+            <br/>
+            <center>
+	            <p:commandButton  value="Cargar" type="submit" ajax="false" 
+                    actionListener="#{tareasAlumnos.upload}" 
+                    onstart="PF('statusDialog').show()"
+                    oncomplete="PF('statusDialog').hide()">
+	            </p:commandButton>
+            </center>
+        </h:form>
+        
+        <!--Formulario para agregar/editar Interfaces-->
+		<h:form id="verResultadoNota" onsubmit="return false;"
+			style="width:100%; min-width:100%; max-width:100%;">
+			<p:dialog id="verResultadoNotaDialog" header="Editar/Agregar Interfaces"
+				widgetVar="verResultadoNotaDialog" modal="true" height="290px"
+				showEffect="fade" hideEffect="fade" closeOnEscape="true"
+				resizable="false" width="300px"
+				style="width:300px; max-width:300px;">
+				<h:panelGroup layout="block" id="panelResultadoNotaDDialog" style="width:100%:">
+					<table width="100%">
+						<tr>
+							<td width="40%"><h:outputText value="Calificación:"></h:outputText></td>
+							<td><h:outputText
+									value="#{tareasAlumnos.relaciontareasEstudiantesVN.calificacion}"></h:outputText>
+							</td>
+						</tr>
+						<tr>
+							<td><h:outputText value="Comentarios:"></h:outputText></td>
+							<td><h:outputText
+									value="#{tareasAlumnos.relaciontareasEstudiantesVN.comentariosprofesor}"></h:outputText>
+							</td>
+						</tr>
+					</table>
+					<br />
+					<br />
+					<center>
+						<p:commandButton value="Cerrar"
+							onstart="PF('statusDialog').show();"
+							oncomplete="PF('verResultadoNotaDialog').hide(); PF('statusDialog').hide();"
+							process="@form">
+						</p:commandButton>
+					</center>
+				</h:panelGroup>
+				<p:ajax event="close" update="@none" />
+			</p:dialog>
+		</h:form>
+        
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/imagenes/ajax-loader.gif" />
+		</p:dialog>
+		<p:growl id="messages" showDetail="true"/>
+    </h:body>
+</html>

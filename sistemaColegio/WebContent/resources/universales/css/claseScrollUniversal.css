@@ -1,0 +1,38 @@
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;        
+}
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment  {
+    display: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #f6f6f6;
+}
+
+
+::-webkit-scrollbar-track-piece  {
+    background-color: #3b3b3b;
+    -webkit-border-radius: 6px;    
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    -webkit-border-radius: 6px;    
+    background: #666 url(/sistemaColegio/resources/imagenes/scrollbar_thumb_bg.png) no-repeat center;
+}
+
+
+
+
+.claseOverFlowVertical{
+    max-height: 300px;
+    overflow: scroll;
+    overflow-y: auto; 
+    overflow-x: hidden; 
+}
+
+.claseWidth100CompletoUniversal{
+    width: 100%;   
+}

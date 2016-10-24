@@ -1,0 +1,347 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition template="../../../templates/general/templateGeneral.xhtml">
+        <ui:define name="title">
+            <title>Registro Usuarios</title>
+        </ui:define>
+        <ui:define name="content">
+
+
+
+            <link href="/sistemaColegio/resources/universales/css/cssUniversalRicardo.css" rel="stylesheet" type="text/css"/>
+            <link href="/sistemaColegio/resources/universales/css/botones.css" rel="stylesheet" type="text/css"/>
+            <link href="/sistemaColegio/resources/universales/css/sombrasUniversales.css" rel="stylesheet" type="text/css"/>
+            <link href="/sistemaColegio/resources/universales/css/popupCss.css" rel="stylesheet" type="text/css"/>
+            <link href="/sistemaColegio/resources/universales/css/claseFigurasElementosUniversales.css" rel="stylesheet" type="text/css"/>
+            <link href="/sistemaColegio/interfaces/administracion/configuracionBloques/css/configuracionBloques.css" rel="stylesheet" type="text/css"/>
+            <title>Configuración: Bloques</title>
+            <script type="text/javascript" src="/sistemaColegio/resources/jquery/jquery.js"/>
+            <script type="text/javascript" src="/sistemaColegio/resources/universales/js/popUpUniversal.js"/>        
+            <script type="text/javascript" src="/sistemaColegio/resources/universales/js/jsUniversalRicardo.js"/>
+            <script type="text/javascript" src="/sistemaColegio/resources/universales/js/popUpUniversal.js"/>
+            <script type="text/javascript" src="/sistemaColegio/interfaces/administracion/configuracionBloques/js/configuracionBloques.js"/>
+
+            <h:body>
+
+                <h:form id="idFormPrincipal" onsubmit="return false;">
+                    <h:panelGroup layout="block">
+                        <br/>
+                        <br/>
+                        <fieldset class="claseBordeUniversalRedondear" style="width: 70%; background:  #F7F5EA; margin: 0 auto;">
+                            <br/>
+                            <div style="width: 70%; margin: 0 auto; margin-bottom: 10px;">
+                                <h:outputLabel value="Crear Bloques [+]" class="" style="color: blue; font-weight: bolder; font-style: italic; cursor: pointer;">
+                                    <f:ajax event="click" listener="#{configuracionBloques.metodoBotonCrearBloques()}" render=":idFormCrearBloques" onevent="onEventBontonCrearBloques"/>
+                                </h:outputLabel>
+                            </div>                    
+                            <fieldset class="claseBordeUniversalRedondear" style="background: #f6eecf; width: 70%; margin: 0 auto">
+                                <h:panelGroup layout="block">
+                                    <table border="1" style="width: 100%">
+                                        <thead>
+                                            <th>Bloques</th>
+                                            <th>Grados / Cursos</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <table style="width: 100%">
+                                                        <tr>
+                                                            <td>                                                        
+                                                            </td>
+                                                            <td>
+                                                                <h:panelGroup id="idPanelGroupTablaBloquesPrincipal" layout="block">
+                                                                    <h:dataTable value="#{configuracionBloques.listaAgrupacursosByPrincipal}" var="agrupaCursosGeneral" style="width: 70%;" columnClasses="columna1TablaBloques, columna2TablaBloques">
+                                                                        <h:column>
+                                                                            <!--<div>-->
+                                                                            <h:outputLabel class="claseCirculoUniversal botonesFont claseMarginTopElementosTablasASeleccionar" value="#{configuracionBloques.funcionCalculaCantidadCursosByBloques(agrupaCursosGeneral)}" style="background: #ba1a0f;width: 90%;text-align: center;font-size: 14px; color: white; display: block;">
+                                                                                <f:convertNumber/>
+                                                                            </h:outputLabel>
+                                                                            <!--</div>-->
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <!--<h:panelGroup layout="block" >-->
+                                                                            <h:outputLabel class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonGrisClaro claseMarginTopElementosTablasASeleccionar" value="#{agrupaCursosGeneral.nombre}" style="cursor: pointer; width: 90%; padding: 5px; display: block;">
+                                                                                <f:ajax event="click" listener="#{configuracionBloques.metodoClickLabelBloquesPrincipalesSelected(agrupaCursosGeneral)}" render=":idFormPrincipal:idPanelGroupTablaBloquesPrincipal :idFormPrincipal:idPanelGroupRelacionesBloquesCursosGeneral" onevent="onEventLabelBloquesSelected"/>
+                                                                            </h:outputLabel>
+                                                                            <!--</h:panelGroup>-->
+                                                                        </h:column>
+                                                                    </h:dataTable>
+                                                                    <h:outputLabel value="No hay bloques creados." rendered="#{configuracionBloques.listaAgrupacursosByPrincipal.size() == 0}"/>
+                                                                </h:panelGroup>        
+                                                            </td>
+                                                        </tr>
+                                                    </table>                                            
+                                                </td>
+                                                <td>
+                                                    <table style="width: 100%">
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                <h:panelGroup id="idPanelGroupRelacionesBloquesCursosGeneral" layout="block">
+                                                                    <h:dataTable value="#{configuracionBloques.listaCursosByPrincipal}" var="cursosGeneral" style="width: 100%" rendered="#{configuracionBloques.listaCursosByPrincipal.size() > 0}">
+                                                                        <h:column>
+                                                                            <h:graphicImage class="claseIMGBanderaCursosGeneral" value="/resources/imagenes/ricardoNuevas/banderaAzul32.png" style="width: 25px; height: 25px;" rendered="#{configuracionBloques.funcionConfirmaCursoHasGrupoBloques(cursosGeneral)}"/>
+                                                                            <h:outputLabel class="claseBanderaCursoDesactivadaTotal" value="" style="display: none;" rendered="#{configuracionBloques.funcionConfirmaCursoHasGrupoBloquesGeneral(cursosGeneral) and !configuracionBloques.funcionConfirmaCursoHasGrupoBloques(cursosGeneral)}"/>
+                                                                        </h:column>
+                                                                        <h:column>
+                                                                            <!--<div >-->
+                                                                            <h:outputLabel class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonGrisClaro claseMarginTopElementosTablasASeleccionar" onclick="if(!onClickLabelCursosGenerales(this)){return false;}" value="#{cursosGeneral.grados.nombre} - #{cursosGeneral.nombre}" style="cursor: pointer; width: 90%; padding: 5px; display: block" title="#{configuracionBloques.funcionRetornaTituloGrupoCursoPertenece(cursosGeneral)}">
+                                                                                <f:ajax event="click" listener="#{configuracionBloques.metodoClickLabelCursosPrincipalesSelected(cursosGeneral)}" render=":idFormPrincipal:idPanelGroupTablaBloquesPrincipal :idFormPrincipal:idPanelGroupRelacionesBloquesCursosGeneral" onevent="onEventLabelCursosSelected"/>
+                                                                            </h:outputLabel>
+                                                                            <!--</div>-->
+                                                                        </h:column>
+                                                                    </h:dataTable>
+                                                                    <h:outputLabel value="No hay cursos asignados para el presente año académico." rendered="#{configuracionBloques.listaCursosByPrincipal.size() == 0}"/>
+                                                                </h:panelGroup>
+                                                            </td>
+                                                        </tr>
+                                                    </table>                                            
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>                                    
+                                </h:panelGroup>                            
+                                <br/>
+                            </fieldset>
+                            <br/>                    
+                            <h:panelGroup layout="block">
+                                <div style="width: 70%; margin: 0 auto; margin-bottom: 10px;">
+                                    <h:outputLabel value="Crear Actividad Intermedia[+]" class="" style="color: blue; font-weight: bolder; font-style: italic; cursor: pointer;">
+                                        <f:ajax event="click" listener="#{configuracionBloques.metodoBotonCrearActividadesIntermedias()}" render=":idFormPopUpCrearActividadesIntermedias" onevent="onEventBotonCrearAsignaturasIntermedias"/>
+                                    </h:outputLabel>
+                                </div>
+                                <fieldset class="claseBordeUniversalRedondear" style="background: #f6eecf; width: 70%; margin: 0 auto">
+                                    <legend></legend>
+                                    <h:panelGroup layout="block">
+                                        <table style="width: 100%" border="1">
+                                            <thead>
+                                                <th>Actividades Intermedias</th>
+                                                <th>Grados / Cursos</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <h:panelGroup id="idPanelGrouptablaActividadesIntermedias" layout="block">
+                                                            <h:dataTable value="#{configuracionBloques.listaActividadesintermediasesByAsignar}" var="actividadesIntermedias" style="width: 100%" rendered="#{configuracionBloques.listaActividadesintermediasesByAsignar.size() > 0}">
+                                                                <h:column>
+                                                                    <h:outputLabel value="#{configuracionBloques.funcionCountCursosHasActividadesIntermedias(actividadesIntermedias)}" class="claseCirculoUniversal botonesFont claseMarginTopElementosTablasASeleccionar" style="background: #ba1a0f;width: 100%;text-align: center;font-size: 14px; color: white; padding: 7px;"/>
+                                                                </h:column>
+                                                                <h:column>
+                                                                    <h:outputLabel value="#{actividadesIntermedias.nombre}" class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonGrisClaro claseMarginTopElementosTablasASeleccionar" style="width: 90%; padding: 5px; display: inline-block; cursor: pointer;">
+                                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoClickLabelActividadesIntermediasByNew(actividadesIntermedias)}" render=":idFormPrincipal:idPanelGrouptablaActividadesIntermedias :idFormPrincipal:idPanelGroupTablaCursosByNewActividades" onevent="onEventLabelActividadesIntermediasSeleccionar"/>
+                                                                    </h:outputLabel>
+                                                                </h:column>                                                        
+                                                            </h:dataTable>
+                                                            <h:outputLabel value="No hay actividades intermedia creadas." rendered="#{configuracionBloques.listaActividadesintermediasesByAsignar.size() == 0}"/>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                    <td>
+                                                        <h:panelGroup id="idPanelGroupTablaCursosByNewActividades" layout="block">
+                                                            <h:dataTable value="#{configuracionBloques.listaCursosBySelectedNEW}" var="cursos" style="width: 100%;" rendered="#{configuracionBloques.listaCursosBySelectedNEW.size() > 0}">
+                                                                <h:column>
+                                                                    <h:graphicImage class="claseIMGBanderaCursosGeneral claseMarginTopElementosTablasASeleccionar" value="/resources/imagenes/ricardoNuevas/banderaAzul32.png" style="width: 25px; height: 25px;" rendered="#{configuracionBloques.funcionConfirmaCursosHasActividadesIntermedias(cursos)}"/>
+                                                                </h:column>                                                                                                                        
+                                                                <h:column>
+                                                                    <h:outputLabel value="#{cursos.grados.nombre} - #{cursos.nombre}" class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonGrisClaro claseMarginTopElementosTablasASeleccionar" style="width: 90%; padding: 5px; display: inline-block; cursor: pointer;">
+                                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoClickCursosByNewRelacionActividadesIntermediasCursos(cursos)}" render=":idFormPrincipal:idPanelGrouptablaActividadesIntermedias :idFormPrincipal:idPanelGroupTablaCursosByNewActividades"/>
+                                                                    </h:outputLabel>                                                                
+                                                                </h:column>
+                                                            </h:dataTable>
+                                                            <h:outputLabel value="No hay cursos asignados." rendered="#{configuracionBloques.listaCursosBySelectedNEW.size() == 0}"/>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </h:panelGroup>
+                                </fieldset>
+                            </h:panelGroup>
+                            <br/>
+                        </fieldset>
+                    </h:panelGroup>                        
+                </h:form>
+
+                <div class="clasePopUpContactUniversal clasePopUpCrearBloques" style="display: none; min-height: 85%; width: 90%">
+                    <h:form id="idFormCrearBloques" onsubmit="return false;">
+                        <h:panelGroup layout="block">
+                            <h:panelGroup layout="block">
+                                <h:outputLabel value="Nombre Grupo de Bloques: "/>
+                                <h:inputText value="#{configuracionBloques.agrupacursosByCrearNew.nombre}">
+                                    <f:ajax event="keyup"/>
+                                </h:inputText>
+                                <h:panelGroup id="idPanelGroupTablaBloquesByNewBloques" layout="block">                                                    
+                                    <h:dataTable id="idTablaBloquesByNewBloques" value="#{configuracionBloques.listaBloquesByCrearNew}" var="bloquesNuevos" border="1">                            
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputLabel value="Bloque"/>
+                                            </f:facet>
+                                            <h:outputLabel value="#{(configuracionBloques.funcionRetornaIndexPosicion()) + 1}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputLabel value="Hora Inicio"/>
+                                            </f:facet>
+                                            <h:inputText value="#{bloquesNuevos.horainicio}" disabled="#{configuracionBloques.funcionRetornaIndexPosicion() > 0}">
+                                                <f:ajax event="keyup" rendered="#{configuracionBloques.funcionRetornaIndexPosicion() == 0}"/>
+                                                <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                            </h:inputText>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <h:outputLabel value="Hora Fin"/>
+                                            </f:facet>
+                                            <h:inputText value="#{bloquesNuevos.horafin}" disabled="#{(configuracionBloques.listaBloquesByCrearNew.size() -1) != configuracionBloques.funcionRetornaIndexPosicion()}">
+                                                <f:ajax event="keyup"/>
+                                                <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>
+                                            </h:inputText>                                    
+                                        </h:column>
+                                        <h:column>
+                                            <h:graphicImage value="/resources/imagenes/borrar.png" rendered="#{configuracionBloques.funcionRetornaIndexPosicion() > 0}" style="cursor: pointer">
+                                                <f:ajax event="click" listener="#{configuracionBloques.metodoIMGEliminarBloquesByNuevoBloque()}" render=":idFormCrearBloques:idPanelGroupTablaBloquesByNewBloques"/>
+                                            </h:graphicImage>
+                                        </h:column>
+                                    </h:dataTable>                            
+                                </h:panelGroup>
+                                <h:outputLabel value="Agregar bloque [+]" style="color: blue; font-weight: bolder;">
+                                    <f:ajax event="click" listener="#{configuracionBloques.metodoLabelAgregarBloqueByNuevosBloques()}" render=":idFormCrearBloques:idPanelGroupTablaBloquesByNewBloques"/>
+                                </h:outputLabel>
+                                <br/>
+                                <br/>
+                                <h:panelGroup layout="block">
+                                    <h:commandButton value="Crear grupo Bloques" class="botonVerde botonesFont">
+                                        <f:ajax event="click" listener="#{configuracionBloques.metodoCrearGruposBloques()}" render=":idFormPopUpCrearActividadesIntermedias" onerror="onErrorBotonCrearGrupoBloques" onevent="onEventBotonCrearGrupoBloques"/>
+                                    </h:commandButton>
+                                </h:panelGroup>
+                            </h:panelGroup>                    
+                        </h:panelGroup>
+                    </h:form>
+                </div>
+                <div class="claseBackgroundPopupUniversal clasePopUpBackGroundCrearBloques"></div>
+
+                <div class="clasePopUpContactUniversal clasePopUpCrearActividadesIntermedias" style="display: none; min-height: 85%; width: 90%">
+                    <h:form id="idFormPopUpCrearActividadesIntermedias" onsubmit="return false;">
+                        <h:panelGroup layout="block">
+                            <h:outputLabel value="Nombre Actividad: "/>
+                            <h:inputText value="#{configuracionBloques.relacionactividadesintermediasbloquesByCrearNEW.actividadesintermedias.nombre}">
+                                <f:ajax event="keyup"/>
+                            </h:inputText>
+                            <br/>
+                            <br/>
+                            <h:panelGroup id="idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" layout="block">
+                                <div>
+                                    <h:outputLabel value="Seleccione los días para la actividad a crear: "/>
+                                </div>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonesFont">
+                                                    <h:outputLabel value="Lunes" style="display: block; cursor: pointer;">
+                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoLabelDiaLUNES()}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" onevent="onEventClickLabelDiaByNewActividadIntermedia"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                                <h:outputLabel value="" style="display: none" class="claseBanderaDiaMarcadoByActividadIntermediaNEW" rendered="#{configuracionBloques.banderaLunesByActividadIntermediaNEW}"/>
+                                            </td>                                
+                                            <td>
+                                                <div class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonesFont">
+                                                    <h:outputLabel value="Martes" style="display: block; cursor: pointer;">
+                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoLabelDiaMARTES()}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" onevent="onEventClickLabelDiaByNewActividadIntermedia"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                                <h:outputLabel value="" style="display: none" class="claseBanderaDiaMarcadoByActividadIntermediaNEW" rendered="#{configuracionBloques.banderaMartesByActividadIntermediaNEW}"/>
+                                            </td>                                
+                                            <td>
+                                                <div class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonesFont">
+                                                    <h:outputLabel value="Miercoles" style="display: block; cursor: pointer;">
+                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoLabelDiaMIERCOLES()}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" onevent="onEventClickLabelDiaByNewActividadIntermedia"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                                <h:outputLabel value="" style="display: none" class="claseBanderaDiaMarcadoByActividadIntermediaNEW" rendered="#{configuracionBloques.banderaMiercolesByActividadIntermediaNEW}"/>                                        
+                                            </td>                                
+                                            <td>
+                                                <div class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonesFont">
+                                                    <h:outputLabel value="Jueves" style="display: block; cursor: pointer;">
+                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoLabelDiaJUEVES()}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" onevent="onEventClickLabelDiaByNewActividadIntermedia"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                                <h:outputLabel value="" style="display: none" class="claseBanderaDiaMarcadoByActividadIntermediaNEW" rendered="#{configuracionBloques.banderaJuevesByActividadIntermediaNEW}"/>
+                                            </td>                                
+                                            <td>
+                                                <div class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonesFont">
+                                                    <h:outputLabel value="Viernes" style="display: block; cursor: pointer;">
+                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoLabelDiaVIERNES()}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" onevent="onEventClickLabelDiaByNewActividadIntermedia"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                                <h:outputLabel value="" style="display: none" class="claseBanderaDiaMarcadoByActividadIntermediaNEW" rendered="#{configuracionBloques.banderaViernesByActividadIntermediaNEW}"/>
+                                            </td>                                
+                                            <td>
+                                                <div class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonesFont">
+                                                    <h:outputLabel value="Sábado" style="display: block; cursor: pointer;">
+                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoLabelDiaSABADO()}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" onevent="onEventClickLabelDiaByNewActividadIntermedia"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                                <h:outputLabel value="" style="display: none" class="claseBanderaDiaMarcadoByActividadIntermediaNEW" rendered="#{configuracionBloques.banderaSabadoByActividadIntermediaNEW}"/>
+                                            </td>
+                                            <td>
+                                                <div class="claseBordeUniversalRedondear claseCeldaColorDesactivada botonesFont">
+                                                    <h:outputLabel value="Domingo" style="display: block; cursor: pointer;">
+                                                        <f:ajax event="click" listener="#{configuracionBloques.metodoLabelDiaDOMINGO()}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupTablaDiasASeleccionarByNewActividadIntermedia" onevent="onEventClickLabelDiaByNewActividadIntermedia"/>
+                                                    </h:outputLabel>
+                                                </div>
+                                                <h:outputLabel value="" style="display: none" class="claseBanderaDiaMarcadoByActividadIntermediaNEW" rendered="#{configuracionBloques.banderaDomingoByActividadIntermediaNEW}"/>
+                                            </td>                                
+                                        </tr>
+                                    </table>
+                                </div>
+                                <br/>                        
+                                <div>
+                                    <h:outputLabel value="Seleccione los bloques: ">
+                                    </h:outputLabel>
+                                    <h:panelGroup id="idPanelGroupColumnaTablaActividadesIntermediasByNew" layout="block">
+                                        <h:dataTable  value="#{configuracionBloques.listaAgrupacursosesByNewActividadIntermedia}" var="agrupaBloquesByNew" rowClasses="claseFilaTablaAgrupaBlquesByNewActividadesInt" cellpadding="0" cellspacing="0" style="width: 100%">
+                                            <h:column>
+                                                <h:outputLabel value="#{agrupaBloquesByNew.nombre}" style="font-weight: bolder"/>
+                                                <br/>
+
+                                                <h:dataTable value="#{configuracionBloques.listaBloquesByNewActividadIntermedia}" var="bloquesByNew" rowClasses="claseColumnaHiddenByBloquesByNewActividad"> 
+                                                    <h:column>                                            
+                                                        <h:panelGroup class="claseCeldaColorDesactivada clasePanelGroupBloqueByNewActividadIntermedia claseBordeUniversalRedondear botonGrisClaro botonesFont #{bloquesByNew.idbloques > 0 ? 'claseCeldaColorDesactivada':'claseCeldaSeleccionada'}" layout="block" rendered="#{agrupaBloquesByNew.idagrupacursos == bloquesByNew.agrupacursos.idagrupacursos}" style="padding: 5px;">
+                                                            <f:ajax event="click" listener="#{configuracionBloques.metodoPrueba(bloquesByNew)}" render=":idFormPopUpCrearActividadesIntermedias:idPanelGroupColumnaTablaActividadesIntermediasByNew" onevent="onEventClickBloquesByNewActividadesIntermedias">
+                                                                <h:outputLabel value="#{bloquesByNew.horainicio}">
+                                                                    <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>                                                
+                                                                </h:outputLabel>
+                                                                -
+                                                                <h:outputLabel value="#{bloquesByNew.horafin}" rendered="#{agrupaBloquesByNew.idagrupacursos == bloquesByNew.agrupacursos.idagrupacursos}">
+                                                                    <f:convertDateTime pattern="hh:mm a" timeZone="America/Bogota"/>                                                
+                                                                </h:outputLabel>
+                                                            </f:ajax>
+                                                        </h:panelGroup>                                                
+                                                    </h:column>
+                                                </h:dataTable>
+                                            </h:column>
+                                        </h:dataTable>
+                                    </h:panelGroup>                            
+                                </div>
+                            </h:panelGroup>
+                            <br/>
+                            <br/>                            
+                        </h:panelGroup>
+                        <div style="display: block; width: 100%">
+                            <h:commandButton value="Crear Actividad Intermedia" class="botonVerde botonesFont">
+                                <f:ajax event="click" listener="#{configuracionBloques.metodoBotonCrearActividaIntemedia()}" onerror="onErrorBotonCrearActividadIntermediaFinal" onevent="onEventBotonCrearActividadIntermediaFinal"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </div>
+                <div class="claseBackgroundPopupUniversal clasePopUpBackGroundCrearActividadesIntermedias"></div>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+
+</html>
+

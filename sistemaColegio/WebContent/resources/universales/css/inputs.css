@@ -1,0 +1,19 @@
+/* 
+    Document   : botones
+    Created on : 29-jun-2012, 11:14:04
+    Author     : juannoguera
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.border{
+    border: 1px solid gray;
+}
+
+.border:in-range{
+    border: 1px solid gray;
+}
+
+.borderCambiado{
+    border: 1px solid red;
+}

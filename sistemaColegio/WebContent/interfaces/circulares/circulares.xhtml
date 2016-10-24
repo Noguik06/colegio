@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+
+
+
+	<link href="css/circulares.css" rel="stylesheet" type="text/css" />
+
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<!--<h:outputStylesheet name="claseScrollUniversal.css" library="universales/css"/>-->
+	<h:outputStylesheet name="ui.core.css" library="dataPicker/css" />
+
+	<h:outputStylesheet name="ui.theme.css" library="dataPicker/css" />
+	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+	<!--<h:outputScript name="scrollUniversal.js" library="universales/js"/>-->
+	<script type="text/javascript" src="js/circulares.js" />
+
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+
+
+	<title>Circulares</title>
+</h:head>
+<h:body>
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<!--<h:form id="idFormTablaBusquedaAlumnosPincipal" rendered="{rolesManager.registrarCirculares()}">-->
+	<h:form id="idFormTablaBusquedaAlumnosPincipal">
+		<p:growl id="messages" />
+		<h:outputLabel value="#{circularesManager.conectar()}"
+			style="display: none;" />
+		<h:panelGroup layout="block"
+			style="width: 1200px; height: 600px; margin: 0 auto;">
+			<div id="idDivInputBuscarProveedor1" class="claseDivBuscarPrincipal"
+				style="float: right; width: 21.5%; display: none;">
+				<table style="width: 100%;">
+					<tr>
+						<td>
+							<div class="claseDivLabelBuscarPrincipal">
+								<h:outputLabel value="Buscar:" class="claseLabelBuscarPrincipal" />
+							</div>
+						</td>
+
+						<td><h:inputText id="inputTextBuscar"
+								value="#{registroUsuarios.query}"
+								class="claseInputTextBuscarPrincipal"
+								onfocus="guardarValorEspecial(this); guardarValorLetras(this)"
+								onkeyup="recorrerListaBusquedaProductos(event.keyCode); if(validarLetras(this)) return false;">
+								<f:ajax event="keyup"
+									onevent="onEventInputTextBuscarEstudiantes" />
+							</h:inputText></td>
+					</tr>
+				</table>
+			</div>
+			<br />
+			<br />
+
+			<table width="100%">
+				<tr>
+					<td><h:outputLabel value="¡Agregar Circular!"
+							style="color: blue; margin-bottom: 5px; font-size: 15px; font-weight: bolder; cursor: pointer; font-style: italic; display: block">
+							<f:ajax event="click"
+								listener="#{circularesManager.nuevaCircular()}"
+								render=":idFormTablaBusquedaAlumnosPincipal:contenido"
+								onevent="despuesEscoger" />
+						</h:outputLabel></td>
+					<td>&nbsp;</td>
+				</tr>
+			</table>
+			<table width="100%;" cellpadding="0" cellspacing="0">
+				<tr class="ubicacionCeldaArriba">
+					<td width="40%" style="max-width: 40%;"><h:panelGroup
+							id="idPanelGroupContenedorTablaPrincipal" layout="block"
+							style="width:100">
+							<div>
+								<div style="width: 100%; float: none"
+									class="divTablaHeader claseWidth100CompletoUniversal claseDivContenedorHeaderPrincipal">
+									<table style="width: 100%" cellpadding="0" cellspacing="0">
+										<thead>
+											<tr style="height: 35px">
+												<th class="claseTdCodigo bordesHeader"><label>Circular</label>
+												</th>
+												<th class="claseTdNombres bordesHeader"><label>Fecha</label>
+												</th>
+												<th class="claseTdGrado"><label>&nbsp;</label></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								<div class="box-wrap antiscroll-wrap" style="width: 100%">
+									<div class="box" style="width: 100%">
+										<div class="antiscroll-inner" style="width: 100%">
+											<div class="box-inner"
+												style="width: 100%; margin: 0 auto; max-height: 400px; height: 400px; overflow-y: scroll;"
+												id="contenedorEstudiantesBusqueda">
+												<h:panelGroup id="idPanelGroupTablaPedidosPrincipal"
+													class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal"
+													layout="block" style="width: 100%;">
+													<h:dataTable width="100%"
+														rendered="#{circularesManager.dataListCirculares.size()>0}"
+														id="tablaDatosBusqueda"
+														styleClass="tablaLabelProductoProveedor tablaDatosUniversalRender"
+														style="width: 100%;"
+														value="#{circularesManager.dataListCirculares}"
+														var="circular"
+														columnClasses="claseTdCodigo bordesHeader, claseTdNombres bordesHeader, claseTdGrado"
+														rowClasses="fila1 filaCircular, fila2 filaCircular"
+														cellpadding="0" cellspacing="0">
+
+														<h:column>
+															<h:outputLabel value="#{circular.nombre}"
+																styleClass="marginIzquierdo labelSinResaltar"
+																style="display: block; cursor: pointer;">
+																<f:convertDateTime type="both" dateStyle="full"
+																	locale="es_ES" pattern="d/MM/yyyy"
+																	timeZone="America/Bogota" />
+																<p:ajax event="click"
+																	listener="#{circularesManager.seleccionarCircular(circular)}"
+																	oncomplete="despuesEscogerFin()"
+																	update=":idFormTablaBusquedaAlumnosPincipal:contenido"></p:ajax>
+
+															</h:outputLabel>
+														</h:column>
+														<h:column>
+															<h:outputLabel value="#{circular.fecha}"
+																styleClass="marginIzquierdo labelSinResaltar"
+																style="display: block; cursor: pointer;">
+																<f:convertDateTime type="both" dateStyle="full"
+																	locale="es_ES" pattern="d/MM/yyyy"
+																	timeZone="America/Bogota" />
+																<f:ajax event="click"
+																	listener="#{circularesManager.seleccionarCircular(circular)}"
+																	render=":idFormTablaBusquedaAlumnosPincipal:contenido"
+																	onevent="despuesEscoger" />
+															</h:outputLabel>
+														</h:column>
+														<h:column>
+															<!-- Código Proveedor-->
+															<center>
+																<h:graphicImage value="/resources/images/borrar.gif"
+																	style="cursor: pointer;">
+																	<f:ajax event="click"
+																		render=":idFormTablaBusquedaAlumnosPincipal:idPanelGroupTablaPedidosPrincipal :idFormTablaBusquedaAlumnosPincipal:messages"
+																		listener="#{circularesManager.eliminarCircular(circular)}"
+																		onevent="despueseliminar" />
+																</h:graphicImage>
+															</center>
+														</h:column>
+													</h:dataTable>
+												</h:panelGroup>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</h:panelGroup></td>
+					<td width="60%" style="width: 60%">
+						<div id="backgroundCargando"></div> <h:panelGroup layout="block"
+							id="contenido" style="width: 100%; margin-left: 10px;">
+							<table cellpadding="0" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td width="10%"><h:outputText value="Título"
+											styleClass="labelResaltado" /></td>
+									<td width="80%"><h:inputText
+											value="#{circularesManager.circularSeleccionada.nombre}"
+											disabled="#{circularesManager.circularSeleccionada == null ? 'true':'false'}"
+											style="width: 100%;">
+											<f:ajax execute="@this" />
+										</h:inputText></td>
+								</tr>
+								<tr style="height: 50px; min-height: 50px;">
+									<td colspan="2"><h:outputLabel value="Guardar"
+											styleClass="botonAzul" onclick="prueba()">
+											<f:ajax event="click" execute="circularesContenido"
+												render=":idFormTablaBusquedaAlumnosPincipal:messages :idFormTablaBusquedaAlumnosPincipal:tablaDatosBusqueda :idFormTablaBusquedaAlumnosPincipal:idPanelGroupTablaPedidosPrincipal"
+												listener="#{circularesManager.guardarCircular()}"
+												onevent="despuesGuardarCircular" />
+										</h:outputLabel></td>
+								</tr>
+								<tr>
+									<td colspan="2" width="100%">
+										<div id="circularesWrapper">
+											<p:editor id="circularesContenido"
+												value="#{circularesManager.circularSeleccionada.contenido}">
+											</p:editor>
+										</div>
+									</td>
+								</tr>
+							</table>
+
+							<h:inputHidden id="contenidoCircular"
+								value="#{circularesManager.contenido}" />
+
+							<h:inputHidden id="banderaEscribir"
+								value="#{circularesManager.circularSeleccionada == null ? 'true':'false'}" />
+						</h:panelGroup>
+					</td>
+
+				</tr>
+			</table>
+			<br />
+			<br />
+			<br />
+		</h:panelGroup>
+	</h:form>
+</h:body>
+</html>

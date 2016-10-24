@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+
+	<link href="/sistemaColegio/resources/universales/css/tablas.css"
+		rel="stylesheet" type="text/css" />
+	<!--<link href="/sistemaColegio/resources/universales/css/claseScrollUniversal.css" rel="stylesheet" type="text/css"/>-->
+	<link href="/sistemaColegio/resources/universales/css/primefaces.css"
+		rel="stylesheet" type="text/css" />
+	<link href="/sistemaColegio/resources/universales/css/claseTablasR.css"
+		rel="stylesheet" type="text/css" />
+	<link href="/sistemaColegio/resources/universales/css/botones.css"
+		rel="stylesheet" type="text/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	
+	<script type="text/javascript" src="js/editarGaleria.js" />
+
+	
+
+	<!-- Css globales  -->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+	<!--Estilos del menu  -->
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+	<!-- Css de la página -->
+	<link
+		href="/sistemaColegio/faces/interfaces/galeria/css/editarGaleria.css"
+		rel="stylesheet" type="text/css" />
+
+	<title>CATEGORÍAS:: Crear - Editar</title>
+</h:head>
+<h:body>
+	<div style="width: auto;">
+		<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+	</div>
+	<h:form id="formGaleria" rendered="#{rolesManager.galeria()}">
+
+		<br />
+		<br />
+		<br />
+		<p:growl id="messages" showDetail="true" />
+		<h:panelGroup layout="block" style="width: 70%; margin: 0 auto;">
+			<table width="100%">
+				<tr>
+					<td><h:outputLabel value="¡Agregar Categoría!"
+							style="color: blue; margin-bottom: 5px; font-size: 15px; font-weight: bolder; cursor: pointer; font-style: italic; display: block">
+							<f:ajax event="click" listener="#{galeriaManager.nuevaGaleria}"
+								render="@form"></f:ajax>
+						</h:outputLabel></td>
+				</tr>
+			</table>
+			<h:panelGroup id="idPanelGroupContenedorTablaPrincipal"
+				layout="block" style="min-height: 300px;">
+				<div
+					class="divTablaHeader claseWidth100CompletoUniversal claseDivContenedorHeaderPrincipal"
+					style="width: 100%;">
+					<table style="width: 100%" cellpadding="0" cellspacing="0">
+						<thead>
+							<tr style="height: 35px">
+								<th class="claseTdGaleria-1 colUsuariosHeader bordesHeader">
+									<label>Nombre</label>
+								</th>
+								<th class="claseTdGaleria-2"><label>Número de Fotos</label></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="box-wrap antiscroll-wrap" style="width: 100%">
+					<div class="box" style="width: 100%">
+						<div class="antiscroll-inner" style="width: 100%">
+							<div class="box-inner"
+								style="width: 100%; margin: 0 auto; max-height: 200px; height: 200px; overflow-y: auto;"
+								id="contenedorEstudiantesBusqueda">
+								<h:panelGroup id="idPanelGroupTablaPedidosPrincipal"
+									class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal"
+									layout="block" style="width: 100%;">
+
+									<h:dataTable id="tablaCategoriasBusqueda"
+										styleClass="tablaLabelProductoProveedor tablaDatosUniversalRender"
+										style="width: 100%;"
+										value="#{galeriaManager.dataListPhocagalleryCategories}"
+										var="categoria"
+										columnClasses="claseTdGaleria-1 bordesHeader colUsuariosBody, claseTdGaleria-2"
+										rowClasses="fila1, fila2" cellpadding="0" cellspacing="0">
+										<f:ajax event="click"
+											render=":formGaleria:panelControlSecundario :formGaleria:panelControlInicial :formGaleria:dataTableFotos"
+											listener="#{galeriaManager.escogerCategoria}">
+											<h:column>
+												<!-- Código Proveedor-->
+												<h:outputLabel
+													style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize; cursor:pointer;"
+													value="#{categoria.title}">
+													<f:converter converterId="minusculasjava" />
+												</h:outputLabel>
+											</h:column>
+											<h:column>
+												<h:outputLabel
+													style="text-align: left; margin-left: 5px; display: block; text-transform: capitalize;"
+													value="#{galeriaManager.numeroFotosGaleria}">
+												</h:outputLabel>
+											</h:column>
+										</f:ajax>
+									</h:dataTable>
+								</h:panelGroup>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+			<fieldset class="fieldSetUniversal"
+				style="width: 98%; margin-left: auto; margin-right: auto;">
+				<h:panelGroup id="panelControlInicial">
+					<h:panelGroup
+						rendered="#{galeriaManager.categoriaSeleccionada != null}">
+						<h:outputLabel value="Nombre de la Galería"
+							styleClass="labelResaltado">
+						</h:outputLabel>
+			&nbsp;
+			<h:inputText id="title"
+							value="#{galeriaManager.categoriaSeleccionada.title}">
+						</h:inputText>
+			&nbsp;
+			<h:outputLabel value="Guardar" styleClass="botonVerde">
+							<f:ajax event="click" execute="title"
+								render="tablaCategoriasBusqueda messages panelControlSecundario"
+								listener="#{galeriaManager.guardarCambios}"></f:ajax>
+						</h:outputLabel>
+					</h:panelGroup>
+				</h:panelGroup>
+				&nbsp;
+				<h:panelGroup id="panelControlSecundario">
+					<h:panelGroup
+						rendered="#{galeriaManager.categoriaSeleccionada != null and galeriaManager.categoriaSeleccionada.id > 0}">
+						<h:outputLabel value="Eliminar Fotos" styleClass="botonAzul" onclick="if(!confirm('Desea eliminar las fotos seleccionadas?')) return false;">
+							<f:ajax event="click" execute="title" render="dataTableFotos messages tablaCategoriasBusqueda"
+								listener="#{galeriaManager.eliminarFotos}"></f:ajax>
+						</h:outputLabel>
+					&nbsp;
+					<h:outputLabel value="Eliminar Galeria" styleClass="botonRojo" onclick="if(!confirm('Desea eliminar la galería?')) return false;"
+							rendered="#{galeriaManager.categoriaSeleccionada != null and galeriaManager.categoriaSeleccionada.id > 0}">
+							<f:ajax event="click" execute="title" render="@form"
+								listener="#{galeriaManager.eliminarGaleria}"></f:ajax>
+						</h:outputLabel>
+						<br />
+						<br />
+						<p:fileUpload id="fileupload" dragDropSupport="true"
+							cancelLabel="Cancelar" uploadLabel="Cargar" label="Escoger Fotos" oncomplete="final()"
+							fileUploadListener="#{galeriaManager.handleFileUpload}" update="tablaCategoriasBusqueda dataTableFotos messages"
+							mode="advanced" sizeLimit="99999999" multiple="true" auto="false"
+							fileLimit="5" />
+						
+					</h:panelGroup>
+				</h:panelGroup>
+				<br />
+				<div>
+					<h:dataTable id="dataTableFotos"
+						value="#{galeriaManager.dataListColegioPhocagalleries}"
+						var="fotos" columnClasses="fotosCol1, fotosCol2, fotosCol3">
+						<h:column>
+							<h:selectBooleanCheckbox value="#{galeriaManager.valorEliminar}">
+								<f:ajax execute="@this"></f:ajax>
+							</h:selectBooleanCheckbox>
+						</h:column>
+						<h:column>
+							<h:graphicImage
+								value="http://colpedagogicocampestre.edu.co/images/phocagallery/thumbs/phoca_thumb_m_#{fotos.filename}">
+							</h:graphicImage>
+						</h:column>
+						<h:column>
+							<h:inputText value="#{fotos.title}">
+								<f:ajax render="@this" execute="@this"></f:ajax>
+							</h:inputText>
+						</h:column>
+					</h:dataTable>
+				</div>
+			</fieldset>
+		</h:panelGroup>
+		<br/>
+		<br/>
+	</h:form>
+</h:body>
+</html>

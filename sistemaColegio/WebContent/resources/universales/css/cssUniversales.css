@@ -1,0 +1,506 @@
+*{
+    font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
+
+input{
+    /*    text-align: right;*/
+}
+
+html{
+    height: 100%;
+    background: url(/sistemaColegio/resources/imagenes/generales/fondosInterfaces.jpeg);    
+    /*background: #F5F6F7;*/
+    background-size: 100%;
+    background-attachment: fixed;
+    -webkit-user-select: none;    
+
+    /*        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #eeeeee), color-stop(1, #cccccc), color-stop(0, #cccccc));*/
+
+    /*    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.7, #bfbfbf), color-stop(1, #dfdfdf), color-stop(0.1, #ffffff));
+        background-image: -moz-linear-gradient(top, #bfbfbf 0%, #dfdfdf 52%, #ffffff 100%);
+        background-image: -o-linear-gradient(top, #bfbfbf 0%, #dfdfdf 52%, #ffffff 100%);
+        background-image: -ms-linear-gradient(top, #bfbfbf 0%, #dfdfdf 52%, #ffffff 100%);*/
+
+}
+
+.headerClassUniversal{            
+    /*    border-top-left-radius: 10px 10px;
+        border-top-right-radius: 10px 10px;*/
+    background: #AABDE6; 
+}
+
+
+.headerClassUniversal2{    
+    background: #AABDE6;
+    height: 30px; 
+    border-top-left-radius: 5px 5px; 
+    border-top-right-radius: 5px 5px;
+    /*    display: inline-block;*/
+    padding: 0px 0 6px;
+    color: #FFF;
+    text-decoration: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;   
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    -webkit-user-select: none;    
+}
+
+.headerClassUniversal2 table thead tr th label{    
+    text-shadow: 0 2px 1px rgba(0,0,0,0.3);
+    font-weight: bolder;
+    font-size: 13px;
+}
+
+.bordeHerderWhiteTh{
+    border-left: 1px solid white;
+}
+
+.headerClassUniversal thead tr th{
+    border-right: 1px solid white;    
+    height: 40px;    
+
+}
+.headerClassUniversal thead tr th label{    
+    font-size: 12px;
+    font-weight: bolder;
+    text-transform: uppercase;    
+    text-align: center;    
+}
+
+.headerClassUniversalCuadrado{
+    background: #AABDE6; 
+    -webkit-user-select: none;
+}
+
+.headerClassUniversalCuadrado thead tr th{
+    border-left:  1px solid white;
+    border-bottom:  1px solid white;    
+    height: 40px;    
+}
+.headerClassUniversalCuadrado thead tr th label{    
+    font-size: 12px;
+    font-weight: bolder;
+    text-transform: uppercase;    
+    text-align: center;    
+}
+
+.claseDivContenedorTablaHead{    
+    background: #AABDE6; 
+    height: 40px;
+    border-top-left-radius: 10px 10px;
+    border-top-right-radius: 10px 10px
+}
+
+.evenClassUniversal{
+    /*    background: #F7F7F7;*/
+    height: 35px;
+}
+
+.evenClassUniversal2{
+    background: #F7F7F7;    
+    height: 20px;
+}
+
+.oldClassUniversa2{
+    background: #e0defe;
+    height: 35px;
+}
+.evenClassUniversal td{
+    border-left: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+/*stylos para la segunda tabla o la tabla que se renderiza en el keyup del inputtext Buscar*/
+.tablaDatosUniversalRender{
+    border: 1px solid white;
+}
+.tablaDatosUniversalRender tr td label{        
+    width: 100%;
+    max-height: 30px;
+    padding-top: 1px;
+    padding-left: 2px;
+    text-align: left;
+    margin: 0 auto;
+    display: block;
+    overflow: hidden;    
+    cursor: pointer;
+}
+.tablaDatosUniversalRender2{
+    /*    border: 1px solid white;    */
+}
+.tablaDatosUniversalRender2 tr td label{
+    max-height: 30px;
+    overflow: hidden;        
+}
+
+.tablaDatosUniversalRender tbody tr:hover{
+    background: #FFC;
+    /*    background: #eae8e9;    */
+
+}
+
+.labelEnlacesUniversal{
+    color: blue;     
+    cursor: pointer;    
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bolder;    
+}
+
+/*ESTILOS REFERENTE A LAS TABLAS  DE LOS POPUP */
+.headerClassPopUp2{
+    background: #a8a071;
+    font-weight: bolder;
+    text-transform: uppercase;    
+    height: 20px;
+}
+
+.bodyTablasPopUp2{
+    background: #f6f3e3;
+}
+
+/*ESTILOS PARA LA SEGUNDA TABLA DE LOS POPUP*/
+.headerClassUniversarPopUp3{
+    background: #e7e7e7;
+    background: lightslategrey;
+    height: 25px;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+.sugerenciaObligatorio{
+    color: red;
+    font-size: 11px;    
+}
+
+/*ESTILOS PARA LOS LABEL'S QUE RENDERIZAN CON EL ONCLICK UN INPUTTEXT */
+.classLabelMostrarInputText:hover{
+    background: white;
+    border-color: red;
+    /*    border: 1px solid #c6c6c6;*/
+}
+
+/*ESTILOS REFERENTES AL POPUP QUE MUESTRA LA DESCRIPCIÓN DE UN PRODUCTO*/
+.divHechosPopUp{
+    min-width: 250px; 
+    max-width: 400px;
+    min-height: 100px;
+    display: block;    
+    padding: 5px;           
+    border:1px solid grey;
+    text-align: justify;
+    background:white;    
+    -webkit-box-shadow: 0px 5px 80px #505050;
+    -moz-box-shadow: 0px 5px 80px #505050; /* Para Mozilla FireFox*/        
+    position: absolute;        
+}
+
+/*ESTILOS REFERENTES AL BORDE QUE SE RENDERIZA EN EL MOMENTO EN QUE SE RENDERIZA EL POPUP DESCRIPCION PRODUCTO*/
+.estiloBordeTdDescripcion{
+    border: 2px solid #EADF76!important
+}
+.tablaProveedoresASeleccionar{
+    background: #eef6fa;
+    border: 1px solid #262ffe;
+    /*    position: fixed;*/
+    /*    margin-top: 25px; */
+    width: inherit;       
+}
+
+.claseMensajeError{
+    color: red;
+    display: block;
+}
+
+
+.claseOpacityUniversal{
+    opacity: 0.35;
+}
+
+
+
+
+
+
+
+
+
+
+/*stylos para la segunda tabla o la tabla que se renderiza en el keyup del inputtext Buscar*/
+.tablaDatosUniversalRender{
+    border: 1px solid white;
+    font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
+.tablaDatosUniversalRender tr td label{        
+    width: 100%;
+    max-height: 30px;
+    padding-top: 1px;
+    padding-left: 2px;
+    text-align: left;
+    margin: 0 auto;
+    display: block;
+    overflow: hidden;    
+    font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+}
+
+.tablaDatosUniversalRender tbody tr:hover{
+    /*    background: #eae8e9;*/
+    background: #FFC;    
+
+}
+
+.labelEnlacesUniversal{
+    color: blue;     
+    cursor: pointer;    
+    font-style: italic;
+    font-size: 13px;
+}
+
+/*ESTILOS PARA LA SEGUNDA TABLA DE LOS POPUP*/
+.headerClassUniversarPopUp3{
+    background: #e7e7e7;
+}
+
+.sugerenciaObligatorio{
+    color: red;
+    font-size: 11px;    
+}
+
+
+.claseTablaLabelCentradoUniversal{
+    text-align: center;
+    display: block;
+}
+
+.clasePruebaErrorInputText{
+    border: 2px solid red;
+}
+
+
+.claseProductoPedidoYaTraido{
+    background: #b3b3b3;
+}
+
+
+
+.claseBorderRadiosBottom{
+    border-bottom-left-radius: 5px 5px; 
+    border-bottom-right-radius: 5px 5px;
+}
+
+.claseBorderButtonShadowUniversal{
+    border-bottom-left-radius: 5px 5px; 
+    border-bottom-right-radius: 5px 5px;
+    /*    padding: 10px;*/
+    color: black;
+    text-decoration: none;        
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    -webkit-user-select: none;
+}
+
+.claseSombrasPopUpUniversal{    
+    z-index: 2;
+    /*    background: #faf9e6;*/
+    background: #fefcf2;
+    padding: 10px;
+    border-top-left-radius: 10px 10px;
+    -moz-border-radius:10px 10px 10px 10px;
+    border-bottom-left-radius: 10px 10px;
+    border-bottom-right-radius: 10px 10px;
+    border-top-right-radius:10px 10px;
+    -webkit-box-shadow: 0px 25px 50px  #505050;
+    -moz-box-shadow: 0px 25px 50px #505050; 
+}
+
+.claseBordeUniversalRedondear{
+    -webkit-border-radius: 6px;
+    padding: 10px;
+    color: black;
+    text-decoration: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    -webkit-user-select: none;
+}
+
+.claseTablaProdutosPedidosBorderTd tbody tr td{
+    border-left:  1px solid white;
+    border-bottom:  1px solid white;
+}
+
+.claseDivPantallaUniversal{
+    display: none;
+    position:fixed;
+    _position:absolute; /* hack for internet explorer 6*/
+    height:100%;
+    width:100%;
+    top:0;
+    left:0;
+    background:white;
+    border:1px solid #cecece;
+    z-index:1;    
+    opacity: 0.5;
+}
+
+
+/*ESTILOS PARA LA TABLA QUE CONTINE LA INFORMACIÓN DE LAS FACTURAS*/
+.col1TablaFacuraEnAvalar{
+    width: 20%;
+}
+.col2TablaFacuraEnAvalar{
+    width: 20%;
+}
+.col3TablaFacuraEnAvalar{
+    width: 20%;
+}
+
+.col4TablaFacuraEnAvalar{
+    width: 20%;
+}
+.col5TablaFacuraEnAvalar{
+    width: 20%;
+}
+
+.claseBorderTdUniversalTemp{
+    border-left: 1px solid white;
+    border-bottom: 1px solid white;    
+    height: 22px;
+}
+
+.claseHideLabelUniversal label{
+    /*    overflow-x: hidden;     */
+}
+
+.claseBorderRigthTdUniversalTemp{
+    border-right: 1px solid white;
+}
+
+/*Estilos de las filas*/
+.claseBordeButtomTDuniversal{
+    border-bottom: 1px solid white;
+}    
+.filaR1{    
+    background: url('/sistemaColegio/resources/imagenes/fondos/fila1.png') repeat;
+    height: 35px;
+}
+
+.filaR2{
+    background: url('/sistemaColegio/resources/imagenes/fondos/fila2.png') repeat;
+    height: 35px;
+}
+.claseProductoPedidoTraidoInTable{
+    background: #e3d6ac;
+}
+
+.claseProductoPedidoTraido{
+    background: #febc84;
+}
+
+
+/*Estilos para las filas de la tabla con todos los productos pedido del pedido seleccionado: y se usan en determinados casos*/
+.classProductoYAPedidoTR{
+    background: #f7acac;    
+}
+.classProductoNOPedirTR{
+    background: #919290;
+}
+
+.selectEstuvoProductoPedido{
+    background: #d5d5d5;
+}
+.productoPedidoAEliminarTR{
+    background: #a3a3a6;
+}
+
+.selectedPedido{
+    background: #97E268;
+}
+
+.selected, .selected1, .select1_1{
+    background: #FFC;
+}
+
+.selected2{
+    background: #e8eab4;
+}
+
+.selectPedido1{
+    background: #FFC;
+}
+
+/*ESTILOS MENU RINCIPAL*/
+.claseMenuPrincipal{
+    width: 650px;
+    margin: 0 auto; 
+    display: block;
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;
+    font-size: 12px;
+}
+
+
+/*input[type= "text"]:focus{
+    box-shadow: -1px -1px 2px 1px #579ED4, inset -1px -1px 2px 1px #579ED4;    
+    border: 1px transparent;
+    outline-color: #579ED4;
+    outline-style: auto;
+    outline-width: 5px;    
+    -webkit-appearance: textfield;
+    -webkit-backface-visibility: visible;
+    -webkit-background-clip: border-box;
+    -webkit-background-composite: source-over;
+    -webkit-background-origin: padding-box;
+    -webkit-background-size: auto;
+    -webkit-border-fit: border;
+    -webkit-border-horizontal-spacing: 2px;
+    -webkit-border-image: none;
+    -webkit-border-vertical-spacing: 2px;
+}
+
+input[type= "text"]{
+    outline: medium none;
+    padding: 4px;
+}*/
+
+.claseHeaderTablasTres{
+    background: #d6b369;
+    height: 35px;
+    border: 1px solid white;
+}
+.rowClassTablasTres{
+    background: #e5dabd;
+    height: 30px;
+}
+.columna1TablaTres{
+    width: 50%;
+    border: 1px solid white;
+}
+.columna2TablaTres{
+    width: 50%;
+    border: 1px solid white;
+}
+
+
+.boderUniversalDerecho{
+    border-right: 1px solid white;
+}
+
+.boderUniversalIzquierdo{
+    border-left: 1px solid white;
+}
