@@ -122,7 +122,7 @@ public class Fotos {
 		        ByteArrayOutputStream os = null;
 			    byte[] bytes = null;
 			    File file = new File(System.getProperty("user.dir") + "/prueba.png");
-		    	URL url = new URL("http://localhost:8080/sistemaColegio/resources/imagenes/header_boletin.png");
+//		    	URL url = new URL("http://localhost:8080/sistemaColegio/resources/imagenes/header_boletin.png");
 		    	BufferedImage image = null;
 		    	
 		    	image = ImageIO.read(file);

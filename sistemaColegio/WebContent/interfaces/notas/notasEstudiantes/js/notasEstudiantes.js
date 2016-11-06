@@ -5,19 +5,6 @@ varNombreElemento = ""
 //Variables para guardar el id el input que vamos a mostrar
 varNombreInput = ""
 
-//
-////FunciÃ³n para terminar de agregar el popUp
-//function terminarAgregarPopUp(e){
-//    if(e.status=="complete"){
-//        banderaClick = true
-//    }
-//    if(e.status=="success"){
-//        $("#backgroundPopup").fadeOut("fast")
-//        $("#" + varNombreElemento).fadeOut("fast")
-//        $("#"+varNombreElemento+"\\:"+varNombreInput).val("")
-//    }
-//}
-//
 
 //MÃ©todo para cerrar los popUp'
 function escongerPopUP(){
@@ -25,87 +12,7 @@ function escongerPopUP(){
     $("#logrosBoletines").fadeOut("fast")
 
 }
-//
-////MÃ©todo para seleccionar el elemento a editar
-//function seleccionarElementoEditar(nombreElemento, nombreInput){
-//    varNombreElemento = nombreElemento
-//    varNombreInput = nombreInput
-//}
-//
-////MÃ©todo para cargar el popUP de editar un elemento
-//function cargarPopUPEditarElemento(e){
-//    if(e.status=="success"){
-//        $("#formRegistroMatricula").css("width", "30%")
-//        agregarElemento(varNombreElemento,varNombreInput)
-//    }
-//}
-//
-////##MÃ©todo para cuando editan el valor de un input
-//var nombreClaseEditarValor
-//var indiceEditarValor
-//function despuesEditarValor(e){
-//    if(e.status=="begin"){
-//        $($(".cargando"+nombreClase)[$("."+e.source.className).index(e.source)]).hide()
-//        $($(".eliminar"+nombreClase)[$("."+e.source.className).index(e.source)]).show()
-//        
-//        $($(".cargando"+nombreClase)[$("."+e.source.className).index(e.source)]).show()
-//        $($(".eliminar"+nombreClase)[$("."+e.source.className).index(e.source)]).hide()
-//    }
-//    if(e.status=="success"){
-//        $($(".cargando"+nombreClase)[$("."+e.source.className).index(e.source)]).hide()
-//        $($(".eliminar"+nombreClase)[$("."+e.source.className).index(e.source)]).show()
-//    }
-//}
-//
-////MÃ©todo para validar 
-//function validarBlurCargando(e){
-//    if($($(".cargando"+e.className)[$("."+e.className).index(e)]).is(":visible")){
-//        return true;
-//    }
-//    return false
-////    $($(".cargando"+e.className)[$("."+e.className).index(e)]).show()
-//}
-//
-////function despuesEditarValor(e){
-////    if(e.status=="begin"){
-////        indiceEditarValor = $("."+e.source.className).index(e.source)
-////        nombreClase = e.source.className;
-////        $($(".cargando"+nombreClase)[indiceEditarValor]).show()
-////        $($("."+nombreClase)[indiceEditarValor]).hide()
-////    }
-////    if(e.status=="success"){
-////        $($(".cargando"+nombreClase)[indiceEditarValor]).hide()
-//////        $($("."+nombreClase)[indiceEditarValor]).hide()
-////        $($("."+nombreClase)[indiceEditarValor]).show()
-//////        indiceEditarValor = $("."+e.source.className).index(e.source)
-//////        nombreClase = e.source.className;
-//////        $($(".cargando"+nombreClase)[indiceEditarValor]).show()
-//////        $($("."+nombreClase)[indiceEditarValor]).hide()
-//////        alert(indiceEditarValor)
-////    }
-////}
-//
-////###MÃ©todo Para empezar la ediciÃ³n de algÃºn campo
-//function empezarEdicion(e){
-//    if(!validarNumero(e)){
-//        nombreClase = $(e)[0].className;
-//        //        alert(nombreClase)
-//        indiceEditarValor = $("."+$(e)[0].className).index(e)
-//        
-//        $($(".cargando"+nombreClase)[indiceEditarValor]).show()
-//        $($(".eliminar"+nombreClase)[indiceEditarValor]).hide()
-//    }
-//}
-//
-//function terminarUpdate(e){
-//    if(e.status=="success"){
-//        try{
-//            
-//        }catch(e){
-//            
-//        }
-//    }
-//}
+
 
 //###CURSOS
 function seleccionarCurso(e){

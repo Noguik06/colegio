@@ -137,6 +137,8 @@ public class Usuarios implements Serializable {
     private List<Relacionusuariocronogramas> relacionusuariocronogramasList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarios")
     private List<Estudiantes> estudiantesList;
+    
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarios")
     private List<Profesores> profesoresList;
 

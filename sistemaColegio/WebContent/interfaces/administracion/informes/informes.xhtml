@@ -212,16 +212,18 @@
 									var="estudiante" width="100%" cellpadding="0" cellspacing="0"
 									rowClasses="fila2, row2">
 									<h:column>
-										<h:outputLabel
-											value="#{estudiante.estudiantes.usuarios.apellidos} #{estudiante.estudiantes.usuarios.nombres}"
-											style="text-transform: capitalize; cursor: pointer;"
-											styleClass="marginIzquierdo">
-											<f:converter converterId="minusculasjava" />
-											<f:ajax event="click"
-												listener="#{notasEstudiantes.seleccionarEstudianteBoletin(estudiante)}"
-												render=":formPrincipal:contenedorInformes :formPrincipal:contenedorPeriodos :formPrincipal:observaciones"
-												onevent="seleccionarEstudiante" />
-										</h:outputLabel>
+										<div class="marginIzquierdo">
+											<h:outputLabel
+												value="#{estudiante.estudiantes.usuarios.apellidos} #{estudiante.estudiantes.usuarios.nombres}"
+												style="text-transform: capitalize; cursor: pointer;">
+												<f:converter converterId="minusculasjava" />
+												<f:ajax event="click"
+													listener="#{notasEstudiantes.seleccionarEstudianteBoletin(estudiante)}"
+													render=":formPrincipal:contenedorInformes :formPrincipal:contenedorPeriodos :formPrincipal:observaciones"
+													onevent="seleccionarEstudiante" />
+											</h:outputLabel>
+										</div>
+										
 									</h:column>
 								</h:dataTable>
 							</h:panelGroup>
@@ -260,11 +262,12 @@
 									border="0" width="100%"
 									style="display:#{notasEstudiantes.dataListAsignturasEstudiantes==null ?'none':'auto'}">
 									<h:column>
-										<h:outputLabel value="#{asignatura.asignaturas.nombre}"
-											style="text-transform: capitalize;"
-											styleClass="marginIzquierdo">
-											<f:converter converterId="minusculasjava" />
-										</h:outputLabel>
+										<div class="marginIzquierdo"> 
+											<h:outputLabel value="#{asignatura.asignaturas.nombre}"
+												style="text-transform: capitalize;">
+													<f:converter converterId="minusculasjava" />
+											</h:outputLabel>
+										</div>
 									</h:column>
 									<h:column>
 										<table width="100%" cellpadding="0" cellspacing="0" border="0">

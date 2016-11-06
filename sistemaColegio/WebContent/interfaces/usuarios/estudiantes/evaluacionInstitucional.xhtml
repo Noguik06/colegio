@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Registro Notas Profesores</title>
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+	<!--Css locales-->
+	<link href="css/evaluacionInstitucional.css" rel="stylesheet"
+		type="text/css" />
+		
+	<!--Js locales-->
+     <script type="text/javascript"  src="js/evaluacioninstitucional.js"/>
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+	<h:outputScript name="universaljs.js" library="universales/js" />
+
+
+</h:head>
+<h:body>
+
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+	<h:form id="idFormTablaBusquedaAlumnosPincipal">
+		<fieldset class="fieldSetUniversal"
+				style="width: 1200px; margin-left: auto; margin-right: auto;">
+			<p:panel id="panelPrincipal" style="background:none; border:none;"
+			rendered="#{evaluacionInstitucional.dataListProfesores != null and evaluacionInstitucional.dataListProfesores.size() > 0}">
+				<!--Cuadramos primero toda la parte del header de las notas de los estudiantes-->
+				<div class="divTablaHeader" style="width: 100%;">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<thead style="width: 100%">
+							<tr style="height: 30px;">
+								<th class="colEvaluacion-1 bordesHeader">Profesor</th>
+								<th class="colEvaluacion-2">Preguntas</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<table width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tbody style="width: 100%">
+						<td class="colEvaluacion-1 bordesHeader" valign="top">
+						<h:dataTable
+								id="tblProfesoresEvaluacionInstitucional"
+								width="100%"
+								value="#{evaluacionInstitucional.dataListProfesores}"
+								var="profesor">
+								<h:column >
+									<h:outputLabel value="#{profesor.usuarios.nombres} #{profesor.usuarios.apellidos}" 
+									style="width:90%" styleClass="botonGrisClaro-Verde labelSinResaltar">
+										<f:ajax event="click" onevent="seleccionarProfesor"
+										listener="#{evaluacionInstitucional.seleccionarDocente(profesor)}" 
+										render=":idFormTablaBusquedaAlumnosPincipal:tblPreguntasEvalucionInstitucional 
+										:idFormTablaBusquedaAlumnosPincipal:botoFinalizarEvaluacion"></f:ajax>
+									</h:outputLabel>
+								</h:column>
+						</h:dataTable>
+						</td>
+						<td class="colEvaluacion-2" valign="top">
+							<p:dataTable
+								id="tblPreguntasEvalucionInstitucional"
+								value="#{evaluacionInstitucional.dataListSegmentoPreguntas}"
+								var="segmentopreguntas"
+								emptyMessage="No ha seleccionado ningún profesor">
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column colspan="2" headerText="Evaluación Institucional (Responda cada una de las preguntas según el profesor seleccionado donde 1 es lo mínimo y 10  es lo máximo)" />
+									</p:row>
+								</p:columnGroup>
+								<p:subTable
+									value="#{segmentopreguntas.dataLisRespuestaPreguntas}"
+									var="respuestas">
+									<f:facet name="header">
+										<h:outputLabel
+											value="#{segmentopreguntas.segmentopreguntas.nombre}"></h:outputLabel>
+									</f:facet>
+									<p:column>
+										<h:outputLabel value="#{respuestas.preguntas.texto}"></h:outputLabel>
+									</p:column>
+									<p:column>
+										 <p:inputNumber id="input3" value="#{respuestas.valor}" minValue="0" maxValue="10" decimalPlaces="0" >  
+	                					</p:inputNumber>  
+									</p:column>
+								</p:subTable>
+							</p:dataTable>
+							<br />
+							<center>
+								<p:panel id="botoFinalizarEvaluacion" style="background:none; border:none;">
+									<p:commandButton value="Finalizar Encuesta" id="ajax"  
+									actionListener="#{evaluacionInstitucional.finalizarEncuesta}"
+									rendered="#{evaluacionInstitucional.dataListSegmentoPreguntas != null or
+									evaluacionInstitucional.dataListSegmentoPreguntas.isEmpty()}"
+									onstart="PF('statusDialog').show()"
+									onsuccess="PF('statusDialog').hide()"
+									update="messages :idFormTablaBusquedaAlumnosPincipal" 
+									styleClass="ui-priority-primary" />
+								</p:panel>
+							</center>
+						</td>
+					</tbody>
+				</table>
+			</p:panel>
+			<p:panel id="panelSecundario" style="background:none; border:none;"
+			rendered="#{evaluacionInstitucional.dataListProfesores == null or evaluacionInstitucional.dataListProfesores.size() == 0}">
+			<center>
+				<h:outputText styleClass="labelResaltado" value="Actualmente no cuenta con ninguna encuesta pendiente para contestar"/>
+			</center>
+			</p:panel>
+		</fieldset>
+		<p:growl id="messages" showDetail="true" widgetVar="messages" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/imagenes/ajaxloadingbar.gif" />
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>
