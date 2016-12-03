@@ -30,6 +30,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,6 +55,9 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.codec.Base64.InputStream;
+import com.lowagie.text.pdf.codec.Base64.OutputStream;
 
 import ejb.AnosacademicosFacade;
 import ejb.AsignaturasFacade;
@@ -284,207 +289,229 @@ public class NotasEstudiantes implements Serializable {
 				// Ahora vamos a recorrer los periodos y a agregarles la s
 				// asignaturas
 				for (Periodos p : dataListPeriodosTmp) {
-					List<Relaciondimensionesasignaturasano> datalistDimensionesTmp = relaciondimensionesasignaturasanoFacade
-							.findByLikeAll("SELECT R FROM Relaciondimensionesasignaturasano R WHERE R.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
-									+ rap.getIdrelacionasignaturaperiodos()
-									+ " AND R.cursos.idcursos = "
-									+ registromatriculas.getCursos()
-											.getIdcursos()
-									+ " ORDER BY R.dimensiones.iddimensiones");
+					if(p.getTipo() == 0){
+						List<Relaciondimensionesasignaturasano> datalistDimensionesTmp = relaciondimensionesasignaturasanoFacade
+								.findByLikeAll("SELECT R FROM Relaciondimensionesasignaturasano R WHERE R.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
+										+ rap.getIdrelacionasignaturaperiodos()
+										+ " AND R.cursos.idcursos = "
+										+ registromatriculas.getCursos()
+												.getIdcursos()
+										+ " ORDER BY R.dimensiones.iddimensiones");
 
-					double promedioPeriodo = 0;
-
-					PeriodosEstudiantes periodosEstudiantes = new PeriodosEstudiantes();
-					// Agregamos el periodo
-					periodosEstudiantes.setPeriodos(p);
-					// Creamos una lista de las dimensiones que le vamos a
-					// agregar a este periodo
-					List<DimensionesEstudiantes> dataListDimensionesEstudiantestmp = new ArrayList<DimensionesEstudiantes>();
-					// Agregamos esta lista al periodo
-					periodosEstudiantes
-							.setDataListDimensionesEstudiantes(dataListDimensionesEstudiantestmp);
-
-					// Agregamos a la lisa de los periodos esta dimensión
-					dataListPeriodosEstudiantesTmp.add(periodosEstudiantes);
-
-					if (datalistDimensionesTmp.isEmpty()) {
-						periodosEstudiantes.setValor(0);
-					}
-
-					// Recorremos la lista de las dimensiones para averiguar el
-					// promedio de la dimensión en este periodo
-					for (Relaciondimensionesasignaturasano rdaa : datalistDimensionesTmp) {
-						// Cremos un objeto temporal tipo DimensionesEstudiantes
-						DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
-						// Le agregmos la dimensión
-						dimensionesEstudiantesTmp.setDimensiones(rdaa
-								.getDimensiones());
-						// Agregamos a la lista de las dimensiones que creamos
-						// antes esta nuevo dimensión
-						dataListDimensionesEstudiantestmp
-								.add(dimensionesEstudiantesTmp);
-
-						// Hacemos una lista temporal de las dimensiones
-						List<NotasDimensionesEstudiantes> dataListNotasDimensionesEstudiantes = new ArrayList<NotasDimensionesEstudiantes>();
-						// Agregamos la lista que acabamos de crear
-						dimensionesEstudiantesTmp
-								.setDataListNotasDimensionesEstudiantes(dataListNotasDimensionesEstudiantes);
-
-						// Sacamos las notas que tiene que cada dimesion
-						List<Relacionnotasdimension> tmp = relacionnotasdimensionFacade
-								.findByLikeAll("SELECT R FROM Relacionnotasdimension R WHERE  R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
-										+ rdaa.getIdrelaciondimensionesasignaturasano()
-										+ " AND R.periodos.idperiodos = "
-										+ p.getIdperiodos());
-						double promedioDimension = 0;
-
-						if (tmp.isEmpty()) {
-							dimensionesEstudiantesTmp.setValor(0);
+						double promedioPeriodo = 0;
+	
+						PeriodosEstudiantes periodosEstudiantes = new PeriodosEstudiantes();
+						// Agregamos el periodo
+						periodosEstudiantes.setPeriodos(p);
+						// Creamos una lista de las dimensiones que le vamos a
+						// agregar a este periodo
+						List<DimensionesEstudiantes> dataListDimensionesEstudiantestmp = new ArrayList<DimensionesEstudiantes>();
+						// Agregamos esta lista al periodo
+						periodosEstudiantes
+								.setDataListDimensionesEstudiantes(dataListDimensionesEstudiantestmp);
+	
+						// Agregamos a la lisa de los periodos esta dimensión
+						dataListPeriodosEstudiantesTmp.add(periodosEstudiantes);
+	
+						if (datalistDimensionesTmp.isEmpty()) {
+							periodosEstudiantes.setValor(0);
 						}
-
-						// Recogemos la lista de logros
-						dimensionesEstudiantesTmp
-								.setDataListRelacionlogrosdimensiones(relacionlogrosdimensionesFacade.findByLikeAll("SELECT R FROM Relacionlogrosdimensiones R WHERE R.periodos.idperiodos = "
-										+ p.getIdperiodos()
-										+ " AND R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
-										+ rdaa.getIdrelaciondimensionesasignaturasano()));
-
-						// Recorremos las notas de esta dimensión
-						for (Relacionnotasdimension rnd : tmp) {
-							// Hacemos un objeto temporal tipo
-							// NotasDimensionesEstudiantes
-							NotasDimensionesEstudiantes notasDimensionesEstudiantes = new NotasDimensionesEstudiantes();
-							// Le agregamos la dimensión
-							notasDimensionesEstudiantes
-									.setRelacionnotasdimension(rnd);
-							// A la lista de las dimensiones le agregamos las
-							// dimensiones
-							dataListNotasDimensionesEstudiantes
-									.add(notasDimensionesEstudiantes);
-							// Creamos una lista temporal de actividades
-							List<ActividadesNotasEstudiantes> dataListActividadesNotasEstudiantes = new ArrayList<ActividadesNotasEstudiantes>();
-							// Agregamos esta lista de actividades al objeto
-							// creado anteriormente
-							notasDimensionesEstudiantes
-									.setDataListActividadesNotasEstudiantes(dataListActividadesNotasEstudiantes);
-
-							double promedioActividades = 0;
-							List<Relacionnotaslogrosdimensionboletin> tmpRNLDB = relacionnotaslogrosdimensionboletinFacade
-									.findByLikeAll("SELECT R FROM Relacionnotaslogrosdimensionboletin R WHERE R.relacionnotasdimension.idrelacionnotasdimesion = "
-											+ rnd.getIdrelacionnotasdimesion());
-
-							// Recorremos la lista de las actividades
-							for (Relacionnotaslogrosdimensionboletin rnld : tmpRNLDB) {
-								ActividadesNotasEstudiantes actividadesNotasEstudiantes = new ActividadesNotasEstudiantes();
-								dataListActividadesNotasEstudiantes
-										.add(actividadesNotasEstudiantes);
-
-								List<Notascalificables> tmpNC = notascalificablesFacade
-										.findByLikeAll("SELECT N FROM Notascalificables N WHERE N.registromatriculas.idregistromatriculas = "
-												+ registromatriculas
-														.getIdregistromatriculas()
-												+ " AND "
-												+ " N.relacionnotaslogrosdimensionboletin.idrelacionnotaslogrosdimensionboletin =  "
-												+ rnld.getIdrelacionnotaslogrosdimensionboletin());
-
-								if (!tmpNC.isEmpty()) {
-									actividadesNotasEstudiantes
-											.setNotascalificables(tmpNC.get(0));
-									actividadesNotasEstudiantes.setValor(tmpNC
-											.get(0).getValor());
-									promedioActividades += tmpNC.get(0)
-											.getValor();
-								} else {
-									Notascalificables notasCalificablesTmp = new Notascalificables();
-									notasCalificablesTmp
-											.setRelacionnotaslogrosdimensionboletin(rnld);
-									actividadesNotasEstudiantes
-											.setNotascalificables(notasCalificablesTmp);
-									actividadesNotasEstudiantes.setValor(0);
-								}
-							}
-
-							// Validamos que el tamaño de la lista no está
-							// vcía
-							if (tmpRNLDB != null && tmpRNLDB.isEmpty()) {
-								promedioActividades = 100;
-							} else {
-								if (tmpRNLDB != null) {
-									promedioActividades = new BigDecimal(
-											promedioActividades
-													/ tmpRNLDB.size())
-											.setScale(0,
-													BigDecimal.ROUND_HALF_UP)
-											.doubleValue();
-								} else {
-									promedioActividades = 100;
-								}
-							}
-
-							notasDimensionesEstudiantes
-									.setValor(promedioActividades);
-
-							promedioDimension = promedioDimension
-									+ new BigDecimal((promedioActividades
-											* rnd.getPorcentaje() / 100))
-											.setScale(0,
-													BigDecimal.ROUND_HALF_UP)
-											.doubleValue();
+	
+						// Recorremos la lista de las dimensiones para averiguar el
+						// promedio de la dimensión en este periodo
+						for (Relaciondimensionesasignaturasano rdaa : datalistDimensionesTmp) {
+							// Cremos un objeto temporal tipo DimensionesEstudiantes
+							DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
+							// Le agregmos la dimensión
+							dimensionesEstudiantesTmp.setDimensiones(rdaa
+									.getDimensiones());
+							// Agregamos a la lista de las dimensiones que creamos
+							// antes esta nuevo dimensión
+							dataListDimensionesEstudiantestmp
+									.add(dimensionesEstudiantesTmp);
+	
+							// Hacemos una lista temporal de las dimensiones
+							List<NotasDimensionesEstudiantes> dataListNotasDimensionesEstudiantes = new ArrayList<NotasDimensionesEstudiantes>();
+							// Agregamos la lista que acabamos de crear
 							dimensionesEstudiantesTmp
-									.setValor(promedioDimension);
-						}
-
-						if (rdaa.getPorcentaje() != null) {
-							promedioDimension = new BigDecimal(
-									promedioDimension * rdaa.getPorcentaje()
-											/ 100).setScale(0,
-									BigDecimal.ROUND_HALF_UP).doubleValue();
-							promedioPeriodo += promedioDimension;
-							periodosEstudiantes.setValor(promedioPeriodo);
-						} else {
-							periodosEstudiantes.setValor(100);
-
-						}
-					}
-					List<Recuperaciones> datalistRecuperacionesTMP = recuperacionesFacade
-							.findByLike("SELECT R FROM Recuperaciones R ORDER BY R.numero");
-
-					if (periodosEstudiantes.getValor() < 80) {
-						List<Relacionrecuperacionregistromatriculas> tmpRM2 = new ArrayList<Relacionrecuperacionregistromatriculas>();
-						for (Recuperaciones r : datalistRecuperacionesTMP) {
-							List<Relacionrecuperacionregistromatriculas> tmpRM = relacionrecuperacionregistromatriculasFacade
-									.findByLike("SELECT R FROM  Relacionrecuperacionregistromatriculas R WHERE R.periodos.idperiodos = "
+									.setDataListNotasDimensionesEstudiantes(dataListNotasDimensionesEstudiantes);
+	
+							// Sacamos las notas que tiene que cada dimesion
+							List<Relacionnotasdimension> tmp = relacionnotasdimensionFacade
+									.findByLikeAll("SELECT R FROM Relacionnotasdimension R WHERE  R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
+											+ rdaa.getIdrelaciondimensionesasignaturasano()
+											+ " AND R.periodos.idperiodos = "
+											+ p.getIdperiodos());
+							double promedioDimension = 0;
+	
+							if (tmp.isEmpty()) {
+								dimensionesEstudiantesTmp.setValor(0);
+							}
+	
+							// Recogemos la lista de logros
+							dimensionesEstudiantesTmp
+									.setDataListRelacionlogrosdimensiones(relacionlogrosdimensionesFacade.findByLikeAll("SELECT R FROM Relacionlogrosdimensiones R WHERE R.periodos.idperiodos = "
 											+ p.getIdperiodos()
-											+ " AND R.registromatriculas.idregistromatriculas = "
-											+ registromatriculas
-													.getIdregistromatriculas()
-											+ " AND R.relacionasignaturaperiodos.idrelacionasignaturaperiodos = "
-											+ rap.getIdrelacionasignaturaperiodos()
-											+ " AND R.recuperaciones.idrecuperaciones = "
-											+ r.getIdrecuperaciones());
-							if (!tmpRM.isEmpty()) {
-								periodosEstudiantes
-										.setDataListRelacionrecuperacionregistromatriculas(tmpRM);
-								if (tmpRM.get(0).getValor() > periodosEstudiantes
-										.getValor()
-										&& periodosEstudiantes.getValor() == 0) {
-									periodosEstudiantes
-											.setValor(new BigDecimal(
-													(periodosEstudiantes
-															.getValor() + tmpRM
-															.get(0).getValor()) / 2)
-													.setScale(
-															0,
-															BigDecimal.ROUND_HALF_UP)
-													.doubleValue());
-								} else {
-									if (periodosEstudiantes.getValor() == 0) {
-										periodosEstudiantes.setValor(tmpRM.get(
-												0).getValor());
+											+ " AND R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
+											+ rdaa.getIdrelaciondimensionesasignaturasano()));
+	
+							// Recorremos las notas de esta dimensión
+							for (Relacionnotasdimension rnd : tmp) {
+								// Hacemos un objeto temporal tipo
+								// NotasDimensionesEstudiantes
+								NotasDimensionesEstudiantes notasDimensionesEstudiantes = new NotasDimensionesEstudiantes();
+								// Le agregamos la dimensión
+								notasDimensionesEstudiantes
+										.setRelacionnotasdimension(rnd);
+								// A la lista de las dimensiones le agregamos las
+								// dimensiones
+								dataListNotasDimensionesEstudiantes
+										.add(notasDimensionesEstudiantes);
+								// Creamos una lista temporal de actividades
+								List<ActividadesNotasEstudiantes> dataListActividadesNotasEstudiantes = new ArrayList<ActividadesNotasEstudiantes>();
+								// Agregamos esta lista de actividades al objeto
+								// creado anteriormente
+								notasDimensionesEstudiantes
+										.setDataListActividadesNotasEstudiantes(dataListActividadesNotasEstudiantes);
+	
+								double promedioActividades = 0;
+								List<Relacionnotaslogrosdimensionboletin> tmpRNLDB = relacionnotaslogrosdimensionboletinFacade
+										.findByLikeAll("SELECT R FROM Relacionnotaslogrosdimensionboletin R WHERE R.relacionnotasdimension.idrelacionnotasdimesion = "
+												+ rnd.getIdrelacionnotasdimesion());
+	
+								// Recorremos la lista de las actividades
+								for (Relacionnotaslogrosdimensionboletin rnld : tmpRNLDB) {
+									ActividadesNotasEstudiantes actividadesNotasEstudiantes = new ActividadesNotasEstudiantes();
+									dataListActividadesNotasEstudiantes
+											.add(actividadesNotasEstudiantes);
+	
+									List<Notascalificables> tmpNC = notascalificablesFacade
+											.findByLikeAll("SELECT N FROM Notascalificables N WHERE N.registromatriculas.idregistromatriculas = "
+													+ registromatriculas
+															.getIdregistromatriculas()
+													+ " AND "
+													+ " N.relacionnotaslogrosdimensionboletin.idrelacionnotaslogrosdimensionboletin =  "
+													+ rnld.getIdrelacionnotaslogrosdimensionboletin());
+	
+									if (!tmpNC.isEmpty()) {
+										actividadesNotasEstudiantes
+												.setNotascalificables(tmpNC.get(0));
+										actividadesNotasEstudiantes.setValor(tmpNC
+												.get(0).getValor());
+										promedioActividades += tmpNC.get(0)
+												.getValor();
+									} else {
+										Notascalificables notasCalificablesTmp = new Notascalificables();
+										notasCalificablesTmp
+												.setRelacionnotaslogrosdimensionboletin(rnld);
+										actividadesNotasEstudiantes
+												.setNotascalificables(notasCalificablesTmp);
+										actividadesNotasEstudiantes.setValor(0);
 									}
 								}
-								tmpRM2.add(tmpRM.get(0));
+	
+								// Validamos que el tamaño de la lista no está
+								// vcía
+								if (tmpRNLDB != null && tmpRNLDB.isEmpty()) {
+									promedioActividades = 100;
+								} else {
+									if (tmpRNLDB != null) {
+										promedioActividades = new BigDecimal(
+												promedioActividades
+														/ tmpRNLDB.size())
+												.setScale(0,
+														BigDecimal.ROUND_HALF_UP)
+												.doubleValue();
+									} else {
+										promedioActividades = 100;
+									}
+								}
+	
+								notasDimensionesEstudiantes
+										.setValor(promedioActividades);
+	
+								promedioDimension = promedioDimension
+										+ new BigDecimal((promedioActividades
+												* rnd.getPorcentaje() / 100))
+												.setScale(0,
+														BigDecimal.ROUND_HALF_UP)
+												.doubleValue();
+								dimensionesEstudiantesTmp
+										.setValor(promedioDimension);
+							}
+	
+							if (rdaa.getPorcentaje() != null) {
+								promedioDimension = new BigDecimal(
+										promedioDimension * rdaa.getPorcentaje()
+												/ 100).setScale(0,
+										BigDecimal.ROUND_HALF_UP).doubleValue();
+								promedioPeriodo += promedioDimension;
+								periodosEstudiantes.setValor(promedioPeriodo);
 							} else {
+								periodosEstudiantes.setValor(100);
+	
+							}
+						}
+						List<Recuperaciones> datalistRecuperacionesTMP = recuperacionesFacade
+								.findByLike("SELECT R FROM Recuperaciones R ORDER BY R.numero");
+	
+						if (periodosEstudiantes.getValor() < 80) {
+							List<Relacionrecuperacionregistromatriculas> tmpRM2 = new ArrayList<Relacionrecuperacionregistromatriculas>();
+							for (Recuperaciones r : datalistRecuperacionesTMP) {
+								List<Relacionrecuperacionregistromatriculas> tmpRM = relacionrecuperacionregistromatriculasFacade
+										.findByLike("SELECT R FROM  Relacionrecuperacionregistromatriculas R WHERE R.periodos.idperiodos = "
+												+ p.getIdperiodos()
+												+ " AND R.registromatriculas.idregistromatriculas = "
+												+ registromatriculas
+														.getIdregistromatriculas()
+												+ " AND R.relacionasignaturaperiodos.idrelacionasignaturaperiodos = "
+												+ rap.getIdrelacionasignaturaperiodos()
+												+ " AND R.recuperaciones.idrecuperaciones = "
+												+ r.getIdrecuperaciones());
+								if (!tmpRM.isEmpty()) {
+									periodosEstudiantes
+											.setDataListRelacionrecuperacionregistromatriculas(tmpRM);
+									if (tmpRM.get(0).getValor() > periodosEstudiantes
+											.getValor()
+											&& periodosEstudiantes.getValor() == 0) {
+										periodosEstudiantes
+												.setValor(new BigDecimal(
+														(periodosEstudiantes
+																.getValor() + tmpRM
+																.get(0).getValor()) / 2)
+														.setScale(
+																0,
+																BigDecimal.ROUND_HALF_UP)
+														.doubleValue());
+									} else {
+										if (periodosEstudiantes.getValor() == 0) {
+											periodosEstudiantes.setValor(tmpRM.get(
+													0).getValor());
+										}
+									}
+									tmpRM2.add(tmpRM.get(0));
+								} else {
+									Recuperaciones recuperaciones = new Recuperaciones(
+											new Long(0));
+									recuperaciones.setNombre("Recuperación");
+									Relacionrecuperacionregistromatriculas relacionrecuperacionregistromatriculas = new Relacionrecuperacionregistromatriculas();
+									relacionrecuperacionregistromatriculas
+											.setPeriodos(p);
+									relacionrecuperacionregistromatriculas
+											.setRelacionasignaturaperiodos(rap);
+									relacionrecuperacionregistromatriculas
+											.setValor(0.0);
+									relacionrecuperacionregistromatriculas
+											.setRecuperaciones(recuperaciones);
+									tmpRM2.add(relacionrecuperacionregistromatriculas);
+								}
+								periodosEstudiantes
+										.setDataListRelacionrecuperacionregistromatriculas(tmpRM2);
+							}
+						} else {
+							List<Relacionrecuperacionregistromatriculas> tmpRM = new ArrayList<Relacionrecuperacionregistromatriculas>();
+							for (Recuperaciones r : datalistRecuperacionesTMP) {
+	
 								Recuperaciones recuperaciones = new Recuperaciones(
 										new Long(0));
 								recuperaciones.setNombre("Recuperación");
@@ -497,56 +524,97 @@ public class NotasEstudiantes implements Serializable {
 										.setValor(0.0);
 								relacionrecuperacionregistromatriculas
 										.setRecuperaciones(recuperaciones);
-								tmpRM2.add(relacionrecuperacionregistromatriculas);
+								tmpRM.add(relacionrecuperacionregistromatriculas);
 							}
 							periodosEstudiantes
-									.setDataListRelacionrecuperacionregistromatriculas(tmpRM2);
-						}
-					} else {
-						List<Relacionrecuperacionregistromatriculas> tmpRM = new ArrayList<Relacionrecuperacionregistromatriculas>();
-						for (Recuperaciones r : datalistRecuperacionesTMP) {
+									.setDataListRelacionrecuperacionregistromatriculas(tmpRM);
+						}	
+						promedioAsignatura += periodosEstudiantes.getValor();
 
-							Recuperaciones recuperaciones = new Recuperaciones(
-									new Long(0));
-							recuperaciones.setNombre("Recuperación");
-							Relacionrecuperacionregistromatriculas relacionrecuperacionregistromatriculas = new Relacionrecuperacionregistromatriculas();
-							relacionrecuperacionregistromatriculas
-									.setPeriodos(p);
-							relacionrecuperacionregistromatriculas
-									.setRelacionasignaturaperiodos(rap);
-							relacionrecuperacionregistromatriculas
-									.setValor(0.0);
-							relacionrecuperacionregistromatriculas
-									.setRecuperaciones(recuperaciones);
-							tmpRM.add(relacionrecuperacionregistromatriculas);
-						}
+					}else{
+						List<Relaciondimensionesasignaturasano> datalistDimensionesTmp = relaciondimensionesasignaturasanoFacade
+								.findByLikeAll("SELECT R FROM Relaciondimensionesasignaturasano R WHERE R.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
+										+ rap.getIdrelacionasignaturaperiodos()
+										+ " AND R.cursos.idcursos = "
+										+ registromatriculas.getCursos().getIdcursos()
+										+ " ORDER BY R.dimensiones.iddimensiones");
 
+						double promedioPeriodo = 0;
+
+						PeriodosEstudiantes periodosEstudiantes = new PeriodosEstudiantes();
+						// Agregamos el periodo
+						periodosEstudiantes.setPeriodos(p);
+						// Creamos una lista de las dimensiones que le vamos a
+						// agregar a este periodo
+						List<DimensionesEstudiantes> dataListDimensionesEstudiantestmp = new ArrayList<DimensionesEstudiantes>();
+						// Agregamos esta lista al periodo
 						periodosEstudiantes
-								.setDataListRelacionrecuperacionregistromatriculas(tmpRM);
+								.setDataListDimensionesEstudiantes(dataListDimensionesEstudiantestmp);
 
+						// Agregamos a la lisa de los periodos esta dimensión
+						dataListPeriodosEstudiantesTmp.add(periodosEstudiantes);
+
+						if (datalistDimensionesTmp.isEmpty()) {
+							periodosEstudiantes.setValor(0);
+						}
+		
+						String query = "select sum(round(pepe.valordndos)),  "
+								+ "pepe.relaciondimensionesasignaturasano, "
+								+ "rdaa.porcentaje, "
+								+ "round(cast(rdaa.porcentaje * ((case when sum(round(pepe.valordndos)) is null "
+								+ "then 0 "
+								+ "else cast(sum(round(pepe.valordndos)) as numeric) end)) as numeric)/100), "
+								+ "rdaa.dimensiones "
+								+ "from ("
+								+ "select round(cast(rnd.porcentaje * ( cast ( sum(case when valor is null then 0 else valor end) as numeric)/count(1)) as numeric)/100) valordndos,  "
+								+ "rnldb.relacionnotasdimension, "
+								+ "rnd.relaciondimensionesasignaturasano "
+								+ "from notascalificables nc "
+								+ "right join relacionnotaslogrosdimensionboletin rnldb  on rnldb.idrelacionnotaslogrosdimensionboletin = nc.relacionnotaslogrosdimensionboletin "
+								+ "and nc.registromatriculas =   " + registromatriculas.getIdregistromatriculas()  + " "
+								+ "join relacionnotasdimension rnd on rnd.idrelacionnotasdimesion = rnldb.relacionnotasdimension "
+								+ "and rnd.periodos = " + p.getIdperiodos() + " "
+								+ "group by rnldb.relacionnotasdimension, rnd.porcentaje, rnd.relaciondimensionesasignaturasano) pepe "
+								+ "join relaciondimensionesasignaturasano rdaa on rdaa.idrelaciondimensionesasignaturasano = pepe.relaciondimensionesasignaturasano "
+								+ "where rdaa.relacionasignaturasperiodos =  " + rap.getIdrelacionasignaturaperiodos() + " "
+								+ "and rdaa.cursos =  " + registromatriculas.getCursos().getIdcursos() + " "
+								+ "group by relaciondimensionesasignaturasano, rdaa.porcentaje, rdaa.dimensiones "
+								+ "order by rdaa.dimensiones ";
+					
+							List<Object[]> dataListDimensionesValor = relacionlogrosdimensionesFacade.findoAll(query);
+							double tmp = 0;
+							for(Object[] o:dataListDimensionesValor){
+								DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
+								
+								dimensionesEstudiantesTmp
+								.setDataListRelacionlogrosdimensiones(relacionlogrosdimensionesFacade.findByLikeAll("SELECT R FROM Relacionlogrosdimensiones R WHERE R.periodos.idperiodos = "
+										+ p.getIdperiodos()
+										+ " AND R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
+										+ Long.parseLong(o[1].toString())));
+								
+								dimensionesEstudiantesTmp.setDimensiones(dimensionesFacade.find(Long.parseLong(o[4].toString())));
+								dataListDimensionesEstudiantestmp.add(dimensionesEstudiantesTmp);
+								dimensionesEstudiantesTmp.setValor(Double.parseDouble(o[0].toString()));
+								
+								tmp += Double.parseDouble(o[3].toString());
+							}
+							if(tmp > 100){
+								tmp = 100;
+							}
+							periodosEstudiantes.setValor(new BigDecimal(tmp)
+							.setScale(0,
+									BigDecimal.ROUND_UP)
+							.doubleValue());
+							
 					}
-
-					promedioAsignatura += periodosEstudiantes.getValor();
-
-					// System.out.print(promedioAsignatura + " PROM ASIG " +
-					// periodosEstudiantes.getValor() + " PERIODO " +
-					// periodosEstudiantes.getPeriodos().getNombre());
-					//
-					// if (!dataListPeriodosEstudiantesTmp.isEmpty()) {
-					// // System.out.print(promedioAsignatura /
-					// dataListPeriodosEstudiantesTmp.size() +
-					// " PROMEDIO ASIGNA");
-					// }
-
+	
+					promedioAsignatura = new BigDecimal(promedioAsignatura
+							/ dataListPeriodosEstudiantesTmp.size()).setScale(0,
+							BigDecimal.ROUND_HALF_UP).doubleValue();
+					asignaturasEstudiantesTmp.setValor(promedioAsignatura);
+	
+					dataListAsignturasEstudiantes.add(asignaturasEstudiantesTmp);
 				}
-
-				promedioAsignatura = new BigDecimal(promedioAsignatura
-						/ dataListPeriodosEstudiantesTmp.size()).setScale(0,
-						BigDecimal.ROUND_HALF_UP).doubleValue();
-				asignaturasEstudiantesTmp.setValor(promedioAsignatura);
-
-				dataListAsignturasEstudiantes.add(asignaturasEstudiantesTmp);
-
 			}
 
 			if (!dataListAsignturasEstudiantes.isEmpty()) {
@@ -825,10 +893,27 @@ public class NotasEstudiantes implements Serializable {
 			return null;
 		}
 		if (dataListCursos == null || dataListCursos.isEmpty()) {
-			dataListCursos = cursosFacade
-					.findByLikeAll("SELECT  DISTINCT(R.cursos) FROM Relacionprofesoresasignaturaperiodo R WHERE R.profesores.usuarios.idusuarios = "
-							+ sesiones.getUsuarios().getIdusuarios() + " AND R.cursos.anosacademicos.estadoactivo = true"
-							+ " ORDER BY R.cursos.grados.numero");
+			//Se valida si son administradores
+			if(getSesiones().isAdministrador()){
+				dataListCursos = cursosFacade
+						.findByLikeAll("SELECT  DISTINCT(R.cursos) FROM Relacionprofesoresasignaturaperiodo R"
+								+ " WHERE " 
+								+ " R.cursos.anosacademicos.estadoactivo = true"
+								+ " ORDER BY R.cursos.grados.numero");
+			}else{
+				//Se validan si son profesores
+				dataListCursos = cursosFacade
+						.findByLikeAll("SELECT  DISTINCT(R.cursos) FROM Relacionprofesoresasignaturaperiodo R"
+								+ " WHERE "
+								+ " ((R.profesores.usuarios.idusuarios = " + sesiones.getUsuarios().getIdusuarios()  
+								+ " AND  R.cursos.anosacademicos.estadoactivo = true ) OR R.cursos.profesor.usuarios.idusuarios = "
+										+ sesiones.getUsuarios().getIdusuarios()
+										+ ") AND  R.cursos.anosacademicos.estadoactivo = true"
+										+ " "
+										+ "ORDER BY R.cursos.grados.numero");
+			}
+			
+			
 		}
 		return dataListCursos;
 	}
@@ -840,17 +925,31 @@ public class NotasEstudiantes implements Serializable {
 		this.periodoSeleccionado = null;
 
 		this.cursoSeleccionado = cursos;
-		dataListAsignaturas = relacionasignaturaperiodosFacade
-				.findByLikeAll("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA WHERE RPA.cursos.grados.idgrados = "
-						+ cursos.getGrados().getIdgrados()
-						+ " AND RPA.profesores.usuarios.idusuarios = "
-						+ getSesiones().getUsuarios().getIdusuarios()
-						+ " AND RPA.cursos.anosacademicos.estadoactivo = true"
-						+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		if(getSesiones().isAdministrador()){
+			dataListAsignaturas = relacionasignaturaperiodosFacade
+					.findByLikeAll("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA WHERE RPA.cursos.grados.idgrados = "
+							+ cursos.getGrados().getIdgrados()
+							+ " AND RPA.cursos.anosacademicos.estadoactivo = true"
+							+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		}else{
+			//Validamos si es profesor
+			dataListAsignaturas = relacionasignaturaperiodosFacade
+					.findByLikeAll("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA "
+							+ "WHERE RPA.cursos.grados.idgrados = "
+							+ cursos.getGrados().getIdgrados()
+							+ " AND "
+							+ "(RPA.profesores.usuarios.idusuarios = "
+							+ getSesiones().getUsuarios().getIdusuarios()
+							+ " OR RPA.cursos.profesor.usuarios.idusuarios = " + getSesiones().getUsuarios().getIdusuarios() + " "
+							+ ") AND RPA.cursos.anosacademicos.estadoactivo = true"
+							+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		}
 		// registromatriculas.get
 		this.dataListRegistroMatriculas = registromatriculasFacade
-				.findByLikeAll("SELECT R FROM Registromatriculas R WHERE R.cursos.idcursos = "
+				.findByLikeAll("SELECT R FROM Registromatriculas R "
+						+ "WHERE R.cursos.idcursos = "
 						+ cursos.getIdcursos()
+						+ " AND R.fecharetiro is null "
 						+ " ORDER BY R.estudiantes.usuarios.apellidos");
 
 		this.dataListRegistroMatriculasEstudiantes = null;
@@ -867,9 +966,15 @@ public class NotasEstudiantes implements Serializable {
 	public void escogerPeriodo(Periodos periodos) {
 		periodoSeleccionado = periodos;
 		dataListRegistroMatriculasEstudiantes = null;
+		//Validamos si es un periodo normal o es el final
 		if (periodos.getTipo() == 0){
 			dataListDefinitivas = null;
-			dataListRegistroMatriculasEstudiantes = getDataListRegistroMatriculasEstudiantes();
+			//Validamos si la forma como se hace el calculo es nuevo o es antigua
+			if(periodos.getCalculo() == 1){
+				dataListRegistroMatriculasEstudiantes = getDataListRegistroMatriculasEstudiantes();
+			}else{
+				dataListRegistroMatriculasEstudiantes = getDataListRegistroMatriculasEstudiantes_antiguo();
+			}
 		}else{
 			dataListRegistroMatriculasEstudiantes = null;
 			calcularDefinitivasPorAsignatura(null, null, null);
@@ -958,143 +1063,26 @@ public class NotasEstudiantes implements Serializable {
 			Definitivas definitivas = new Definitivas();
 			//Hacemos una lista para empezar a colocar la Información de cada periodo
 			List<Definitivasasignaturasperiodos> dataListDefinitivasasignaturasperiodos = new ArrayList<Definitivasasignaturasperiodos>();
+			
+			
+			
+			
 			// Recorremos la lista de los peeriodos			
 			for (Periodos p : getDataListPeriodos()){
 				if(p.getTipo() == 0){
-					double promedioPeriodos = 0;
-		
-					// Sacamos la lista de dimensiones de esta asignatura
-					List<Relaciondimensionesasignaturasano> datalistDimensionesTmp = relaciondimensionesasignaturasanoFacade
-							.findByLikeAll("SELECT R FROM Relaciondimensionesasignaturasano R WHERE R.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
-									+ asignaturaSeleccionada
-											.getIdrelacionasignaturaperiodos()
-									+ " AND R.cursos.idcursos = "
-									+ rm.getCursos().getIdcursos());
-		
-					// Recorremos la lista de las dimensiones
-					for (Relaciondimensionesasignaturasano rdaa : datalistDimensionesTmp) {
-		
-						DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
-		
-						// Sacamos las notas que tiene que cada dimesion
-						List<Relacionnotasdimension> tmp = relacionnotasdimensionFacade
-								.findByLikeAll("SELECT R FROM Relacionnotasdimension R WHERE  R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
-										+ rdaa.getIdrelaciondimensionesasignaturasano()
-										+ " AND R.periodos.idperiodos = "
-										+ p.getIdperiodos());
-						double promedioDimension = 0;
-		
-						// Validamos si no hay notas asociadas a esta dimensión
-						if (tmp.isEmpty()) {
-							dimensionesEstudiantesTmp.setValor(0);
-							promedioDimension = 0;
-						}
-		
-						for (Relacionnotasdimension rnd : tmp) {
-							double promedioActividades = 0;
-							List<Relacionnotaslogrosdimensionboletin> tmpRNLDB = relacionnotaslogrosdimensionboletinFacade
-									.findByLikeAll("SELECT R FROM Relacionnotaslogrosdimensionboletin R WHERE R.relacionnotasdimension.idrelacionnotasdimesion = "
-											+ rnd.getIdrelacionnotasdimesion());
-							// Recorremos las actividades de las notas
-							for (Relacionnotaslogrosdimensionboletin rnld : tmpRNLDB) {
-		
-								List<Notascalificables> tmpNC = notascalificablesFacade
-										.findByLikeAll("SELECT N FROM Notascalificables N WHERE N.registromatriculas.idregistromatriculas = "
-												+ rm.getIdregistromatriculas()
-												+ " AND "
-												+ " N.relacionnotaslogrosdimensionboletin.idrelacionnotaslogrosdimensionboletin =  "
-												+ rnld.getIdrelacionnotaslogrosdimensionboletin());
-		
-								if (!tmpNC.isEmpty()) {
-									promedioActividades += tmpNC.get(0)
-											.getValor();
-								}
-							}
-		
-							// Validamos que el tamaño de la lista no está
-							// vacía
-							if (tmpRNLDB != null && tmpRNLDB.isEmpty()) {
-								promedioActividades = 0;
-							} else {
-								if (tmpRNLDB != null) {
-									promedioActividades = new BigDecimal(
-											promedioActividades
-													/ tmpRNLDB.size())
-											.setScale(0,
-													BigDecimal.ROUND_HALF_UP)
-											.doubleValue();
-								}
-							}
-
-							promedioDimension = promedioDimension
-									+ new BigDecimal((promedioActividades
-											* rnd.getPorcentaje() / 100))
-											.setScale(0,
-													BigDecimal.ROUND_HALF_UP)
-											.doubleValue();
-							dimensionesEstudiantesTmp
-									.setValor(promedioDimension);
-		
-						}
-		
-						if (rdaa.getPorcentaje() != null) {
-							promedioDimension = new BigDecimal(
-									promedioDimension * rdaa.getPorcentaje()
-											/ 100).setScale(0,
-									BigDecimal.ROUND_HALF_UP).doubleValue();
-							promedioPeriodos += promedioDimension;
-						} 
-					}
-		
-		
-					boolean bandera = true;
-					for (Recuperaciones r : getDataListRecuperaciones()) {
-						Relacionrecuperacionregistromatriculas relacionrecuperacionregistromatriculasTMp = new Relacionrecuperacionregistromatriculas();
-						List<Relacionrecuperacionregistromatriculas> tmpRM = relacionrecuperacionregistromatriculasFacade
-								.findByLike("SELECT R FROM  Relacionrecuperacionregistromatriculas R WHERE R.recuperaciones.idrecuperaciones = "
-										+ r.getIdrecuperaciones()
-										+ " AND R.periodos.idperiodos = "
-										+ p.getIdperiodos()
-										+ " AND R.registromatriculas.idregistromatriculas = "
-										+ rm.getIdregistromatriculas()
-										+ " AND R.relacionasignaturaperiodos.idrelacionasignaturaperiodos = "
-										+ asignaturaSeleccionada
-												.getIdrelacionasignaturaperiodos());
-						if (bandera) {
-
-							if (tmpRM.isEmpty()) {
-								relacionrecuperacionregistromatriculasTMp
-										.setValor(new Double(0));
-							} else {
-								relacionrecuperacionregistromatriculasTMp = tmpRM
-										.get(0);
-							}
-
-							// Miramos si este estudiante es nuevo
-							if (promedioPeriodos > 0) {
-								if (promedioPeriodos < relacionrecuperacionregistromatriculasTMp
-										.getValor() && promedioPeriodos < 80) {
-									promedioPeriodos = (new BigDecimal(
-											(promedioPeriodos + relacionrecuperacionregistromatriculasTMp.getValor()) / 2)
-									.setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
-									if (bandera
-											&& promedioPeriodos > 80) {
-										bandera = false;
-									}
-								}
-							} else {
-								promedioPeriodos = relacionrecuperacionregistromatriculasTMp.getValor();
-							}
-						}
-					}
-					// Vamos a guardar la nota definitiva
-					guardarNotaDefinitiva(p, asignaturaSeleccionada, rm, promedioPeriodos);
-					Definitivasasignaturasperiodos definitivasasignaturasperiodos = new Definitivasasignaturasperiodos();
-					definitivasasignaturasperiodos.setPeriodos(p);
-					definitivasasignaturasperiodos.setRegistromatricula(rm);
-					definitivasasignaturasperiodos.setValor(promedioPeriodos);
-					dataListDefinitivasasignaturasperiodos.add(definitivasasignaturasperiodos); 
+					List<Definitivasasignaturasperiodos> tmp = definitivasasignaturasperiodosFacade
+					.findByLike("SELECT D FROM Definitivasasignaturasperiodos D WHERE "
+							+ "D.periodos.idperiodos = "
+							+ p.getIdperiodos()
+							+ " AND D.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
+							+ asignaturaSeleccionada.getIdrelacionasignaturaperiodos()
+							+ " AND D.registromatricula.idregistromatriculas = "
+							+ rm
+									.getIdregistromatriculas());
 					
+					if(!tmp.isEmpty()){
+						dataListDefinitivasasignaturasperiodos.add(tmp.get(0));
+					}
 				}
 			}
 			//Agregamos la lista de las definitivas
@@ -1109,12 +1097,11 @@ public class NotasEstudiantes implements Serializable {
 			for(Definitivasasignaturasperiodos def:dataListDefinitivasasignaturasperiodos){
 				if(def.getPeriodos().getTipo() == 0){
 					contador++;
-					promedioFinal += def.getValor();
+					promedioFinal += (def.getValor() * def.getPeriodos().getValor()* 0.01);
 				}
 			}
 			if (contador > 0) {
-				definitivas.setDefinitiva(new BigDecimal((promedioFinal)
-						/ contador).setScale(0, BigDecimal.ROUND_HALF_UP)
+				definitivas.setDefinitiva(new BigDecimal((promedioFinal)).setScale(0, BigDecimal.ROUND_HALF_UP)
 						.intValue());
 			} else {
 				definitivas.setDefinitiva(0);
@@ -1167,10 +1154,11 @@ public class NotasEstudiantes implements Serializable {
 //		}
 	}
 	
-	// Método para calcular las definitivas del periodo
+	// Método para calcular las definitivas del periodo nuevo
 	public List<RegistroMatriculasEstudiantes> getDataListRegistroMatriculasEstudiantes() {
 		if (dataListRegistroMatriculasEstudiantes == null
-				&& periodoSeleccionado != null && periodoSeleccionado.getTipo() == 0) {
+				&& periodoSeleccionado != null && periodoSeleccionado.getTipo() == 0
+				&& periodoSeleccionado.getCalculo() == 1) {
 
 			List<Recuperaciones> dataListRecuperaciones = new ArrayList<Recuperaciones>();
 			dataListRecuperaciones = recuperacionesFacade
@@ -1225,101 +1213,186 @@ public class NotasEstudiantes implements Serializable {
 					registroMatriculasEstudiantes
 							.setDataListPeriodosEstudiantes(dataListPeriodosEstudiantesTmp);
 					
-//					for (Relaciondimensionesasignaturasano rdaa : datalistDimensionesTmp) {
-//						
-//					String query = "select "
-//					+ "case when ceil((sum(pepe.valordn)))  is null then 0 "
-//					+ "else "
-//					+ "case when ceil((sum(pepe.valordn))) > 100 "
-//					+ "then 100 "
-//					+ "else ceil((sum(pepe.valordn))) end end, "
-//					+ "pepe.relaciondimensionesasignaturasano, "
-//					+ "pepe.registromatriculas,"
-//					+ "d.iddimensiones, "
-//					+ "case when ((sum(pepe.valordn)*rdaa.porcentaje/100)) is null then 0 "
-//					+ "else "
-//					+ "case when ((sum(pepe.valordn)*rdaa.porcentaje/100)) > 100 then 100 "
-//					+ "else ((sum(pepe.valordn)*rdaa.porcentaje/100)) end end "
-//					+ "from ("
-//					+ "select case when ((sum(valor)/count(1)) * rnd.porcentaje/100)  is null then 0 "
-//					+ "else case when ((sum(valor)/count(1)) * rnd.porcentaje/100) > 100 then 100 "
-//					+ "else ((sum(valor)/count(1)) * rnd.porcentaje/100) end end valordn, "
-//					+ "nc.registromatriculas, "
-//					+ "rnd.nombrenotas, "
-//					+ "rnd.idrelacionnotasdimesion, "
-//					+ "rnd.relaciondimensionesasignaturasano "
-//					+ "from notascalificables nc join "
-//					+ "relacionnotaslogrosdimensionboletin rnldb on rnldb.idrelacionnotaslogrosdimensionboletin = nc.relacionnotaslogrosdimensionboletin "
-//					+ "join relacionnotasdimension rnd on rnd.idrelacionnotasdimesion = rnldb.relacionnotasdimension "
-//					+ "and rnd.periodos =  " + p.getIdperiodos() + " "
-//					+ "right join registromatriculas rm on rm.idregistromatriculas  = nc.registromatriculas and rm.idregistromatriculas =  " 
-//					+  rm.getIdregistromatriculas() + " "
-//					+ "GROUP BY nc.registromatriculas, "
-//					+ "rnd.nombrenotas, "
-//					+ "rnd.porcentaje, "
-//					+ "rnd.idrelacionnotasdimesion, "
-//					+ "rnd.relaciondimensionesasignaturasano "
-//					+ "ORDER BY rnd.idrelacionnotasdimesion) pepe "
-//					+ "join relaciondimensionesasignaturasano rdaa on rdaa.idrelaciondimensionesasignaturasano = pepe.relaciondimensionesasignaturasano "
-//					+ "join relacionasignaturaperiodos rap on rap.idrelacionasignaturaperiodos = rdaa.relacionasignaturasperiodos "
-//					+ "join dimensiones d on d.iddimensiones = rdaa.dimensiones "
-//					+ "right join registromatriculas rm on rm.idregistromatriculas  = pepe.registromatriculas and rm.idregistromatriculas =  " 
-//					+  rm.getIdregistromatriculas() + " "
-//					+ "where rdaa.relacionasignaturasperiodos =  " + asignaturaSeleccionada.getIdrelacionasignaturaperiodos() + " "
-//					+ "and rdaa.cursos =  " + cursoSeleccionado.getIdcursos() + " "
-//					+ "and pepe.registromatriculas =  " + rm.getIdregistromatriculas() + " "
-//					+ "group by pepe.relaciondimensionesasignaturasano, "
-//					+ "rdaa.porcentaje, "
-//					+ "pepe.registromatriculas, "
-//					+ "d.iddimensiones "
-//					+ "order by d.iddimensiones ";
-////			
-					
-//					String query = "select sum(round(pepe.valordndos)),  "
-//							+ "pepe.relaciondimensionesasignaturasano, "
-//							+ "rdaa.porcentaje, "
-//							+ "round(cast(rdaa.porcentaje * ((case when sum(round(pepe.valordndos)) is null "
-//							+ "then 0 "
-//							+ "else cast(sum(round(pepe.valordndos)) as numeric) end)) as numeric)/100), "
-//							+ "rdaa.dimensiones "
-//							+ "from ("
-//							+ ""
-//							+ "select round(cast(rnd.porcentaje * (  cast(sum(case when valor is null then 0 else valor end) as numeric )/count(1)) as numeric)/100) valordndos,  "
-//							+ "rnldb.relacionnotasdimension, "
-//							+ "rnd.relaciondimensionesasignaturasano "
-//							+ "from notascalificables nc "
-//							+ "right join relacionnotaslogrosdimensionboletin rnldb  on rnldb.idrelacionnotaslogrosdimensionboletin = nc.relacionnotaslogrosdimensionboletin "
-//							+ "and nc.registromatriculas =   " + rm.getIdregistromatriculas() + " "
-//							+ "join relacionnotasdimension rnd on rnd.idrelacionnotasdimesion = rnldb.relacionnotasdimension "
-//							+ "and rnd.periodos = " + p.getIdperiodos() + " "
-//							+ "group by rnldb.relacionnotasdimension, rnd.porcentaje, rnd.relaciondimensionesasignaturasano"
-//							+ ""
-//							+ ") pepe "
-//							+ "join relaciondimensionesasignaturasano rdaa on rdaa.idrelaciondimensionesasignaturasano = pepe.relaciondimensionesasignaturasano "
-//							+ "where rdaa.relacionasignaturasperiodos =  " + asignaturaSeleccionada.getIdrelacionasignaturaperiodos()  + " "
-//							+ "and rdaa.cursos =  " + cursoSeleccionado.getIdcursos() + " "
-//							+ "group by relaciondimensionesasignaturasano, rdaa.porcentaje, rdaa.dimensiones "
-//							+ "order by rdaa.dimensiones ";
-//					
-//					
-//					List<Object[]> dataListDimensionesValor = relacionlogrosdimensionesFacade.findoAll(query);
-//					double tmp = 0;
-//					for(Object[] o:dataListDimensionesValor){
-//						DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
-//						dimensionesEstudiantesTmp.setDimensiones(dimensionesFacade.find(Long.parseLong(o[4].toString())));
-//						dataListDimensionesEstudiantestmp.add(dimensionesEstudiantesTmp);
-//						dimensionesEstudiantesTmp.setValor(Double.parseDouble(o[0].toString()));
-//						tmp += Double.parseDouble(o[3].toString());
-//					}
-//					if(tmp > 100){
-//						tmp = 100;
-//					}
-//					periodosEstudiantes.setValor(tmp);
+					String query = "select sum(round(pepe.valordndos)),  "
+							+ "pepe.relaciondimensionesasignaturasano, "
+							+ "rdaa.porcentaje, "
+							+ "round(cast(rdaa.porcentaje * ((case when sum(round(pepe.valordndos)) is null "
+							+ "then 0 "
+							+ "else cast(sum(round(pepe.valordndos)) as numeric) end)) as numeric)/100), "
+							+ "rdaa.dimensiones "
+							+ "from ("
+							+ ""
+							+ "select round(cast(rnd.porcentaje * (  cast(sum(case when valor is null then 0 else valor end) as numeric )/count(1)) as numeric)/100) valordndos,  "
+							+ "rnldb.relacionnotasdimension, "
+							+ "rnd.relaciondimensionesasignaturasano "
+							+ "from notascalificables nc "
+							+ "right join relacionnotaslogrosdimensionboletin rnldb  on rnldb.idrelacionnotaslogrosdimensionboletin = nc.relacionnotaslogrosdimensionboletin "
+							+ "and nc.registromatriculas =   " + rm.getIdregistromatriculas() + " "
+							+ "join relacionnotasdimension rnd on rnd.idrelacionnotasdimesion = rnldb.relacionnotasdimension "
+							+ "and rnd.periodos = " + p.getIdperiodos() + " "
+							+ "group by rnldb.relacionnotasdimension, rnd.porcentaje, rnd.relaciondimensionesasignaturasano"
+							+ ""
+							+ ") pepe "
+							+ "join relaciondimensionesasignaturasano rdaa on rdaa.idrelaciondimensionesasignaturasano = pepe.relaciondimensionesasignaturasano "
+							+ "where rdaa.relacionasignaturasperiodos =  " + asignaturaSeleccionada.getIdrelacionasignaturaperiodos()  + " "
+							+ "and rdaa.cursos =  " + cursoSeleccionado.getIdcursos() + " "
+							+ "group by relaciondimensionesasignaturasano, rdaa.porcentaje, rdaa.dimensiones "
+							+ "order by rdaa.dimensiones ";
 					
 					
+					List<Object[]> dataListDimensionesValor = relacionlogrosdimensionesFacade.findoAll(query);
+					double tmp = 0;
+					for(Object[] o:dataListDimensionesValor){
+						DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
+						dimensionesEstudiantesTmp.setDimensiones(dimensionesFacade.find(Long.parseLong(o[4].toString())));
+						dataListDimensionesEstudiantestmp.add(dimensionesEstudiantesTmp);
+						dimensionesEstudiantesTmp.setValor(Double.parseDouble(o[0].toString()));
+						tmp += Double.parseDouble(o[3].toString());
+					}
+					if(tmp > 100){
+						tmp = 100;
+					}
+					periodosEstudiantes.setValor(tmp);
 					
+					
+					periodosEstudiantes
+							.setDataListRelacionrecuperacionregistromatriculas(new ArrayList<Relacionrecuperacionregistromatriculas>());
 
-					 //Recorremos la lista de las dimensiones
+					boolean bandera = true;
+					for (Recuperaciones r : dataListRecuperaciones) {
+						Relacionrecuperacionregistromatriculas relacionrecuperacionregistromatriculasTMp = new Relacionrecuperacionregistromatriculas();
+						List<Relacionrecuperacionregistromatriculas> tmpRM = relacionrecuperacionregistromatriculasFacade
+								.findByLike("SELECT R FROM  Relacionrecuperacionregistromatriculas R WHERE R.recuperaciones.idrecuperaciones = "
+										+ r.getIdrecuperaciones()
+										+ " AND R.periodos.idperiodos = "
+										+ periodoSeleccionado.getIdperiodos()
+										+ " AND R.registromatriculas.idregistromatriculas = "
+										+ rm.getIdregistromatriculas()
+										+ " AND R.relacionasignaturaperiodos.idrelacionasignaturaperiodos = "
+										+ asignaturaSeleccionada
+												.getIdrelacionasignaturaperiodos());
+						if (bandera) {
+
+							if (tmpRM.isEmpty()) {
+								relacionrecuperacionregistromatriculasTMp
+										.setIdrelacionrecuperacionregistromatriculas(new Long(
+												0));
+								relacionrecuperacionregistromatriculasTMp
+										.setPeriodos(periodoSeleccionado);
+								relacionrecuperacionregistromatriculasTMp
+										.setRecuperaciones(r);
+								relacionrecuperacionregistromatriculasTMp
+										.setRegistromatriculas(rm);
+								relacionrecuperacionregistromatriculasTMp
+										.setValor(new Double(0));
+							} else {
+								relacionrecuperacionregistromatriculasTMp = tmpRM
+										.get(0);
+							}
+
+							// Miramos si este estudiante es nuevo
+							if (periodosEstudiantes.getValor() > 0) {
+
+								if (periodosEstudiantes.getValor() < relacionrecuperacionregistromatriculasTMp
+										.getValor()
+										&& periodosEstudiantes.getValor() < 80) {
+									periodosEstudiantes
+											.setValor(new BigDecimal(
+													(periodosEstudiantes
+															.getValor() + relacionrecuperacionregistromatriculasTMp
+															.getValor()) / 2)
+													.setScale(
+															0,
+															BigDecimal.ROUND_HALF_UP)
+													.doubleValue());
+
+									if (bandera
+											&& periodosEstudiantes.getValor() > 80) {
+										bandera = false;
+									}
+								}
+							} else {
+								periodosEstudiantes
+										.setValor(relacionrecuperacionregistromatriculasTMp
+												.getValor());
+							}
+						}
+						periodosEstudiantes
+								.getDataListRelacionrecuperacionregistromatriculas()
+								.add(relacionrecuperacionregistromatriculasTMp);
+					}
+					// Vamos a guardar la nota definitiva
+					guardarNotaDefinitiva(p, asignaturaSeleccionada, rm,
+							periodosEstudiantes.getValor());
+				}
+			}
+
+			//
+			dataListPeriodosEstudiantesHeader = new ArrayList<PeriodosEstudiantes>();
+
+			if (!dataListRegistroMatriculasEstudiantes.isEmpty()) {
+				for (PeriodosEstudiantes pe : dataListRegistroMatriculasEstudiantes
+						.get(0).getDataListPeriodosEstudiantes()) {
+					dataListPeriodosEstudiantesHeader.add(pe);
+				}
+			}
+		}else{
+			if(dataListRegistroMatriculasEstudiantes == null
+				&& periodoSeleccionado != null && periodoSeleccionado.getTipo() == 0){
+			List<Recuperaciones> dataListRecuperaciones = new ArrayList<Recuperaciones>();
+			dataListRecuperaciones = recuperacionesFacade
+					.findByLike("SELECT R FROM Recuperaciones R ORDER BY R.numero");
+
+			dataListRegistroMatriculasEstudiantes = new ArrayList<RegistroMatriculasEstudiantes>();
+
+			// Sacamos la lista de los periodos
+			List<Periodos> dataListPeriodosTmp = new ArrayList<Periodos>();
+			dataListPeriodosTmp.add(periodoSeleccionado);
+
+			for (Registromatriculas rm : dataListRegistroMatriculas) {
+
+				// Creamos un nuevo objeto
+				RegistroMatriculasEstudiantes registroMatriculasEstudiantes = new RegistroMatriculasEstudiantes();
+
+				// Agregamos el nuevo objeto a la lista de registros ya creada
+				// antes
+				dataListRegistroMatriculasEstudiantes
+						.add(registroMatriculasEstudiantes);
+
+				// Agregamos al nuevo objeto la rm
+				registroMatriculasEstudiantes.setRegistromatriculas(rm);
+
+				// Creamos una lista tipo periodosEstudiantes
+				List<PeriodosEstudiantes> dataListPeriodosEstudiantesTmp = new ArrayList<PeriodosEstudiantes>();
+
+				// Agregamos al registro de matrículas la nueva lista de los
+				// periodos
+				registroMatriculasEstudiantes
+						.setDataListPeriodosEstudiantes(dataListPeriodosEstudiantesTmp);
+
+				// Recorremos la lista de los peeriodos
+				for (Periodos p : dataListPeriodosTmp) {
+					double promedioPeriodos = 0;
+
+					// Sacamos la lista de dimensiones de esta asignatura
+					List<Relaciondimensionesasignaturasano> datalistDimensionesTmp = relaciondimensionesasignaturasanoFacade
+							.findByLikeAll("SELECT R FROM Relaciondimensionesasignaturasano R WHERE R.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
+									+ asignaturaSeleccionada
+											.getIdrelacionasignaturaperiodos()
+									+ " AND R.cursos.idcursos = "
+									+ rm.getCursos().getIdcursos());
+					List<DimensionesEstudiantes> dataListDimensionesEstudiantestmp = new ArrayList<DimensionesEstudiantes>();
+
+					PeriodosEstudiantes periodosEstudiantes = new PeriodosEstudiantes();
+					dataListPeriodosEstudiantesTmp.add(periodosEstudiantes);
+					periodosEstudiantes
+							.setDataListDimensionesEstudiantes(dataListDimensionesEstudiantestmp);
+					periodosEstudiantes.setPeriodos(p);
+
+					registroMatriculasEstudiantes
+							.setDataListPeriodosEstudiantes(dataListPeriodosEstudiantesTmp);
+					
+//					 Recorremos la lista de las dimensiones
 					for (Relaciondimensionesasignaturasano rdaa : datalistDimensionesTmp) {
 
 						DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
@@ -1459,8 +1532,8 @@ public class NotasEstudiantes implements Serializable {
 							periodosEstudiantes.setValor(0);
 						}
 					}
-
-					// if (periodosEstudiantes.getValor() < 80) {
+//
+//					if (periodosEstudiantes.getValor() < 80) {
 					periodosEstudiantes
 							.setDataListRelacionrecuperacionregistromatriculas(new ArrayList<Relacionrecuperacionregistromatriculas>());
 
@@ -1543,8 +1616,285 @@ public class NotasEstudiantes implements Serializable {
 				}
 			}
 		}
+			
+		}
 		return dataListRegistroMatriculasEstudiantes;
 	}
+	
+	
+	
+	// Método para calcular las definitivas del periodo nuevo
+		public List<RegistroMatriculasEstudiantes> getDataListRegistroMatriculasEstudiantes_antiguo() {
+			if (dataListRegistroMatriculasEstudiantes == null
+					&& periodoSeleccionado != null && periodoSeleccionado.getTipo() == 0) {
+
+				List<Recuperaciones> dataListRecuperaciones = new ArrayList<Recuperaciones>();
+				dataListRecuperaciones = recuperacionesFacade
+						.findByLike("SELECT R FROM Recuperaciones R ORDER BY R.numero");
+
+				dataListRegistroMatriculasEstudiantes = new ArrayList<RegistroMatriculasEstudiantes>();
+
+				// Sacamos la lista de los periodos
+				List<Periodos> dataListPeriodosTmp = new ArrayList<Periodos>();
+				dataListPeriodosTmp.add(periodoSeleccionado);
+
+				for (Registromatriculas rm : dataListRegistroMatriculas) {
+
+					// Creamos un nuevo objeto
+					RegistroMatriculasEstudiantes registroMatriculasEstudiantes = new RegistroMatriculasEstudiantes();
+
+					// Agregamos el nuevo objeto a la lista de registros ya creada
+					// antes
+					dataListRegistroMatriculasEstudiantes
+							.add(registroMatriculasEstudiantes);
+
+					// Agregamos al nuevo objeto la rm
+					registroMatriculasEstudiantes.setRegistromatriculas(rm);
+
+					// Creamos una lista tipo periodosEstudiantes
+					List<PeriodosEstudiantes> dataListPeriodosEstudiantesTmp = new ArrayList<PeriodosEstudiantes>();
+
+					// Agregamos al registro de matrículas la nueva lista de los
+					// periodos
+					registroMatriculasEstudiantes
+							.setDataListPeriodosEstudiantes(dataListPeriodosEstudiantesTmp);
+
+					// Recorremos la lista de los peeriodos
+					for (Periodos p : dataListPeriodosTmp) {
+						double promedioPeriodos = 0;
+
+						// Sacamos la lista de dimensiones de esta asignatura
+						List<Relaciondimensionesasignaturasano> datalistDimensionesTmp = relaciondimensionesasignaturasanoFacade
+								.findByLikeAll("SELECT R FROM Relaciondimensionesasignaturasano R WHERE R.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
+										+ asignaturaSeleccionada
+												.getIdrelacionasignaturaperiodos()
+										+ " AND R.cursos.idcursos = "
+										+ rm.getCursos().getIdcursos());
+						List<DimensionesEstudiantes> dataListDimensionesEstudiantestmp = new ArrayList<DimensionesEstudiantes>();
+
+						PeriodosEstudiantes periodosEstudiantes = new PeriodosEstudiantes();
+						dataListPeriodosEstudiantesTmp.add(periodosEstudiantes);
+						periodosEstudiantes
+								.setDataListDimensionesEstudiantes(dataListDimensionesEstudiantestmp);
+						periodosEstudiantes.setPeriodos(p);
+
+						registroMatriculasEstudiantes
+								.setDataListPeriodosEstudiantes(dataListPeriodosEstudiantesTmp);
+						
+						
+						
+						
+
+						 //Recorremos la lista de las dimensiones
+						for (Relaciondimensionesasignaturasano rdaa : datalistDimensionesTmp) {
+	
+							DimensionesEstudiantes dimensionesEstudiantesTmp = new DimensionesEstudiantes();
+							dimensionesEstudiantesTmp.setDimensiones(rdaa
+									.getDimensiones());
+	
+							dataListDimensionesEstudiantestmp
+									.add(dimensionesEstudiantesTmp);
+	
+							List<NotasDimensionesEstudiantes> dataListNotasDimensionesEstudiantes = new ArrayList<NotasDimensionesEstudiantes>();
+							dimensionesEstudiantesTmp
+									.setDataListNotasDimensionesEstudiantes(dataListNotasDimensionesEstudiantes);
+	
+							// Colocamos la lista de los logros por dimensión
+							dimensionesEstudiantesTmp
+									.setDataListRelacionlogrosdimensiones(relacionlogrosdimensionesFacade.findByLikeAll("SELECT R FROM Relacionlogrosdimensiones R WHERE R.periodos.idperiodos = "
+											+ p.getIdperiodos()
+											+ " AND R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
+											+ rdaa.getIdrelaciondimensionesasignaturasano()));
+	
+							// Sacamos las notas que tiene que cada dimesion
+							List<Relacionnotasdimension> tmp = relacionnotasdimensionFacade
+									.findByLikeAll("SELECT R FROM Relacionnotasdimension R WHERE  R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
+											+ rdaa.getIdrelaciondimensionesasignaturasano()
+											+ " AND R.periodos.idperiodos = "
+											+ p.getIdperiodos());
+							double promedioDimension = 0;
+	
+							// Validamos si no hay notas asociadas a esta dimensión
+							if (tmp.isEmpty()) {
+								dimensionesEstudiantesTmp.setValor(0);
+								promedioDimension = 0;
+							}
+	
+							for (Relacionnotasdimension rnd : tmp) {
+								NotasDimensionesEstudiantes notasDimensionesEstudiantes = new NotasDimensionesEstudiantes();
+								notasDimensionesEstudiantes
+										.setRelacionnotasdimension(rnd);
+								dataListNotasDimensionesEstudiantes
+										.add(notasDimensionesEstudiantes);
+	
+								List<ActividadesNotasEstudiantes> dataListActividadesNotasEstudiantes = new ArrayList<ActividadesNotasEstudiantes>();
+								notasDimensionesEstudiantes
+										.setDataListActividadesNotasEstudiantes(dataListActividadesNotasEstudiantes);
+	
+								double promedioActividades = 0;
+								List<Relacionnotaslogrosdimensionboletin> tmpRNLDB = relacionnotaslogrosdimensionboletinFacade
+										.findByLikeAll("SELECT R FROM Relacionnotaslogrosdimensionboletin R WHERE R.relacionnotasdimension.idrelacionnotasdimesion = "
+												+ rnd.getIdrelacionnotasdimesion());
+								
+//								
+								// Recorremos las actividades de las notas
+								for (Relacionnotaslogrosdimensionboletin rnld : tmpRNLDB) {
+	
+									ActividadesNotasEstudiantes actividadesNotasEstudiantes = new ActividadesNotasEstudiantes();
+									dataListActividadesNotasEstudiantes
+											.add(actividadesNotasEstudiantes);
+	
+									List<Notascalificables> tmpNC = notascalificablesFacade
+											.findByLikeAll("SELECT N FROM Notascalificables N WHERE N.registromatriculas.idregistromatriculas = "
+													+ rm.getIdregistromatriculas()
+													+ " AND "
+													+ " N.relacionnotaslogrosdimensionboletin.idrelacionnotaslogrosdimensionboletin =  "
+													+ rnld.getIdrelacionnotaslogrosdimensionboletin());
+	
+									if (!tmpNC.isEmpty()) {
+										actividadesNotasEstudiantes
+												.setNotascalificables(tmpNC.get(0));
+										actividadesNotasEstudiantes.setValor(tmpNC
+												.get(0).getValor());
+										promedioActividades += tmpNC.get(0)
+												.getValor();
+									} else {
+										Notascalificables notasCalificablesTmp = new Notascalificables();
+										notasCalificablesTmp
+												.setRelacionnotaslogrosdimensionboletin(rnld);
+										actividadesNotasEstudiantes
+												.setNotascalificables(notasCalificablesTmp);
+										actividadesNotasEstudiantes.setValor(0);
+									}
+								}
+	
+								// Validamos que el tamaño de la lista no está
+								// vacía
+								if (tmpRNLDB != null && tmpRNLDB.isEmpty()) {
+									promedioActividades = 0;
+								} else {
+									if (tmpRNLDB != null) {
+										// System.out.print(promedioActividades +
+										// " ENTRANDO PROMEDIO ACTI ");
+										promedioActividades = new BigDecimal(
+												promedioActividades
+														/ tmpRNLDB.size())
+												.setScale(0,
+														BigDecimal.ROUND_HALF_UP)
+												.doubleValue();
+									}
+								}
+//									
+								notasDimensionesEstudiantes
+										.setValor(promedioActividades);
+								promedioDimension = promedioDimension
+										+ new BigDecimal((promedioActividades
+												* rnd.getPorcentaje() / 100))
+												.setScale(0,
+														BigDecimal.ROUND_HALF_UP)
+												.doubleValue();
+								dimensionesEstudiantesTmp
+										.setValor(promedioDimension);
+	
+							}
+	
+							if (rdaa.getPorcentaje() != null) {
+								promedioDimension = new BigDecimal(
+										promedioDimension * rdaa.getPorcentaje()
+												/ 100).setScale(0,
+										BigDecimal.ROUND_HALF_UP).doubleValue();
+								promedioPeriodos += promedioDimension;
+								periodosEstudiantes.setValor(promedioPeriodos);
+							} else {
+								periodosEstudiantes.setValor(0);
+							}
+						}
+	
+//						if (periodosEstudiantes.getValor() < 80) {
+						periodosEstudiantes
+								.setDataListRelacionrecuperacionregistromatriculas(new ArrayList<Relacionrecuperacionregistromatriculas>());
+
+						boolean bandera = true;
+						for (Recuperaciones r : dataListRecuperaciones) {
+							Relacionrecuperacionregistromatriculas relacionrecuperacionregistromatriculasTMp = new Relacionrecuperacionregistromatriculas();
+							List<Relacionrecuperacionregistromatriculas> tmpRM = relacionrecuperacionregistromatriculasFacade
+									.findByLike("SELECT R FROM  Relacionrecuperacionregistromatriculas R WHERE R.recuperaciones.idrecuperaciones = "
+											+ r.getIdrecuperaciones()
+											+ " AND R.periodos.idperiodos = "
+											+ periodoSeleccionado.getIdperiodos()
+											+ " AND R.registromatriculas.idregistromatriculas = "
+											+ rm.getIdregistromatriculas()
+											+ " AND R.relacionasignaturaperiodos.idrelacionasignaturaperiodos = "
+											+ asignaturaSeleccionada
+													.getIdrelacionasignaturaperiodos());
+							if (bandera) {
+
+								if (tmpRM.isEmpty()) {
+									relacionrecuperacionregistromatriculasTMp
+											.setIdrelacionrecuperacionregistromatriculas(new Long(
+													0));
+									relacionrecuperacionregistromatriculasTMp
+											.setPeriodos(periodoSeleccionado);
+									relacionrecuperacionregistromatriculasTMp
+											.setRecuperaciones(r);
+									relacionrecuperacionregistromatriculasTMp
+											.setRegistromatriculas(rm);
+									relacionrecuperacionregistromatriculasTMp
+											.setValor(new Double(0));
+								} else {
+									relacionrecuperacionregistromatriculasTMp = tmpRM
+											.get(0);
+								}
+
+								// Miramos si este estudiante es nuevo
+								if (periodosEstudiantes.getValor() > 0) {
+
+									if (periodosEstudiantes.getValor() < relacionrecuperacionregistromatriculasTMp
+											.getValor()
+											&& periodosEstudiantes.getValor() < 80) {
+										periodosEstudiantes
+												.setValor(new BigDecimal(
+														(periodosEstudiantes
+																.getValor() + relacionrecuperacionregistromatriculasTMp
+																.getValor()) / 2)
+														.setScale(
+																0,
+																BigDecimal.ROUND_HALF_UP)
+														.doubleValue());
+
+										if (bandera
+												&& periodosEstudiantes.getValor() > 80) {
+											bandera = false;
+										}
+									}
+								} else {
+									periodosEstudiantes
+											.setValor(relacionrecuperacionregistromatriculasTMp
+													.getValor());
+								}
+							}
+							periodosEstudiantes
+									.getDataListRelacionrecuperacionregistromatriculas()
+									.add(relacionrecuperacionregistromatriculasTMp);
+						}
+						// Vamos a guardar la nota definitiva
+						guardarNotaDefinitiva(p, asignaturaSeleccionada, rm,
+								periodosEstudiantes.getValor());
+					}
+				}
+
+				//
+				dataListPeriodosEstudiantesHeader = new ArrayList<PeriodosEstudiantes>();
+
+				if (!dataListRegistroMatriculasEstudiantes.isEmpty()) {
+					for (PeriodosEstudiantes pe : dataListRegistroMatriculasEstudiantes
+							.get(0).getDataListPeriodosEstudiantes()) {
+						dataListPeriodosEstudiantesHeader.add(pe);
+					}
+				}
+			}
+			return dataListRegistroMatriculasEstudiantes;
+		}
 	
 	public void setDataListRegistroMatriculasEstudiantes(List<RegistroMatriculasEstudiantes> dataListRegistroMatriculasEstudiantes) {
 		this.dataListRegistroMatriculasEstudiantes = dataListRegistroMatriculasEstudiantes;
@@ -2418,26 +2768,43 @@ public class NotasEstudiantes implements Serializable {
 		dataListAsignaturas = null;
 		dataListDefinitivas = null;
 		if (periodos.getTipo() == 1) {
-			calcularDefinitivas();
+//			calcularDefinitivas();
 		} else {
-			calcularBoletin_Imprimir(null);
+			if(periodos.getCalculo() == 1){
+				calcularBoletin(null);
+			}else{
+				calcularBoletin_Imprimir(null);
+			}
 		}
 	}
 
 	// Método para calcular las definitvas de cada estudiante
 	public void calcularDefinitivas() {
 		List<Relacionasignaturaperiodos> dataListAsignturasEstudiantesTmp = new ArrayList<Relacionasignaturaperiodos>();
-		dataListAsignturasEstudiantesTmp = relacionasignaturaperiodosFacade
-				.findByLikeAll("SELECT DISTINCT(RAP.relacionasignaturasperiodos) FROM Relaciondimensionesasignaturasano RAP WHERE RAP.cursos.idcursos = "
-						+ registromatriculas.getCursos().getIdcursos()
-						+ " AND RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura != 1  AND RAP.relacionasignaturasperiodos.anosacademicos.idanosacademicos = "
-						+ getCurrentYear().getIdanosacademicos()
-						+ " ORDER BY "
-						+ " RAP.relacionasignaturasperiodos.asignaturas.nombre ASC");
+		
+		
+		if (anosacademicosManual == null) {
+			dataListAsignturasEstudiantesTmp = relacionasignaturaperiodosFacade
+					.findByLikeAll("SELECT DISTINCT(RAP.relacionasignaturasperiodos) FROM Relaciondimensionesasignaturasano RAP WHERE RAP.cursos.idcursos = "
+							+ registromatriculas.getCursos().getIdcursos()
+							+ " AND RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura != 1  AND RAP.relacionasignaturasperiodos.anosacademicos.idanosacademicos = "
+							+ getCurrentYear().getIdanosacademicos()
+							+ " ORDER BY "
+							+ " RAP.relacionasignaturasperiodos.asignaturas.nombre ASC");
+		} else {
+			dataListAsignturasEstudiantesTmp = relacionasignaturaperiodosFacade
+					.findByLikeAll("SELECT DISTINCT(RAP.relacionasignaturasperiodos) FROM Relaciondimensionesasignaturasano RAP WHERE RAP.cursos.idcursos = "
+							+ registromatriculas.getCursos().getIdcursos()
+							+ " AND RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura != 1  AND RAP.relacionasignaturasperiodos.anosacademicos.idanosacademicos = "
+							+ anosacademicosManual.getIdanosacademicos()
+							+ " ORDER BY "
+							+ " RAP.relacionasignaturasperiodos.asignaturas.nombre ASC");
+		}
+		
 		for (Periodos p : getDataListPeriodos()) {
 			if (p.getTipo() == 0) {
 				for (Relacionasignaturaperiodos r : dataListAsignturasEstudiantesTmp) {
-					getDefinitivaPeriodo(p, r, registromatriculas);
+//					getDefinitivaPeriodo(p, r, registromatriculas);
 
 				}
 			}
@@ -2614,7 +2981,7 @@ public class NotasEstudiantes implements Serializable {
 		}
 
 		// Guardamos la nota definitiva del estudiante
-		guardarNotaDefinitiva(p, rap, regMat, periodosEstudiantes.getValor());
+//		guardarNotaDefinitiva(p, rap, regMat, periodosEstudiantes.getValor());
 
 		return periodosEstudiantes.getValor();
 	}
@@ -3273,13 +3640,33 @@ public class NotasEstudiantes implements Serializable {
 		table.setWidthPercentage(100);
 		table.setWidths(new float[] { 7, 1, 1});
 		
+//		
+//		List<Object[]> tmp = asignaturasFacade.findo("SELECT "
+//				+ "a.asignatura1, "
+//				+ "a.asignatura2, "
+//				+ "aa.nombre "
+//				+ "from asignaturasgrupales a "
+//				+ " join asignaturas aa on aa.idasignaturas = a.asignatura1"
+//				//+ " join anosacademicos aac on aac.idanosacademicos = a.idanosacademicos and aac.estadoactivo = 'true'"
+//				+ " where a.grado = " +
+//				registromatriculas.getGrados().getIdgrados()
+//				+ " order by a.asignatura1"
+//				);
 		
-		List<Object[]> tmp = asignaturasFacade.findo("SELECT a.asignatura1, a.asignatura2, aa.nombre from asignaturasgrupales a "
-				+ " join asignaturas aa on aa.idasignaturas = a.asignatura1"
-				+ " where a.grado = " +
-				registromatriculas.getGrados().getIdgrados()
+		
+		
+		Anosacademicos anosacademicosCalcular = anosacademicosManual == null?getCurrentYear():anosacademicosManual;
+		List<Object[]> tmp = asignaturasFacade.findo("SELECT "
+				+ "a.asignatura1, "
+				+ "a.asignatura2, "
+				+ "aa.nombre "
+				+ "from asignaturasgrupales a "
+				+ "join asignaturas aa on aa.idasignaturas = a.asignatura1 "
+				+ "where a.grado = " + registromatriculas.getGrados().getIdgrados() + " "
+				+ "and a.idanosacademicos = " + anosacademicosCalcular.getIdanosacademicos()
 				+ " order by a.asignatura1"
 				);
+
 		
 		int idmateria = 0;
 		int valorAsignatura = 0;
@@ -3302,6 +3689,10 @@ public class NotasEstudiantes implements Serializable {
 						}
 					}
 				}
+				if(contador == 0){
+					continue;
+				}
+				
 				valorAsignatura = valorAsignatura/contador;
 				
 				//Hacemos una instancia del convertidor para convertir las materias
@@ -3853,20 +4244,9 @@ public class NotasEstudiantes implements Serializable {
 		cb.beginText();
 
 		// Informacion basica
-//		String text = configuracionesFacade.retornarObject("SELECT C.valor FROM Configuraciones C WHERE C.propiedad = 'nombrecolegio'").toString().toUpperCase();
-//		String text2 = configuracionesFacade.retornarObject("SELECT C.valor FROM Configuraciones C WHERE C.propiedad = 'resolucion'").toString();	
 		String text3 = "GRADO: " + cursoSeleccionado.getGrados().getNombre().toUpperCase();
 		String text31 = "PERIODO: " + periodoSeleccionado.getNombre().toUpperCase();
 
-//
-//		BaseFont bf = BaseFont.createFont();
-//		cb.beginText();
-//
-//		// Informacion basica
-//		String text = configuracionesFacade.retornarObject("SELECT C.valor FROM Configuraciones C WHERE C.propiedad = 'nombrecolegio'").toString().toUpperCase();
-//		String text2 = configuracionesFacade.retornarObject("SELECT C.valor FROM Configuraciones C WHERE C.propiedad = 'resolucion'").toString();	
-//		String text3 = "Grado: " + cursoSeleccionado.getGrados().getNombre();
-//		String text31 = "Periodo: " + periodoSeleccionado.getNombre();
 
 		DateFormat dia = new SimpleDateFormat("EEEE, dd 'de' MMMM 'de' yyyy",new Locale("es","ES"));
 		
@@ -3938,6 +4318,17 @@ public class NotasEstudiantes implements Serializable {
 				celda.setBorderWidthTop(new Float(0.5));
 				table.addCell(celda);
 				// Jucio valorativo
+				//Colocamos el juicio valorativo que se calculo antes
+//				if(periodoSeleccionado.getCalculo() == 1){
+//					List<Definitivasasignaturasperiodos> tmpList = 
+//							definitivasasignaturasperiodosFacade.findByLike("SELECT D FROM Definitivasasignaturasperiodos D WHERE D.registromatricula.idregistromatriculas = " 
+//							+ registromatriculas.getIdregistromatriculas() + " AND D.periodos.idperiodos = " + periodoSeleccionado.getIdperiodos() + " "
+//							+ "AND  D.relacionasignaturasperiodos.asignaturas.idasignaturas = " + rm.getAsignaturas().getIdasignaturas());
+//					if(!tmpList.isEmpty()){
+//						rm.setValor(tmpList.get(0).getValor());
+//					}
+//					
+//				}
 				if (rm.getValor() > 95) {
 					celda = new PdfPCell(new Phrase(
 							"JV:  " + decimalFormat.format(rm.getValor())
@@ -4032,8 +4423,6 @@ public class NotasEstudiantes implements Serializable {
 					tableLogro.setWidthPercentage(100);
 					tableLogro.setWidths(new float[] { 11, new Float("0.5"),
 							new Float("0.5") });
-
-					// notasDimensionesEstudiantes.setDataListActividadesNotasEstudiantes(dataListNotasEstudiantes);
 
 					for (Relacionlogrosdimensiones rld : de
 							.getDataListRelacionlogrosdimensiones()) {
@@ -5360,7 +5749,7 @@ public class NotasEstudiantes implements Serializable {
 
 		Font smallfont = new Font(Font.getFamily("HELVETICA"), 9, Font.NORMAL);
 		Font materia = new Font(Font.getFamily("HELVETICA"), 9, Font.BOLD);
-
+		Anosacademicos anosacademicosCalcular = anosacademicosManual == null?getCurrentYear():anosacademicosManual;
 		List<Object[]> tmp = asignaturasFacade.findo("SELECT "
 				+ "a.asignatura1, "
 				+ "a.asignatura2, "
@@ -5368,7 +5757,7 @@ public class NotasEstudiantes implements Serializable {
 				+ "from asignaturasgrupales a "
 				+ "join asignaturas aa on aa.idasignaturas = a.asignatura1 "
 				+ "where a.grado = " + registromatriculas.getGrados().getIdgrados() + " "
-				+ "and a.idanosacademicos = " + getCurrentYear().getIdanosacademicos()
+				+ "and a.idanosacademicos = " + anosacademicosCalcular.getIdanosacademicos()
 				+ " order by a.asignatura1"
 				);
 		
@@ -5496,10 +5885,7 @@ public class NotasEstudiantes implements Serializable {
 								.getDataListDimensionesEstudiantes().isEmpty()
 						&& rm.getDataListPeriodosEstudiantes().get(0)
 								.getDataListDimensionesEstudiantes().get(0)
-								.getDataListRelacionlogrosdimensiones() != null
-						&& !rm.getDataListPeriodosEstudiantes().get(0)
-								.getDataListDimensionesEstudiantes().get(0)
-								.getDataListNotasDimensionesEstudiantes().isEmpty()) {
+								.getDataListRelacionlogrosdimensiones() != null) {
 					// Ahora vamos a agregar cada dimensión
 					for (DimensionesEstudiantes de : rm
 							.getDataListPeriodosEstudiantes().get(0)
@@ -6059,10 +6445,8 @@ public class NotasEstudiantes implements Serializable {
 							.getDataListDimensionesEstudiantes().isEmpty()
 					&& rm.getDataListPeriodosEstudiantes().get(0)
 							.getDataListDimensionesEstudiantes().get(0)
-							.getDataListRelacionlogrosdimensiones() != null
-					&& !rm.getDataListPeriodosEstudiantes().get(0)
-							.getDataListDimensionesEstudiantes().get(0)
-							.getDataListNotasDimensionesEstudiantes().isEmpty()) {
+							.getDataListRelacionlogrosdimensiones() != null) {
+				
 				PdfPTable tableComportamiento = new PdfPTable(4); // Code 1
 				tableComportamiento.setWidthPercentage(100);
 				tableComportamiento.setWidths(new float[] { 9, 2,
@@ -9065,13 +9449,25 @@ public class NotasEstudiantes implements Serializable {
 			// Inicializamos la lista de las definitivas
 			dataListDefinitivas = new ArrayList<NotasEstudiantes.Definitivas>();
 			List<Relacionasignaturaperiodos> dataListAsignturasEstudiantesTmp = new ArrayList<Relacionasignaturaperiodos>();
-			dataListAsignturasEstudiantesTmp = relacionasignaturaperiodosFacade
-					.findByLikeAll("SELECT DISTINCT(RAP.relacionasignaturasperiodos) FROM Relaciondimensionesasignaturasano RAP WHERE RAP.cursos.idcursos = "
-							+ registromatriculas.getCursos().getIdcursos()
-							+ " AND RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura != 1  AND RAP.relacionasignaturasperiodos.anosacademicos.idanosacademicos = "
-							+ getCurrentYear().getIdanosacademicos()
-							+ " ORDER BY "
-							+ " RAP.relacionasignaturasperiodos.asignaturas.nombre ASC");
+			
+			
+			if (anosacademicosManual == null) {
+				dataListAsignturasEstudiantesTmp = relacionasignaturaperiodosFacade
+						.findByLikeAll("SELECT DISTINCT(RAP.relacionasignaturasperiodos) FROM Relaciondimensionesasignaturasano RAP WHERE RAP.cursos.idcursos = "
+								+ registromatriculas.getCursos().getIdcursos()
+								+ " AND RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura != 1  AND RAP.relacionasignaturasperiodos.anosacademicos.idanosacademicos = "
+								+ getCurrentYear().getIdanosacademicos()
+								+ " ORDER BY "
+								+ " RAP.relacionasignaturasperiodos.asignaturas.nombre ASC");
+			} else {
+				dataListAsignturasEstudiantesTmp = relacionasignaturaperiodosFacade
+						.findByLikeAll("SELECT DISTINCT(RAP.relacionasignaturasperiodos) FROM Relaciondimensionesasignaturasano RAP WHERE RAP.cursos.idcursos = "
+								+ registromatriculas.getCursos().getIdcursos()
+								+ " AND RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura != 1  AND RAP.relacionasignaturasperiodos.anosacademicos.idanosacademicos = "
+								+ anosacademicosManual.getIdanosacademicos()
+								+ " ORDER BY "
+								+ " RAP.relacionasignaturasperiodos.asignaturas.nombre ASC");
+			}
 
 			for (Relacionasignaturaperiodos r : dataListAsignturasEstudiantesTmp) {
 				List<Definitivasasignaturasperiodos> dataListDefinitivasasignaturasperiodos = new ArrayList<Definitivasasignaturasperiodos>();
@@ -9094,7 +9490,7 @@ public class NotasEstudiantes implements Serializable {
 							dataListDefinitivasasignaturasperiodos
 									.add(dataListDNE.get(0));
 							promedio += new BigDecimal(dataListDNE.get(0)
-									.getValor()).setScale(0,
+									.getValor()*(p.getValor()*0.01)).setScale(0,
 									BigDecimal.ROUND_HALF_UP).doubleValue();
 						} else {
 							System.out
@@ -9108,8 +9504,7 @@ public class NotasEstudiantes implements Serializable {
 				// Agregamos la asignatura
 				definitivas.setAsignaturas(r.getAsignaturas());
 				// Agregamos el valor total
-				definitivas.setDefinitiva(new BigDecimal(promedio
-						/ (getDataListPeriodos().size() - 1)).setScale(0,
+				definitivas.setDefinitiva(new BigDecimal(promedio).setScale(0,
 						BigDecimal.ROUND_HALF_UP).intValue());
 				
 				//Promediamos con las recuperaciones finales
@@ -9229,7 +9624,7 @@ public class NotasEstudiantes implements Serializable {
 	}
 	
 	
-	
+	//Metodo para calcular el boletin de un alumno
 	public List<AsignaturasEstudiantes> calcularBoletin_Imprimir(
 			Registromatriculas regMat) {
 		if (dataListAsignaturas == null && registromatriculas != null
@@ -9560,4 +9955,210 @@ public class NotasEstudiantes implements Serializable {
 
 		return dataListAsignturasEstudiantes;
 	}
+	
+	
+	private List<EstudianteAcumulativos> dataListEstudianteAcumulativos;
+	
+	private List<Object> teto;
+	
+	public void seleccionarCursoAcumulativo(Cursos cursos){
+			
+		
+		teto = new ArrayList<Object>();
+		this.dataListRegistroMatriculas = registromatriculasFacade
+				.findByLikeAll("SELECT R FROM Registromatriculas R WHERE R.cursos.idcursos = "
+						+ cursos.getIdcursos()
+						+ " ORDER BY R.estudiantes.usuarios.apellidos");
+
+		
+		
+		
+		if(getSesiones().isAdministrador()){
+			dataListAsignaturas = relacionasignaturaperiodosFacade
+					.findByLikeAll("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA WHERE RPA.cursos.grados.idgrados = "
+							+ cursos.getGrados().getIdgrados()
+							/*+ " AND RPA.profesores.usuarios.idusuarios = "
+							+ getSesiones().getUsuarios().getIdusuarios() */
+							+ " AND RPA.cursos.anosacademicos.estadoactivo = true"
+							+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		}else{
+			//Validamos si es profesor
+			dataListAsignaturas = relacionasignaturaperiodosFacade
+					.findByLikeAll("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA "
+							+ "WHERE RPA.cursos.grados.idgrados = "
+							+ cursos.getGrados().getIdgrados()
+							+ " AND "
+							+ "(RPA.profesores.usuarios.idusuarios = "
+							+ getSesiones().getUsuarios().getIdusuarios()
+							+ " OR RPA.cursos.profesor.usuarios.idusuarios = " + getSesiones().getUsuarios().getIdusuarios() + " "
+							+ ") AND RPA.cursos.anosacademicos.estadoactivo = true"
+							+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		}
+		
+		
+//		dataListAsignaturas = relacionasignaturaperiodosFacade
+//				.findByLikeAll("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA WHERE RPA.cursos.grados.idgrados = "
+//						+ cursos.getGrados().getIdgrados()
+//						/*+ " AND RPA.profesores.usuarios.idusuarios = "
+//						+ getSesiones().getUsuarios().getIdusuarios() */
+//						+ " AND RPA.cursos.anosacademicos.estadoactivo = true"
+//						+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+//		
+		dataListEstudianteAcumulativos = new ArrayList<NotasEstudiantes.EstudianteAcumulativos>();
+		for(Registromatriculas r:dataListRegistroMatriculas){
+			List<PeriodosAcumulativos> dataListPeriodosAcumulativos = new ArrayList<NotasEstudiantes.PeriodosAcumulativos>();
+//			teto.add(r.getEstudiantes().getUsuarios().getNombres());
+			for(Relacionasignaturaperiodos rap:dataListAsignaturas){
+				List<Definitivasasignaturasperiodos> tmp = definitivasasignaturasperiodosFacade
+						.findByLike("SELECT D FROM Definitivasasignaturasperiodos D WHERE "
+								+ "D.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
+								+ rap.getIdrelacionasignaturaperiodos()
+								+ " AND D.registromatricula.idregistromatriculas = "
+								+ r.getIdregistromatriculas() + " " 
+								+ "ORDER BY D.periodos.fechafin");
+				double acumulado = 0;
+				//Vamos hasta 4 porque son solo 4 periodos
+				for(int i=0;i<4;i++){
+					PeriodosAcumulativos acumulativos = new PeriodosAcumulativos();
+					try{
+						acumulativos.setValor(tmp.get(i).getValor());
+						acumulativos.setPeriodos(tmp.get(i).getPeriodos());
+						teto.add(tmp.get(i).getValor());
+					}catch(Exception e){
+						acumulativos.setValor(0);
+						acumulativos.setPeriodos(null);
+						teto.add(0);
+					}
+					if(acumulativos.getPeriodos()!=null){
+						acumulado += acumulativos.getValor()*acumulativos.getPeriodos().getValor()*0.01;
+					}
+					dataListPeriodosAcumulativos.add(acumulativos);
+				}
+				//Colocamos el ultimo periodo que es el acumulativo
+				PeriodosAcumulativos acumulativos = new PeriodosAcumulativos();
+				acumulativos.setValor(new BigDecimal((acumulado)).setScale(0, BigDecimal.ROUND_HALF_UP).intValue());
+				dataListPeriodosAcumulativos.add(acumulativos);
+			}
+			EstudianteAcumulativos acumulativosEst = new EstudianteAcumulativos();
+			acumulativosEst.setRegistromatriculas(r);
+			acumulativosEst.setDataListPeriodosAcumulativos(dataListPeriodosAcumulativos);
+			dataListEstudianteAcumulativos.add(acumulativosEst);
+		}
+	}
+	
+	
+	
+	
+	
+	public List<Object> getTeto() {
+		return teto;
+	}
+
+	public void setTeto(List<Object> teto) {
+		this.teto = teto;
+	}
+
+	public List<EstudianteAcumulativos> getDataListEstudianteAcumulativos() {
+		return dataListEstudianteAcumulativos;
+	}
+
+	public void setDataListEstudianteAcumulativos(List<EstudianteAcumulativos> dataListEstudianteAcumulativos) {
+		this.dataListEstudianteAcumulativos = dataListEstudianteAcumulativos;
+	}
+
+	public class PeriodosAcumulativos{
+		Periodos periodos;
+		double valor;
+		public double getValor() {
+			return valor;
+		}
+		public void setValor(double valor) {
+			this.valor = valor;
+		}
+		public Periodos getPeriodos() {
+			return periodos;
+		}
+		public void setPeriodos(Periodos periodos) {
+			this.periodos = periodos;
+		}
+	}
+	
+	
+	public class EstudianteAcumulativos{
+		Registromatriculas registromatriculas;
+		
+		List<PeriodosAcumulativos> dataListPeriodosAcumulativos;
+		
+		public Registromatriculas getRegistromatriculas() {
+			return registromatriculas;
+		}
+		public void setRegistromatriculas(Registromatriculas registromatriculas) {
+			this.registromatriculas = registromatriculas;
+		}
+		public List<PeriodosAcumulativos> getDataListPeriodosAcumulativos() {
+			return dataListPeriodosAcumulativos;
+		}
+		public void setDataListPeriodosAcumulativos(List<PeriodosAcumulativos> dataListPeriodosAcumulativos) {
+			this.dataListPeriodosAcumulativos = dataListPeriodosAcumulativos;
+		}
+	}
+	
+	List<Integer> prueba;
+
+	public List<Integer> prueba(Registromatriculas rm) {
+		prueba = new ArrayList<Integer>();
+		for(int i=0;i<85;i++){
+			if(rm != null)
+				prueba.add(10);
+			else
+				prueba.add(20);
+		}
+		return prueba;
+	}
+	
+	 public static void main(String[] args) throws com.lowagie.text.DocumentException {
+	        List<java.io.InputStream> list = new ArrayList<java.io.InputStream>();
+	        try {
+	            // Source pdfs
+	            list.add(new FileInputStream(new File("f:/1.pdf")));
+	            list.add(new FileInputStream(new File("f:/2.pdf")));
+
+	            // Resulting pdf
+	            java.io.FileOutputStream out = new java.io.FileOutputStream(new java.io.File("f:/result.pdf"));
+
+	            doMerge(list, out);
+
+	        } catch (FileNotFoundException e) {
+	            e.printStackTrace();
+	        } catch (DocumentException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	
+	public static void doMerge(List<java.io.InputStream> list, java.io.FileOutputStream outputStream)
+            throws DocumentException, IOException, com.lowagie.text.DocumentException {
+		com.lowagie.text.Document document = new com.lowagie.text.Document();
+        com.lowagie.text.pdf.PdfWriter writer = com.lowagie.text.pdf.PdfWriter.getInstance(document, outputStream);
+        document.open();
+        com.lowagie.text.pdf.PdfContentByte cb = writer.getDirectContent();
+        
+        for (java.io.InputStream in : list) {
+            PdfReader reader = new PdfReader(in);
+            for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+                document.newPage();
+                //import the page from source pdf
+                com.lowagie.text.pdf.PdfImportedPage page = writer.getImportedPage(reader, i);
+                //add the page to the destination pdf
+                cb.addTemplate(page, 0, 0);
+            }
+        }
+        
+        outputStream.flush();
+        document.close();
+        outputStream.close();
+    }
+	
 }

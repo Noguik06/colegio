@@ -28,9 +28,11 @@ import jsf.usuarios.Sesiones;
  */
 public class ManejoSesiones implements Filter {
 
+	private FilterConfig filterConfig;
+	
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    	this.filterConfig = filterConfig;
     }
 
     @Override
@@ -53,9 +55,7 @@ public class ManejoSesiones implements Filter {
 	            
 //	            String toReplace = requestURI.substring(requestURI.indexOf("/Dir_My_App"), requestURI.lastIndexOf("/") + 1);
 //	            String newURI = requestURI.replace(toReplace, "?Contact_Id=");
-	            request.getRequestDispatcher("/sistemaColegio/faces/index.xhtml");
-	            
-	            
+	            request.getRequestDispatcher("/sistemaColegio/faces/index.xhtml");	            
 	        }else{
 	        	Object bean =  (Object) ((HttpServletRequest) request).getSession().getAttribute("sesiones");
 	        	Sesiones sesssion = (Sesiones) bean;
@@ -70,6 +70,13 @@ public class ManejoSesiones implements Filter {
 	        		request.getRequestDispatcher("/sistemaColegio/faces/interfaces/usuarios/miUsuario/miUsuario.xhtml");
 //	        		((HttpServletResponse) response).sendRedirect("/sistemaColegio/faces/interfaces/usuarios/miUsuario/miUsuario.xhtml");
 	        	}
+	        	
+	        	if(!sesssion.isEstadoEvalucionInsttitucional()
+	        			&& !url.equals("/sistemaColegio/faces/interfaces/usuarios/estudiantes/evaluacionInstitucional.xhtml")
+	        			&& url.contains("xhtml")){
+	        		((HttpServletResponse) response).sendRedirect("/sistemaColegio/faces/interfaces/usuarios/estudiantes/evaluacionInstitucional.xhtml");
+	        		request.getRequestDispatcher("/sistemaColegio/faces/interfaces/usuarios/estudiantes/evaluacionInstitucional.xhtml");
+	        	}
 	        }
     	}
     	chain.doFilter(request, response);
@@ -77,7 +84,7 @@ public class ManejoSesiones implements Filter {
 
     @Override
     public void destroy() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    	filterConfig = null;
     }
 
 }

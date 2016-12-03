@@ -75,6 +75,12 @@ public class Periodos implements Serializable {
     private String nombre;
     @Column(name = "tipo")
     private int tipo;
+    //Porcentaje que representa del total
+    @Column(name = "valor")
+    private int valor;
+    @Column(name = "calculo")
+    //Forma en que se calcula las notas finales de las materias
+    private int calculo;
     @OneToMany(mappedBy = "periodos")
     private List<Relacionlogrosdimensiones> relacionlogrosdimensionesList;
     @JoinColumn(name = "anoacademicos", referencedColumnName = "idanosacademicos")
@@ -143,8 +149,16 @@ public class Periodos implements Serializable {
     public void setRelacionlogrosdimensionesList(List<Relacionlogrosdimensiones> relacionlogrosdimensionesList) {
         this.relacionlogrosdimensionesList = relacionlogrosdimensionesList;
     }
+    
+    public int getValor() {
+		return valor;
+	}
 
-    public Anosacademicos getAnoacademicos() {
+	public void setValor(int valor) {
+		this.valor = valor;
+	}
+
+	public Anosacademicos getAnoacademicos() {
         return anoacademicos;
     }
 
@@ -169,6 +183,14 @@ public class Periodos implements Serializable {
 
 	public void setTipo(int tipo) {
 		this.tipo = tipo;
+	}
+	
+	public int getCalculo() {
+		return calculo;
+	}
+
+	public void setCalculo(int calculo) {
+		this.calculo = calculo;
 	}
 
 	@Override

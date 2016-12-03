@@ -42,6 +42,9 @@ public class Segmentopreguntas implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "nombre")
     private String nombre;
+    @Column(name = "tipo")
+    private int tipo;
+    
     @OneToMany(mappedBy = "segmentopreguntas", fetch=FetchType.LAZY)
     private List<Preguntas> preguntasList;
 
@@ -67,8 +70,16 @@ public class Segmentopreguntas implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
+    public int getTipo() {
+		return tipo;
+	}
 
-    @XmlTransient
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
+
+	@XmlTransient
     public List<Preguntas> getPreguntasList() {
         return preguntasList;
     }

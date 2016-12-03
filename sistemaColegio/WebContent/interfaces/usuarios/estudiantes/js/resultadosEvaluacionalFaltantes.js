@@ -29,9 +29,6 @@ function seleccionarCurso(e){
         $(e.source).addClass("botonSeleccionadoVerde")
         $(e.source).addClass("botonCursoSeleccionado")
         
-        
-        $('#formPrincipal\\:tbl_MainAcumulativas_Usuarios_head tr').height($("#formPrincipal\\:tbl_MainAcumulativas_Notas_head").height());
-        
     }
 }
 

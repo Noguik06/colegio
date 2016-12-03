@@ -66,11 +66,12 @@
 								var="profesor">
 								<h:column >
 									<h:outputLabel value="#{profesor.usuarios.nombres} #{profesor.usuarios.apellidos}" 
-									style="width:90%" styleClass="botonGrisClaro-Verde labelSinResaltar">
-										<f:ajax event="click" onevent="seleccionarProfesor"
+									style="width:90%" styleClass="botonGrisClaro-Verde labelSinResaltar 
+										#{evaluacionInstitucional.profesorSeleccionado != null
+										and evaluacionInstitucional.profesorSeleccionado.idprofesores == profesor.idprofesores ? 'botonSeleccionadoVerde botonSeleccionado':''}">
+										<f:ajax event="click"
 										listener="#{evaluacionInstitucional.seleccionarDocente(profesor)}" 
-										render=":idFormTablaBusquedaAlumnosPincipal:tblPreguntasEvalucionInstitucional 
-										:idFormTablaBusquedaAlumnosPincipal:botoFinalizarEvaluacion"></f:ajax>
+										render=":idFormTablaBusquedaAlumnosPincipal"></f:ajax>
 									</h:outputLabel>
 								</h:column>
 						</h:dataTable>
@@ -97,11 +98,28 @@
 										<h:outputLabel value="#{respuestas.preguntas.texto}"></h:outputLabel>
 									</p:column>
 									<p:column>
-										 <p:inputNumber id="input3" value="#{respuestas.valor}" minValue="0" maxValue="10" decimalPlaces="0" >  
+										 <p:inputNumber id="input3" value="#{respuestas.valor}" tabindex="0" minValue="0" maxValue="10" decimalPlaces="0" >  
 	                					</p:inputNumber>  
 									</p:column>
 								</p:subTable>
 							</p:dataTable>
+							<br/>
+							<h:panelGroup rendered="#{evaluacionInstitucional.dataListSegmentoPreguntas != null or
+									evaluacionInstitucional.dataListSegmentoPreguntas.isEmpty()}">
+								<table style="width: 80%" border="0" cellpadding="0" cellspacing="0">
+									<tr>
+										<td width="20%" valign="center">
+											<h:outputLabel styleClass="marginIzquierdo labelResaltado">Observaciones</h:outputLabel>
+										</td>
+										
+										<td width="80%" valign="center">
+											<center>
+			            						<p:inputTextarea value="#{evaluacionInstitucional.observaciones}"  rows="6" style="width:100%"></p:inputTextarea>
+			            					</center>
+										</td>
+									</tr>
+								</table>
+							</h:panelGroup>
 							<br />
 							<center>
 								<p:panel id="botoFinalizarEvaluacion" style="background:none; border:none;">

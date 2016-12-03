@@ -6,9 +6,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-
-	<h:outputScript name="jquery.js" library="jquery" />
-
 	<!--Css locales-->
 	<link href="css/notasEstudiantes.css" rel="stylesheet" type="text/css" />
 
@@ -408,5 +405,10 @@
 			</div>
 		</div>
 	</div>
+	
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<p:graphicImage name="/imagenes/ajax-loader.gif" />
+	</p:dialog>
 </h:body>
 </html>

@@ -21,9 +21,11 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import clasesAyuda.HttpSessionCollector;
+import ejb.EstadoevaluacioninstitucionalFacade;
 import ejb.EstudiantesFacade;
 import ejb.ProfesoresFacade;
 import ejb.RegistromatriculasFacade;
+import ejb.RelacionusuariosrolesFacade;
 import ejb.TareasFacade;
 import ejb.UsuariosFacade;
 import entities.Registromatriculas;
@@ -47,6 +49,12 @@ public class Sesiones implements Serializable {
     private EstudiantesFacade estudiantesFacade;
     @EJB
     private RegistromatriculasFacade registromatriculasFacade;
+    @EJB
+    private EstadoevaluacioninstitucionalFacade estadoevaluacioninstitucionalFacade;
+    @EJB
+    private RelacionusuariosrolesFacade relacionusuariosrolesFacade;
+    
+    
     private String login;
     private String password;
     private boolean sesion = false;
@@ -55,6 +63,8 @@ public class Sesiones implements Serializable {
     private int TipoUsuario;
     private List<Object[]> dataListPermisosModulos;
     private List<Object[]> dataListPermisos;
+    private boolean estadoEvalucionInsttitucional = true;
+    private boolean administrador = false;
 
     /**
      * Creates a new instance of Sesiones
@@ -78,7 +88,7 @@ public class Sesiones implements Serializable {
         this.password = password;
     }
 
-    public String validarSubmit() {
+    public String validarSubmit() throws IOException {
         if (login != null && password != null && !usuariosFacade.findByLike("SELECT U FROM Usuarios U WHERE U.nombredeusuario = '" + login + "' AND U.password = '" + password + "'").isEmpty()) {
             sesion = true;
             List<Usuarios> tmp = usuariosFacade.findByLike("SELECT U FROM Usuarios U WHERE U.nombredeusuario = '" + login + "' AND U.password = '" + password + "' ");
@@ -118,16 +128,42 @@ public class Sesiones implements Serializable {
             usuarios = usuariosFacade.findByLike("SELECT U FROM Usuarios U WHERE U.nombredeusuario = '" + login + "' AND U.password = '" + password + "' "
             		+ "AND U.estado_activo = 'true'").get(0);
             
+            //Se valida que el usuario sea administrador
             if (!profesoresFacade.findByLike("SELECT P FROM Profesores P WHERE P.usuarios.idusuarios = " + usuarios.getIdusuarios())
                             .isEmpty()) {
                 TipoUsuario = 1;
-            }else if(!profesoresFacade.findByLike("SELECT P FROM Estudiantes P WHERE P.usuarios.idusuarios = " + usuarios.getIdusuarios())
+            }else 
+            	//Se valida que el usuario sea estudiante
+            	if(!profesoresFacade.findByLike("SELECT P FROM Estudiantes P WHERE P.usuarios.idusuarios = " + usuarios.getIdusuarios())
                             .isEmpty()){
                 registromatriculas = registromatriculasFacade.
-                        findByLike("SELECT R FROM Registromatriculas R WHERE R.estudiantes.usuarios.idusuarios = " + usuarios.getIdusuarios()).get(0);
+                        findByLike("SELECT R FROM Registromatriculas R WHERE R.fecharetiro is null "
+                        		+ "AND R.estudiantes.usuarios.idusuarios = " + usuarios.getIdusuarios()).get(0);
                 TipoUsuario = 2;
+                
+                //Buscamos si todavía le falta algo de la encuesta
+                if(!profesoresFacade.findByLikeAll("SELECT DISTINCT R.profesores FROM Relacionprofesoresasignaturaperiodo R "
+						+ "WHERE R.cursos.idcursos = " 
+						+ registromatriculas.getCursos().getIdcursos() + " " 
+						+ "AND R.profesores.idprofesores not in "
+						+ "(SELECT E.profesor.idprofesores  FROM Estadoevaluacioninstitucional E "
+						+ "WHERE E.profesor.idprofesores = R.profesores.idprofesores AND E.registromatriculas.idregistromatriculas = "+ 
+						registromatriculas.getIdregistromatriculas()+ ") ").isEmpty()){
+                	//Colocamos la variable en falso para decir que todavía le falta acabar la evaluacion
+                	estadoEvalucionInsttitucional = false;
+                }
+                
+                if(estadoevaluacioninstitucionalFacade.findByLike("SELECT E FROM Estadoevaluacioninstitucional E WHERE E.profesor is null "
+						+ " AND E.registromatriculas.idregistromatriculas = "+ registromatriculas.getIdregistromatriculas()).isEmpty()){
+                	estadoEvalucionInsttitucional = false;
+             	}
             }else{
                 TipoUsuario = 0;
+            }
+            
+            if(!relacionusuariosrolesFacade.findByLike("SELECT R FROM Relacionusuariosroles R WHERE R.usuarios.idusuarios = " + usuarios.getIdusuarios()
+            + " AND R.roles.idroles = 1").isEmpty()){
+            	administrador = true;
             }
             
             FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -141,6 +177,11 @@ public class Sesiones implements Serializable {
             usuarios.setSessionid(session.getId());
             //Guardamos el usuario en la base de datos
             usuariosFacade.edit(usuarios);
+            
+            if(!estadoEvalucionInsttitucional){
+            	FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + 
+            			"/faces/interfaces/usuarios/estudiantes/evaluacionInstitucional.xhtml");
+            }
             
             return "miUsuario";
         } else {
@@ -253,5 +294,23 @@ public class Sesiones implements Serializable {
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
         return (Usuarios) session.getAttribute("USUARIO");
     }
+    
+    //Propiedades del estado de la evaluacion institucional
+	public boolean isEstadoEvalucionInsttitucional() {
+		return estadoEvalucionInsttitucional;
+	}
+
+	public void setEstadoEvalucionInsttitucional(boolean estadoEvalucionInsttitucional) {
+		this.estadoEvalucionInsttitucional = estadoEvalucionInsttitucional;
+	}
+	
+	//Metodo para saber si es administrador
+	public boolean isAdministrador(){
+		if(usuarios == null){
+			return false;
+		}
+		
+		return administrador;
+	}
 
 }

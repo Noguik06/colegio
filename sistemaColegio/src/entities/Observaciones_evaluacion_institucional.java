@@ -31,42 +31,28 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author juannoguera
  */
 @Entity
-@Table(name = "estadoevaluacioninstitucional")
-public class Estadoevaluacioninstitucional implements Serializable {
+@Table(name = "observaciones_evaluacion_institucional")
+public class Observaciones_evaluacion_institucional implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idestadoevaluacioninstitucional")
-    private Long idestadoevaluacioninstitucional;
+    @Column(name = "idobservaciones_evaluacion_institucional")
+    private Long idobservaciones_evaluacion_institucional;
     
     @JoinColumn(name = "registromatriculas", referencedColumnName = "idregistromatriculas")
     @ManyToOne
     private Registromatriculas registromatriculas;
     
-    @JoinColumn(name = "profesores", referencedColumnName = "idprofesores")
-    @ManyToOne
-    private Profesores profesor;
-    
-    private String observaciones;
-    
-    
-    public String getObservaciones() {
-		return observaciones;
+    @Column(name="observacion")
+    private String observacion;
+
+	public Long getIdobservaciones_evaluacion_institucional() {
+		return idobservaciones_evaluacion_institucional;
 	}
 
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
-	}
-
-	
-
-	public Long getIdestadoevaluacioninstitucional() {
-		return idestadoevaluacioninstitucional;
-	}
-
-	public void setIdestadoevaluacioninstitucional(Long idestadoevaluacioninstitucional) {
-		this.idestadoevaluacioninstitucional = idestadoevaluacioninstitucional;
+	public void setIdobservaciones_evaluacion_institucional(Long idobservaciones_evaluacion_institucional) {
+		this.idobservaciones_evaluacion_institucional = idobservaciones_evaluacion_institucional;
 	}
 
 	public Registromatriculas getRegistromatriculas() {
@@ -77,11 +63,11 @@ public class Estadoevaluacioninstitucional implements Serializable {
 		this.registromatriculas = registromatriculas;
 	}
 
-	public Profesores getProfesor() {
-		return profesor;
+	public String getObservacion() {
+		return observacion;
 	}
 
-	public void setProfesor(Profesores profesor) {
-		this.profesor = profesor;
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
 	}
 }
