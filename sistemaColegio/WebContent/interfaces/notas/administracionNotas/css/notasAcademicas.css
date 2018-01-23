@@ -58,9 +58,9 @@ td {
 }
 
 .colTablaNotasPrincipal-2{
-    width: 12%;
-    min-width: 12%;
-    max-width: 12%;
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
 }
 
 .colTablaNotasPrincipal-3{
@@ -111,7 +111,7 @@ td {
 }
 
 .colAsignaturas-1 label{
-    width: 100%;
+    width: 80%;
 }
 
 
