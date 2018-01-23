@@ -583,8 +583,8 @@ public class NotasRecuperaciones implements Serializable {
 //            		+ "group by rm.idregistromatriculas, u.nombres, u.apellidos order by u.apellidos";
 
             
-            String query = "select sum(q_dimensiones.valortotal), "
-            		+ "q_dimensiones.registromatriculas, "
+            String query = "select coalesce(sum(q_dimensiones.valortotal),0), "
+            		+ "rm.idregistromatriculas, "
             		+ "u.nombres, "
             		+ "u.apellidos "
             		+ "from (select round(cast(rdaa.porcentaje * ((case when sum(round(pepe.valordndos)) is null "
@@ -607,10 +607,12 @@ public class NotasRecuperaciones implements Serializable {
             		+ "and rdaa.cursos =  " + cursoSeleccionado.getIdcursos()+ " "
             		+ "group by relaciondimensionesasignaturasano, rdaa.porcentaje,  "
             		+ "rdaa.dimensiones, pepe.registromatriculas) q_dimensiones "
-            		+ "join registromatriculas rm on rm.idregistromatriculas = q_dimensiones.registromatriculas "
+            		+ "right join registromatriculas rm on rm.idregistromatriculas = q_dimensiones.registromatriculas "
             		+ "join estudiantes e on rm.estudiantes = e.idestudiantes "
             		+ "join usuarios u on u.idusuarios = e.usuarios  "
-            		+ "group by q_dimensiones.registromatriculas, u.nombres, u.apellidos";
+            		+ "where rm.cursos = " + cursoSeleccionado.getIdcursos()+ " "
+            		+ "group by rm.idregistromatriculas, u.nombres, u.apellidos "
+            		+ "order by u.apellidos, u.nombres";
             
             double tmp = new BigDecimal(4.5)
 					.setScale(0,

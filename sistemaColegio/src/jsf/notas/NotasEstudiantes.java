@@ -3001,7 +3001,8 @@ public class NotasEstudiantes implements Serializable {
 								+ " AND RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura != 1  AND RAP.relacionasignaturasperiodos.anosacademicos.idanosacademicos = "
 								+   periodoSeleccionado.getAnoacademicos().getIdanosacademicos()
 								+ " ORDER BY "
-								+ " RAP.relacionasignaturasperiodos.asignaturas.nombre ASC");
+								+ " RAP.relacionasignaturasperiodos.asignaturas.tipoasignatura, " 
+								+ " RAP.relacionasignaturasperiodos.asignaturas.nombre");
 				regMat = registromatriculas;
 			} else {
 				dataListAsignaturas = relacionasignaturaperiodosFacade
@@ -3082,7 +3083,7 @@ public class NotasEstudiantes implements Serializable {
 							+ "group by rnldb.relacionnotasdimension, rnd.porcentaje, rnd.relaciondimensionesasignaturasano) pepe "
 							+ "join relaciondimensionesasignaturasano rdaa on rdaa.idrelaciondimensionesasignaturasano = pepe.relaciondimensionesasignaturasano "
 							+ "where rdaa.relacionasignaturasperiodos =  " + rap.getIdrelacionasignaturaperiodos() + " "
-							+ "and rdaa.cursos =  " + cursoSeleccionado.getIdcursos() + " "
+							+ "and rdaa.cursos =  " + (cursoSeleccionado!=null ?cursoSeleccionado.getIdcursos():getSesiones().getRegistromatriculas().getCursos().getIdcursos()) + " "
 							+ "group by relaciondimensionesasignaturasano, rdaa.porcentaje, rdaa.dimensiones "
 							+ "order by rdaa.dimensiones ";
 				
@@ -3739,7 +3740,28 @@ public class NotasEstudiantes implements Serializable {
 				celda.setBorderWidthRight(0);
 				celda.setBorderColorRight(BaseColor.WHITE);
 				table.addCell(celda);
-				celda = new PdfPCell(new Phrase(getJuicioValorativo(def.getDefinitiva()), smallfont));
+				
+				// inicio
+				String definitiva = "";
+				
+				if (def.getDefinitiva() > 95) {
+				
+					definitiva  = " Excelente";
+
+				} else {
+					if (def.getDefinitiva() > 79) {
+						definitiva  = " Sobresaliente";
+					} else {
+						if (def.getDefinitiva() > 64) {
+							definitiva  = " Aceptable";
+						} else {
+							definitiva  = " Insuficiente";
+						}
+
+					}
+				}
+
+				celda = new PdfPCell(new Phrase(definitiva, smallfont));
 				celda.setBorderWidthLeft(0);
 				celda.setBorderColorLeft(BaseColor.WHITE);
 				table.addCell(celda);
@@ -4070,8 +4092,31 @@ public class NotasEstudiantes implements Serializable {
 				celda.setBorderWidthRight(0);
 				celda.setBorderColorRight(BaseColor.WHITE);
 				table.addCell(celda);
+				
+				// inicio
+				String definitiva = "";
+				
+				if (def.getDefinitiva() > 95) {
+				
+					definitiva  = " Excelente";
+
+				} else {
+					if (def.getDefinitiva() > 79) {
+						definitiva  = " Sobresaliente";
+					} else {
+						if (def.getDefinitiva() > 64) {
+							definitiva  = " Aceptable";
+						} else {
+							definitiva  = " Insuficiente";
+						}
+
+					}
+				}
+//				
+//				celda = new PdfPCell(new Phrase(definitiva));
+//				
 				celda = new PdfPCell(new Phrase(
-						getJuicioValorativo(def.getDefinitiva()), smallfont));
+						definitiva, smallfont));
 				celda.setBorderWidthLeft(0);
 				celda.setBorderColorLeft(BaseColor.WHITE);
 				table.addCell(celda);
@@ -7464,7 +7509,28 @@ public class NotasEstudiantes implements Serializable {
 					celda.setBorderWidthRight(0);
 					celda.setBorderColorRight(BaseColor.WHITE);
 					table.addCell(celda);
-					celda = new PdfPCell(new Phrase(getJuicioValorativo(def.getDefinitiva()), smallfont));
+					
+					// inicio
+					String definitiva = "";
+					
+					if (def.getDefinitiva() > 95) {
+					
+						definitiva  = " Excelente";
+
+					} else {
+						if (def.getDefinitiva() > 79) {
+							definitiva  = " Sobresaliente";
+						} else {
+							if (def.getDefinitiva() > 64) {
+								definitiva  = " Aceptable";
+							} else {
+								definitiva  = " Insuficiente";
+							}
+
+						}
+					}
+					
+					celda = new PdfPCell(new Phrase(definitiva));
 					celda.setBorderWidthLeft(0);
 					celda.setBorderColorLeft(BaseColor.WHITE);
 					table.addCell(celda);
@@ -10160,5 +10226,48 @@ public class NotasEstudiantes implements Serializable {
         document.close();
         outputStream.close();
     }
+	
+	
+	//####### ESTUDIANTES ################
+	// Método para esocoger el periodo 
+	public List<Periodos> getDataListPeriodosEstudiantes() {
+//		periodoSeleccionado = null;
+		try{
+		if (dataListPeriodos == null ) {
+				dataListPeriodos = periodosFacade
+						.findByLike("SELECT P FROM Periodos P WHERE P.anoacademicos.estadoactivo = true"
+								+ " ORDER BY P.fechainicio");
+			
+		}
+		}catch(Exception e){
+			System.out.print("Error al consultar la lista de los periodos " + e);
+		}
+		return dataListPeriodos;
+	}
+	
+	public List<Periodos> getDataListPeriodosEstudiantesFinal() {
+		if(getDataListPeriodosEstudiantes() != null){
+			List<Periodos> tmp = new ArrayList<Periodos>();
+			for (Periodos p : getDataListPeriodosEstudiantes()) {
+				if (p.getTipo() == 0)
+					tmp.add(p);
+			}
+			return tmp;
+		}
+		return null;
+	}
+	
+	public List<AsignaturasEstudiantes> getDataListAsignturasEstudiantesE() {
+		if (periodoSeleccionado != null && periodoSeleccionado.getTipo() == 1) {
+			return null;
+		}
+		if (dataListAsignturasEstudiantes == null) {
+			getSesion();
+			dataListAsignturasEstudiantes = new ArrayList<AsignaturasEstudiantes>();
+			calcular();
+		}
+
+		return dataListAsignturasEstudiantes;
+	}
 	
 }

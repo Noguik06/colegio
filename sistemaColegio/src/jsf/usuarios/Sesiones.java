@@ -161,6 +161,9 @@ public class Sesiones implements Serializable {
                 TipoUsuario = 0;
             }
             
+            
+            estadoEvalucionInsttitucional = true;
+            
             if(!relacionusuariosrolesFacade.findByLike("SELECT R FROM Relacionusuariosroles R WHERE R.usuarios.idusuarios = " + usuarios.getIdusuarios()
             + " AND R.roles.idroles = 1").isEmpty()){
             	administrador = true;

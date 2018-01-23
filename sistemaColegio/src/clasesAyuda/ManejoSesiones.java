@@ -8,6 +8,7 @@ package clasesAyuda;
 import java.io.IOException;
 
 import javax.enterprise.inject.spi.Bean;
+import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -37,13 +38,13 @@ public class ManejoSesiones implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//         String url = ((HttpServletRequest)request).getRequestURL().toString();
+         String url = ((HttpServletRequest)request).getRequestURL().toString();
 //         System.out.print(url);
 //         String queryString = ((HttpServletRequest)request).getQueryString();
 //         System.out.print(queryString);
 //        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-    	String url = ((HttpServletRequest)request).getRequestURI();
-//    	RequestDispatcher view = request.getRequestDispatcher(url);
+//    	String url = ((HttpServletRequest)request).getRequestURI();
+    	RequestDispatcher view = request.getRequestDispatcher(url);
     	
 //    	view.forward(request, response);
     	
@@ -80,6 +81,17 @@ public class ManejoSesiones implements Filter {
 	        }
     	}
     	chain.doFilter(request, response);
+    	
+    	 /*HttpServletRequest req = (HttpServletRequest) request;
+         HttpServletResponse res = (HttpServletResponse) response;
+
+         if (!req.getRequestURI().startsWith(req.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER)) { // Skip JSF resources (CSS/JS/Images/etc)
+             res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+             res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+             res.setDateHeader("Expires", 0); // Proxies.
+         }
+
+         chain.doFilter(request, response);*/
     }
 
     @Override

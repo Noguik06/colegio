@@ -226,6 +226,34 @@ public class ConfiguracionNotas implements Serializable {
         datalistDimensiones = dimensionesFacade.findByLikeAll("SELECT D FROM Dimensiones D ORDER BY D.nombre");
         this.relacionasignaturaperiodosAsignado = asignatura;
 
+        //Recorremos las dimensiones
+        for(Dimensiones d:datalistDimensiones){
+        	if(d.getNombre().equals("Saber") || d.getNombre().equals("Hacer") || d.getNombre().equals("Social")){
+	        	//Validamos si el tipo de asignatura que escogimos es tipo 0 es decir calificable normalmente
+	        	if(asignatura.getAsignaturas().getTipoasignatura() == 0){
+	        		Short valor = new Short("0");
+		        	if(d.getNombre().equals("Saber")){
+		        		valor = 40;
+		        	}
+		        	if(d.getNombre().equals("Hacer")){
+		        		valor = 40;
+		        	}
+		        	if(d.getNombre().equals("Social")){
+		        		valor = 20;
+		        	}
+	        		if (relaciondimensionesasignaturasanoFacade.findByLikeAll("SELECT RDAA FROM Relaciondimensionesasignaturasano RDAA WHERE RDAA.dimensiones.iddimensiones = " + d.getIddimensiones() + " AND RDAA.relacionasignaturasperiodos.idrelacionasignaturaperiodos = " + relacionasignaturaperiodosAsignado.getIdrelacionasignaturaperiodos() + " AND + RDAA.cursos.idcursos = " + cursoSeleccionado.getIdcursos()).isEmpty()) {
+	                    //Si esta vacio entonces creamos uno nuevo
+	                    Relaciondimensionesasignaturasano tmp = new Relaciondimensionesasignaturasano(new Long(0));
+	                    tmp.setDimensiones(d);
+	                    tmp.setCursos(cursoSeleccionado);
+	                    tmp.setRelacionasignaturasperiodos(relacionasignaturaperiodosAsignado);
+	                    tmp.setPorcentaje(valor);
+	                    relaciondimensionesasignaturasanoFacade.create(tmp);
+	                } 
+	        	}
+        	}
+        }
+        
         periodoSeleccionado = null;
         relaciondimensionesasignaturasanoAsignada = null;
 //        relacionnotasrelacionlogrosdimensionSeleccionada = null;

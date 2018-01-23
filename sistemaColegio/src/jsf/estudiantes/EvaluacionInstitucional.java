@@ -101,6 +101,9 @@ public class EvaluacionInstitucional implements Serializable {
 
 	@Resource
 	private UserTransaction userTransaction;
+	
+	//#######RESULTADOS EVALUACION INSTITUCIONAL
+	private List<Object[]> dataLisResultadoEvInstitucional;
 
 	// Metodo para traer la sesion actual del usuario
 	public Sesiones getSesion() {
@@ -384,6 +387,68 @@ public class EvaluacionInstitucional implements Serializable {
 		}
 
 		return anosacademicos;
+	}
+	
+	//#########################
+	//RESULTADOS EVALUACION INSTITUCIOKNAL
+	//#########################
+	
+	// Lista de los profesores de los admin
+	public List<Profesores> getDataListProfesoresAdmin() {
+		if (getSesion() != null && getSesion().isAdministrador() && (dataListProfesores == null || dataListProfesores.isEmpty())) {
+			dataListProfesores = profesoresFacade
+					.findByLikeAll("SELECT DISTINCT R.profesores FROM Relacionprofesoresasignaturaperiodo R "
+							+ "WHERE R.relacionasignaturaperiodos.anosacademicos.estadoactivo = true "
+							+ "and R.profesores is not null "
+							+ "ORDER BY R.profesores.usuarios.apellidos");
+			Profesores profesores = new Profesores();
+			Usuarios usuarios = new Usuarios();
+			usuarios.setNombres("Institución");
+			usuarios.setApellidos("Educativa");
+			profesores.setUsuarios(usuarios);
+			dataListProfesores.add(profesores);
+		}
+		return dataListProfesores;
+	}
+	
+	public void setDataListProfesoresAdmin(List<Profesores> dataListProfesores) {
+		this.dataListProfesores = dataListProfesores;
+	}
+	
+	//Metodo para seleccinoar  un docente y ver sus resultados de la evaluacion	
+	public void seleccionarDocenteAdmin(Profesores profesores) {
+			profesorSeleccionado = profesores;
+			if(profesores.getIdprofesores() != null){
+				String query = "select round(avg(p.valor)), pr.texto, s.nombre, p.idprofesor, p.idpreguntas "
+						+ "from respuestapreguntas p  "
+						+ "join preguntas pr on pr.idpreguntas = p.idpreguntas "
+						+ "join segmentopreguntas s on s.idsegmentopreguntas = pr.segmentopreguntas "
+						+ "join profesores prf on prf.idprofesores =  p.idprofesor "  
+						+ "join usuarios u on u.idusuarios = prf.usuarios "
+						+ "where idprofesor  = " +  profesores.getIdprofesores() + " "
+						+ "group by p.idprofesor, p.idpreguntas, pr.texto, s.nombre "
+						+ "order by p.idpreguntas ";
+				
+					dataLisResultadoEvInstitucional = respuestapreguntasFacade.findByNative(query);
+			}else{
+				String query = "select round(avg(p.valor)), pr.texto, s.nombre, p.idpreguntas "
+					+ "from respuestapreguntas p  "
+					+ "join preguntas pr on pr.idpreguntas = p.idpreguntas "
+					+ "join segmentopreguntas s on s.idsegmentopreguntas = pr.segmentopreguntas "
+					+ "where idprofesor is null "
+					+ "group by  p.idpreguntas, pr.texto, s.nombre "
+					+ "order by p.idpreguntas ";
+			
+				dataLisResultadoEvInstitucional = respuestapreguntasFacade.findByNative(query);
+			}
+	}
+
+	public List<Object[]> getDataLisResultadoEvInstitucional() {
+		return dataLisResultadoEvInstitucional;
+	}
+
+	public void setDataLisResultadoEvInstitucional(List<Object[]> dataLisResultadoEvInstitucional) {
+		this.dataLisResultadoEvInstitucional = dataLisResultadoEvInstitucional;
 	}
 
 }

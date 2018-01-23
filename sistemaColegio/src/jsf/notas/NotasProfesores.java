@@ -30,6 +30,7 @@ import javax.transaction.UserTransaction;
 
 import jsf.usuarios.Sesiones;
 import ejb.AnosacademicosFacade;
+import ejb.ConfiguracionesFacade;
 import ejb.CursosFacade;
 import ejb.DimensionesFacade;
 import ejb.LogrosFacade;
@@ -46,6 +47,7 @@ import ejb.RelacionnotasdimensionFacade;
 import ejb.RelacionnotaslogrosdimensionboletinFacade;
 import ejb.RelacionprofesoresasignaturaperiodoFacade;
 import entities.Anosacademicos;
+import entities.Configuraciones;
 import entities.Cursos;
 import entities.Dimensiones;
 import entities.Logros;
@@ -102,6 +104,8 @@ public class NotasProfesores implements Serializable {
 	private RelacionlogrosnotasdimensionFacade relacionlogrosnotasdimensionFacade;
 	@EJB
 	private RecuperacionesFacade recuperacionesFacade;
+	@EJB
+	private ConfiguracionesFacade configuracionesFacade;
 	// ##ANOSACADEMICOS
 	// Anoacademico actual
 	private Anosacademicos anosacademicosActual;
@@ -320,6 +324,38 @@ public class NotasProfesores implements Serializable {
 	public List<Relaciondimensionesasignaturasano> getDataListRelaciondimensionesasignaturasano() {
 		if (datalistDimensionesasignaturasano == null
 				&& relacionasignaturaperiodosAsignado != null) {
+			
+			
+			List<Dimensiones> datalistDimensiones = dimensionesFacade.findByLikeAll("SELECT D FROM Dimensiones D ORDER BY D.nombre");
+			//Recorremos las dimensiones
+	        for(Dimensiones d:datalistDimensiones){
+	        	if(d.getNombre().equals("Saber") || d.getNombre().equals("Hacer") || d.getNombre().equals("Social")){
+		        	//Validamos si el tipo de asignatura que escogimos es tipo 0 es decir calificable normalmente
+		        	if(relacionasignaturaperiodosAsignado.getAsignaturas().getTipoasignatura() == 0){
+		        		Short valor = new Short("0");
+			        	if(d.getNombre().equals("Saber")){
+			        		valor = 40;
+			        	}
+			        	if(d.getNombre().equals("Hacer")){
+			        		valor = 40;
+			        	}
+			        	if(d.getNombre().equals("Social")){
+			        		valor = 20;
+			        	}
+		        		if (relaciondimensionesasignaturasanoFacade.findByLikeAll("SELECT RDAA FROM Relaciondimensionesasignaturasano RDAA WHERE RDAA.dimensiones.iddimensiones = " + d.getIddimensiones() + " AND RDAA.relacionasignaturasperiodos.idrelacionasignaturaperiodos = " + relacionasignaturaperiodosAsignado.getIdrelacionasignaturaperiodos() + " AND + RDAA.cursos.idcursos = " + cursoSeleccionado.getIdcursos()).isEmpty()) {
+		                    //Si esta vacio entonces creamos uno nuevo
+		                    Relaciondimensionesasignaturasano tmp = new Relaciondimensionesasignaturasano(new Long(0));
+		                    tmp.setDimensiones(d);
+		                    tmp.setCursos(cursoSeleccionado);
+		                    tmp.setRelacionasignaturasperiodos(relacionasignaturaperiodosAsignado);
+		                    tmp.setPorcentaje(valor);
+		                    relaciondimensionesasignaturasanoFacade.create(tmp);
+		                } 
+		        	}
+	        	}
+	        }
+			
+			
 			datalistDimensionesasignaturasano = relaciondimensionesasignaturasanoFacade
 					.findByLike("SELECT R FROM Relaciondimensionesasignaturasano R WHERE R.cursos.idcursos = "
 							+ cursoSeleccionado.getIdcursos()
@@ -539,6 +575,87 @@ public class NotasProfesores implements Serializable {
 						+ " AND RR.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
 						+ relaciondimensionesasignaturasanoAsignada
 								.getIdrelaciondimensionesasignaturasano() + ")");
+		
+		
+		dataListRelacionnotasdimension = new ArrayList<Relacionnotasdimension>();
+		
+		List<Configuraciones> dataListConfiguraciones;
+		if(relaciondimensionesasignaturasanoAsignada.getDimensiones().getNombre().equals("Saber")){
+			dataListConfiguraciones = configuracionesFacade.findByLike("SELECT C FROM Configuraciones C WHERE C.propiedad = 'actividadSaber'");
+			for(Configuraciones c:dataListConfiguraciones){
+				String nombreActividad = c.getValor().split("-")[0];
+				Short valor = new Short(c.getValor().split("-")[1]);
+				if(relacionnotasdimensionFacade
+						.findByLike("SELECT R FROM Relacionnotasdimension R WHERE R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano= "
+								+ relaciondimensionesasignaturasanoAsignada
+										.getIdrelaciondimensionesasignaturasano()
+								+ " AND R.periodos.idperiodos = "
+								+ periodoSeleccionado.getIdperiodos()
+								+ " AND R.nombrenotas = '" +nombreActividad + "'").isEmpty()){
+					Relacionnotasdimension notaNueva = new Relacionnotasdimension(new Long(0));
+					notaNueva.setNombrenotas(nombreActividad);
+					notaNueva.setRelaciondimensionesasignaturasano(relaciondimensionesasignaturasanoAsignada);
+					notaNueva.setPorcentaje(valor);
+					notaNueva.setPeriodos(periodoSeleccionado);
+					relacionnotasdimensionFacade.create(notaNueva);
+					dataListRelacionnotasdimension.add(notaNueva);
+				}
+				
+			}
+		}
+		
+		if(relaciondimensionesasignaturasanoAsignada.getDimensiones().getNombre().equals("Social")){
+			dataListConfiguraciones = configuracionesFacade.findByLike("SELECT C FROM Configuraciones C WHERE C.propiedad = 'actividadSocial'");
+			for(Configuraciones c:dataListConfiguraciones){
+				String nombreActividad = c.getValor().split("-")[0];
+				Short valor = new Short(c.getValor().split("-")[1]);
+				if(relacionnotasdimensionFacade
+						.findByLike("SELECT R FROM Relacionnotasdimension R WHERE R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano= "
+								+ relaciondimensionesasignaturasanoAsignada
+										.getIdrelaciondimensionesasignaturasano()
+								+ " AND R.periodos.idperiodos = "
+								+ periodoSeleccionado.getIdperiodos()
+								+ " AND R.nombrenotas = '" +nombreActividad + "'").isEmpty()){
+					Relacionnotasdimension notaNueva = new Relacionnotasdimension(new Long(0));
+					notaNueva.setNombrenotas(nombreActividad);
+					notaNueva.setRelaciondimensionesasignaturasano(relaciondimensionesasignaturasanoAsignada);
+					notaNueva.setPorcentaje(valor);
+					notaNueva.setPeriodos(periodoSeleccionado);
+					relacionnotasdimensionFacade.create(notaNueva);
+					dataListRelacionnotasdimension.add(notaNueva);
+				}
+				
+			}
+		}
+		
+		
+		
+		if(relaciondimensionesasignaturasanoAsignada.getDimensiones().getNombre().equals("Hacer")){
+			dataListConfiguraciones = configuracionesFacade.findByLike("SELECT C FROM Configuraciones C WHERE C.propiedad = 'actividadHacer'");
+			for(Configuraciones c:dataListConfiguraciones){
+				String nombreActividad = c.getValor().split("-")[0];
+				Short valor = new Short(c.getValor().split("-")[1]);
+				if(relacionnotasdimensionFacade
+						.findByLike("SELECT R FROM Relacionnotasdimension R WHERE R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano= "
+								+ relaciondimensionesasignaturasanoAsignada
+										.getIdrelaciondimensionesasignaturasano()
+								+ " AND R.periodos.idperiodos = "
+								+ periodoSeleccionado.getIdperiodos()
+								+ " AND R.nombrenotas = '" +nombreActividad + "'").isEmpty()){
+					Relacionnotasdimension notaNueva = new Relacionnotasdimension(new Long(0));
+					notaNueva.setNombrenotas(nombreActividad);
+					notaNueva.setRelaciondimensionesasignaturasano(relaciondimensionesasignaturasanoAsignada);
+					notaNueva.setPorcentaje(valor);
+					notaNueva.setPeriodos(periodoSeleccionado);
+					relacionnotasdimensionFacade.create(notaNueva);
+					dataListRelacionnotasdimension.add(notaNueva);
+				}
+				
+			}
+		}
+		
+		
+		
 
 		dataListRelacionnotasdimension = relacionnotasdimensionFacade
 				.findByLike("SELECT R FROM Relacionnotasdimension R WHERE R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano= "

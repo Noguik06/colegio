@@ -205,7 +205,7 @@ public class ConfiguracionPeriodo implements Serializable {
 		}
 		if(dataListPeriodos == null){
 			dataListPeriodos = periodosFacade.findByLike("SELECT P FROM Periodos P WHERE P.anoacademicos.idanosacademicos = " + anosacademicoSeleccionado.getIdanosacademicos()
-					+ " ORDER BY P.fechainicio");
+					+ " ORDER BY P.fechafin");
 		}
 		return dataListPeriodos;
 	}

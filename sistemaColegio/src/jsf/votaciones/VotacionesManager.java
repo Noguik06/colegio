@@ -303,6 +303,7 @@ public class VotacionesManager implements Serializable {
 				+ "join usuarios u on u.idusuarios = est.usuarios "
 				+ "left join votaciones v on v.idusuarios = u.idusuarios and v.tipo = 1 "
 				+ "where reg.anosacademicos =  "+ getCurrentYear().getIdanosacademicos() + " and reg.cursos = " + curso.getIdcursos() +" "
+				+ "and fecharetiro is null "
 				+ "order by u.apellidos");
 		
 		dataListRegistromatriculasContralor = registromatriculasFacade.findo("SELECT u.nombres, u.apellidos, v.idvotaciones "
@@ -311,6 +312,7 @@ public class VotacionesManager implements Serializable {
 				+ "join usuarios u on u.idusuarios = est.usuarios "
 				+ "left join votaciones v on v.idusuarios = u.idusuarios and v.tipo = 2 "
 				+ "where reg.anosacademicos =  "+ getCurrentYear().getIdanosacademicos() + " and reg.cursos = " + curso.getIdcursos() +" "
+				+ "and fecharetiro is null "
 				+ "order by u.apellidos");
 	}
 
