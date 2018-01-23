@@ -120,7 +120,7 @@ function cargarPopUPEditarElemento(e){
 var nombreClaseEditarValor
 var indiceEditarValor
 function despuesEditarValor(e){
-    if(e.status=="begin"){
+    /*if(e.status=="begin"){
         $($(".cargando"+nombreClase)[$("."+e.source.className).index(e.source)]).hide()
         $($(".eliminar"+nombreClase)[$("."+e.source.className).index(e.source)]).show()
         
@@ -130,7 +130,7 @@ function despuesEditarValor(e){
     if(e.status=="success"){
         $($(".cargando"+nombreClase)[$("."+e.source.className).index(e.source)]).hide()
         $($(".eliminar"+nombreClase)[$("."+e.source.className).index(e.source)]).show()
-    }
+    }*/
 }
 
 //Método para validar 

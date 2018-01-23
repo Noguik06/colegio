@@ -331,3 +331,342 @@
     max-width: 5%;*/
 }
 
+
+
+
+#formPrincipal{
+    width: 1270px;
+    min-width: 1270px;
+    max-width: 1270px;
+}
+
+/*##Configuración para las tablas##*/
+tr {
+    max-height: 20px;
+    height: 20px;
+}
+
+.divTablaHeader table thead tr {
+    max-height: 20px;
+    height: 20px;
+}
+
+
+.labelEnlacesUniversal{
+    color: blue;     
+    cursor: pointer;    
+    font-style: italic;
+    font-size: 13px;
+    font-weight: bolder;    
+}
+
+.inputAgregarPopUP{
+    width: 90%;
+}
+
+/*###Configuración para los div para agregar registros nuevos*/
+.divPopUPAgregar{
+    width: 20%;
+    /*    margin-left: auto;
+        margin-right: auto;*/
+    /*z-index: 999;*/
+}
+
+.divPopUPAgregarEstudiantes{
+    width: 30%;
+    /*    margin-left: auto;
+        margin-right: auto;*/
+    /*z-index: 999;*/
+}
+
+.editarElelmento{
+    background: url("http://localhost:8080/sistemaColegio/resources/images/borrar.gif") no-repeat center;
+    width: 30%;
+    display: inline-block;
+}
+
+.rowsGeneral{
+    height: 35px;
+    /*    min-height: 35px;
+        max-height: 35px;*/
+    padding-bottom: 10px;
+
+}
+
+/*###TABLA PRINCIPAL*/
+.colTablaNotasPrincipal-0{
+    width: 8%;
+    min-width: 8%;
+    max-width: 8%;
+}
+
+.colTablaNotasPrincipal-1{
+    width: 8%;
+    min-width: 8%;
+    max-width: 8%;
+}
+
+.colTablaNotasPrincipal-2{
+    width: 18%;
+    min-width: 18%;
+    max-width: 18%;
+}
+
+.colTablaNotasPrincipal-3{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+}
+
+.colTablaNotasPrincipal-4{
+    width: 40%;
+    min-width: 40%;
+    max-width: 40%;
+}
+
+.colTablaNotasPrincipal-5{
+    width: 25%;
+    min-width: 25%;
+    max-width: 25%;
+}
+
+
+/*##TABLAS DE LOS CURSOS###*/
+
+/*++FILAS++*/
+.rowCursos{
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+
+/*+++COLUMNAS+++*/
+.colCursos-1{
+    width: 90%;
+}
+
+.colCursos-1 label{
+    /*width: 100%;*/
+}
+
+/*##TABLAS DE LAS ASIGNATURAS##*/
+.colAsignaturas-1{
+    width: 90%;
+}
+
+.colAsignaturas-1 label{
+    /*width: 100%;*/
+}
+
+
+/*###TABLA DONDE VAN LAS CALIFICACIONES*/
+/*TABLA DONDE VA EL NOMBRE Y LAS CALIFICACIONES*/
+.colregistroMatriculas-1{
+    width: 25%;
+    min-width: 25%;
+    max-width: 25%;
+}
+
+.colregistroMatriculas-2{
+    width: 60%;
+    min-width: 60%;
+    max-width: 60%;
+}
+/*.colregistroMatriculas-3{
+    width: 20%;
+    min-width: 20%;
+    max-width: 20%;
+}*/
+
+
+/*##TABLAS DE LAS DIMENSIONES##
+.rowDimensiones{
+    height: 30px;
+    max-height: 30px;
+}*/
+
+/*.colDimensiones-1{
+    width: 50%;
+}
+
+
+.colDimensiones-2{
+    width: 50%
+}
+
+.colDimensiones-2 input{
+    margin-top: 20%;
+
+}
+
+##TABLAS DE LOS PERIODOS
+.colPeriodos-1{
+    width: 70%;
+}
+
+.colPeriodos-1 label{
+    width: 100%;
+}
+
+##TABLAS DE LOS LOGROS
+.colLogros-1{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+
+.colLogros-1 label{
+    min-width: 80%;
+    max-width: 80%;
+    width: 80%;
+}
+
+
+.colLogros-2{
+    width: 9%;
+    min-width: 9%;
+    max-width: 9%;
+}
+
+
+
+##Tablas de las notas
+.colNotas-1{
+    width: 5%;
+    min-width: 5%;
+    max-width: 5%;
+}
+
+.colNotas-2{
+    width: 60%;
+    min-width: 60%;
+    max-width: 60%;
+}
+
+.colNotas-2 label{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.colNotas-3{
+    width: 10%;
+}
+
+.colNotas-3 input{
+    width: 70%;
+    max-width: 100%;
+    text-align: center;
+}
+
+
+.colNotas-4{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+
+}
+
+.colNotas-5{
+    width: 10%;
+    min-width: 10%;
+    max-width: 10%;
+}*/
+
+/*
+### TABLA QUE TIENE LAS ACTIVIDADES
+.colNotasCalificables-1{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.colNotasCalificables-1 label{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.tablasEstudiantesCol-2{
+
+}*/
+
+/*
+
+###TABLA EN LA QUE SE REGISTRAN LAS NOTAS###
+.tablasEstudiantesCol-1{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.tablasEstudiantesCol-2{
+
+}
+
+*/
+
+
+.vertical{
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+
+
+    color:#FF0000;
+    font-size:1.6em !important;
+    font-weight:bold;
+    /*left:0;*/
+    position:absolute;
+    margin-left: 50px;
+    /*top:40px;*/
+}
+
+.postdate {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+.month, .day, .year { 
+  position: absolute; 
+  text-indent: -1000em;
+  background-image: url(http://cdn.css-tricks.com/wp-content/themes/ljq/images/dates.png);
+  background-repeat: no-repeat;
+}
+.month { top: 2px; left: 0; width: 32px; height: 24px;}
+.day { top: 25px; left: 0; width: 32px; height: 25px;}
+.year { bottom: 0; right: 0; width: 17px; height: 48px;}
+
+
+.m-01 { background-position: 0 4px;}
+.m-02 { background-position: 0 -28px;}
+.m-03 { background-position: 0 -57px;}
+
+
+.d-01 { background-position: -50px 0;}
+.d-02 { background-position: -50px -31px;}
+.d-03 { background-position: -50px -62px;}
+
+
+.y-2006 { background-position: -150px 0;}
+.y-2007 { background-position: -150px -50px;}
+.y-2008 { background-position: -150px -100px;}
+
+
+/*###Clases de los logros de los boletines*/
+.divLogrosBoletines{
+    width: 80%;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.colVerLogrosBoletines-1{
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+}
+
+.colVerLogrosBoletines-2{
+    
+}

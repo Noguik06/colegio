@@ -69,7 +69,7 @@
 							</th>
 							<th class="colTablaNotasPrincipal-6 bordesHeader">Item <h:panelGroup
 									id="agregarItemNueva">
-									<h:outputLabel value="[+]"
+									<h:outputLabel value="[+]" rendered="false"
 										styleClass="labelResaltado labelEnlacesUniversal">
 										<f:ajax event="mousedown" execute="@this"
 											render=":notasGlobales"
@@ -80,7 +80,7 @@
 								</h:panelGroup>
 							</th>
 							<th>Actividad <h:panelGroup id="agregarNotaNueva">
-									<h:outputLabel value="[+]"
+									<h:outputLabel value="[+]" rendered="false"
 										styleClass="labelResaltado labelEnlacesUniversal">
 										<f:ajax event="mousedown" render=":formCrearNotasCalificables"
 											listener="#{notasProfesores.seleccionarNotaCalificableEditar(null)}"
@@ -264,8 +264,10 @@
 										<center>
 											<h:inputText id="valorPorcentajeNota"
 												class="ValorPorcentajeNota"
+												rendered="false"
 												value="#{notasProfesores.valorPorcentajeNota}">
-												<p:ajax onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"></p:ajax>
+												<f:ajax event="keyup" execute="@this" onevent="despuesEditarValor"/>
+                                                <f:ajax event="blur" render="@this" execute="@none"/>
 											</h:inputText>
 										</center>
 									</h:column>
@@ -273,6 +275,7 @@
 										<center>
 											<h:graphicImage value="/resources/images/borrar.gif"
 												style="cursor: pointer;"
+												rendered="false"
 												onclick="if(!confirm('Desea eliminar este item?')) return false;">
 												<f:ajax event="click"
 													render=":formPrincipal:contenedorNotas"
@@ -287,6 +290,7 @@
 												style="display: none;" width="50%" height="15%" />
 										</center>
 										<h:graphicImage class="eliminarValorPorcentajeNota"
+											rendered="false"
 											value="/resources/imagenes/botones/editar.png"
 											style="cursor: pointer;" width="20px" height="20px">
 											<f:ajax event="click" render=":notasGlobales"
@@ -297,7 +301,7 @@
 								</h:dataTable>
 								<h:panelGroup id="seleccionarRecuperaciones">
 									<h:outputLabel
-										rendered="#{notasProfesores.periodoSeleccionado}"
+										rendered="false"
 										value="Recuperaciones"
 										styleClass="marginIzquierdo #{notasProfesores.dataListRecuperaciones!=null?'botonSeleccionadoVerde botonNotasSeleccionado':''} botonGrisClaro-Verde labelSinResaltar"
 										style="width: 80%">
@@ -313,18 +317,14 @@
 									value="#{notasProfesores.dataListRelacionnotaslogrosdimensionboletin}"
 									style="display: #{notasProfesores.dataListRelacionnotaslogrosdimensionboletin == null?'none':'block'}"
 									var="rld"
-									columnClasses="colNotasCalificables-0 ubicacionCeldaMitad, colNotasCalificables-1, colNotasCalificables-2 ubicacionCeldaMitad, colNotasCalificables-3 ubicacionCeldaMitad"
+									columnClasses="colNotasCalificables-1"
 									width="100%" cellpadding="0" cellspacing="0"
 									styleClass="border2">
-									<h:column>
-										<h:selectBooleanCheckbox
-											value="#{notasProfesores.valorCheckLogroActividad}">
-											<f:ajax execute="@this" />
-										</h:selectBooleanCheckbox>
-									</h:column>
+									
 									<h:column>
 										<h:outputLabel value="#{rld.nombre}"
-											styleClass="botonGrisClaro-Verde labelSinResaltar marginIzquierdo">
+											styleClass="botonGrisClaro-Verde labelSinResaltar marginIzquierdo"
+											style="width:80%">
 											<f:ajax event="click" execute="@this"
 												render=":formRegistroMatricula"
 												onevent="cargarEdicionNotasEstudiantes"
@@ -332,23 +332,6 @@
 										</h:outputLabel>
 									</h:column>
 
-									<h:column>
-										<h:graphicImage value="/resources/images/borrar.gif"
-											style="cursor: pointer;"
-											onclick="if(!confirm('Desea eliminar esta activdad')) return false;">
-											<f:ajax event="click"
-												render=":formPrincipal:contenedorNotasCalificables"
-												listener="#{notasProfesores.eliminarNota(rld)}" />
-										</h:graphicImage>
-									</h:column>
-									<h:column>
-										<h:graphicImage value="/resources/imagenes/botones/editar.png"
-											style="cursor: pointer;" width="20px" height="20px">
-											<f:ajax event="click" render=":formCrearNotasCalificables"
-												listener="#{notasProfesores.seleccionarNotaCalificableEditar(rld)}"
-												onevent="cargarEdicionNotasCalificables" />
-										</h:graphicImage>
-									</h:column>
 								</h:dataTable>
 
 								<h:dataTable id="tablaRecuperaciones"
