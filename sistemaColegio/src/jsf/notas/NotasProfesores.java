@@ -1424,6 +1424,45 @@ public class NotasProfesores implements Serializable {
 	public List<Relacionnotaslogrosdimensionboletin> getDataListRelacionnotaslogrosdimensionboletin() {
 		if (dataListdataListRelacionnotaslogrosdimensionboletin == null) {
 			if (relacionNotasDimensionSeleccionada != null) {
+				String periodo = relacionNotasDimensionSeleccionada.getPeriodos().getNombre();
+				List<Configuraciones>dataListConfiguraciones = 
+						configuracionesFacade.findByLike("SELECT C FROM Configuraciones C WHERE C.propiedad = 'item" + periodo + "' order by 1");
+				DateFormat fecha = new SimpleDateFormat("MM/dd/yyyy");
+				for(Configuraciones c:dataListConfiguraciones){
+					if(relacionnotaslogrosdimensionboletinFacade
+						.findByLike("SELECT R FROM Relacionnotaslogrosdimensionboletin R WHERE R.relacionnotasdimension.idrelacionnotasdimesion = "
+								+ relacionNotasDimensionSeleccionada
+										.getIdrelacionnotasdimesion()
+								+ " AND R.nombre = '" + c.getValor().split("-")[2] + "'").isEmpty()){
+					
+						String nombreCorte = c.getValor().split("-")[2];
+						Date fechaInicio = null;
+						try {
+							fechaInicio = fecha.parse(c.getValor().split("-")[0]);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Date fechaFin = null;
+						try {
+							fechaFin = fecha.parse(c.getValor().split("-")[1]);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// Creamos la Relacionnotaslogrosdimensionboletin
+						Relacionnotaslogrosdimensionboletin tmp = new Relacionnotaslogrosdimensionboletin(
+								new Long(0));
+						tmp.setRelacionnotasdimension(relacionNotasDimensionSeleccionada);
+						tmp.setNombre(nombreCorte);
+						tmp.setFechafin(fechaFin);
+						tmp.setFechainicio(fechaInicio);
+						tmp.setFechacreacion(new Date());
+						relacionnotaslogrosdimensionboletinFacade.create(tmp);
+					}
+				}
+				
+				
 				dataListdataListRelacionnotaslogrosdimensionboletin = relacionnotaslogrosdimensionboletinFacade
 						.findByLike("SELECT R FROM Relacionnotaslogrosdimensionboletin R WHERE R.relacionnotasdimension.idrelacionnotasdimesion = "
 								+ relacionNotasDimensionSeleccionada
