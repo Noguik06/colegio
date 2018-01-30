@@ -206,10 +206,20 @@ public class NotasProfesores implements Serializable {
 		}
 		if (dataListCursos == null || dataListCursos.isEmpty()) {
 			Relacionprofesoresasignaturaperiodo tmp;
-			dataListCursos = cursosFacade
-					.findByLike("SELECT  DISTINCT(R.cursos) FROM Relacionprofesoresasignaturaperiodo R WHERE r.cursos.anosacademicos.estadoactivo = 'true' AND R.profesores.usuarios.idusuarios = "
-							+ sesiones.getUsuarios().getIdusuarios()
-							+ " ORDER BY R.cursos.grados.numero");
+			
+			//Si el usuario es tipo administrador va a poder ver todos los cursos
+			if(sesiones.isAdministrador()){
+				dataListCursos = cursosFacade
+						.findByLike("SELECT  DISTINCT(R.cursos) FROM Relacionprofesoresasignaturaperiodo R WHERE r.cursos.anosacademicos.estadoactivo = 'true' " 
+								+ " ORDER BY R.cursos.grados.numero");
+			}else{
+				//Si el usuario no es tipo administrador solo va a poder ver los cursos asignados a el
+				dataListCursos = cursosFacade
+						.findByLike("SELECT  DISTINCT(R.cursos) FROM Relacionprofesoresasignaturaperiodo R WHERE r.cursos.anosacademicos.estadoactivo = 'true' AND R.profesores.usuarios.idusuarios = "
+								+ sesiones.getUsuarios().getIdusuarios()
+								+ " ORDER BY R.cursos.grados.numero");
+			}
+			
 		}
 		return dataListCursos;
 	}
@@ -231,12 +241,22 @@ public class NotasProfesores implements Serializable {
 	public void escogerCurso(Cursos cursos) {
 		Sesiones sesiones = getSesiones();
 		this.cursoSeleccionado = cursos;
-		dataListRelacionasignaturaperiodos = relacionasignaturaperiodosFacade
-				.findByLike("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA WHERE RPA.cursos.anosacademicos.estadoactivo = 'true' AND  RPA.cursos.grados.idgrados = "
-						+ cursos.getGrados().getIdgrados()
-						+ " AND RPA.profesores.usuarios.idusuarios = "
-						+ sesiones.getUsuarios().getIdusuarios()
-						+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		
+		if(sesiones.isAdministrador()){
+			dataListRelacionasignaturaperiodos = relacionasignaturaperiodosFacade
+					.findByLike("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA WHERE RPA.cursos.anosacademicos.estadoactivo = 'true' AND  RPA.cursos.grados.idgrados = "
+							+ cursos.getGrados().getIdgrados()
+							+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		}else{
+			dataListRelacionasignaturaperiodos = relacionasignaturaperiodosFacade
+					.findByLike("SELECT RPA.relacionasignaturaperiodos FROM Relacionprofesoresasignaturaperiodo RPA WHERE RPA.cursos.anosacademicos.estadoactivo = 'true' AND  RPA.cursos.grados.idgrados = "
+							+ cursos.getGrados().getIdgrados()
+							+ " AND RPA.profesores.usuarios.idusuarios = "
+							+ sesiones.getUsuarios().getIdusuarios()
+							+ " ORDER BY RPA.relacionasignaturaperiodos.asignaturas.nombre ");
+		}
+		
+		
 		relacionasignaturaperiodosAsignado = null;
 		periodoSeleccionado = null;
 		relaciondimensionesasignaturasanoAsignada = null;
@@ -1209,6 +1229,33 @@ public class NotasProfesores implements Serializable {
 		}
 
 	}
+	
+	// Metodo para escoger la notaCalificable y calificar los alumnos
+	public boolean validacionVigenciaActividad() {
+		if(relacionnotaslogrosdimensionboletinSeleccionada == null){
+			return true;
+		}
+		if(relacionnotaslogrosdimensionboletinSeleccionada.getFechainicio().compareTo(new Date()) < 1
+				&& relacionnotaslogrosdimensionboletinSeleccionada.getFechafin().compareTo(new Date()) > -1){
+			return false;
+		}
+		return true;
+	}
+	
+	//Metodo para validar si puede o no realizar modificaciones sobre las fechas
+	public boolean administrador() {
+		try{
+			Sesiones sesiones = getSesiones();
+			if (sesiones == null || sesiones.getUsuarios() == null) {
+				return false;
+			}
+			if(sesiones.isAdministrador()){
+				return true;
+			}
+		}catch(Exception e){
+		}
+		return false;
+	}
 
 	private List<NotasCalificablesNueva> dataListNotasCalificables;
 
@@ -1374,15 +1421,13 @@ public class NotasProfesores implements Serializable {
 			if (inputFechaFin.getValue() != null
 					&& inputFechaFin.getValue().toString().trim()
 							.replaceAll(" ", "").length() > 0) {
-				relacionnotaslogrosdimensionboletinEditar.setFechafin(fecha
-						.parse(inputFechaFin.getValue().toString()));
+				relacionnotaslogrosdimensionboletinEditar.setFechafin((Date)inputFechaFin.getValue());
 			}
 			// Validamos si hay fecha de fin
 			if (inputFechaInicio.getValue() != null
 					&& inputFechaInicio.getValue().toString().trim()
 							.replaceAll(" ", "").length() > 0) {
-				relacionnotaslogrosdimensionboletinEditar.setFechainicio(fecha
-						.parse(inputFechaInicio.getValue().toString()));
+				relacionnotaslogrosdimensionboletinEditar.setFechainicio((Date)inputFechaInicio.getValue());
 			}
 			relacionnotaslogrosdimensionboletinEditar.setNombre(input
 					.getValue().toString());
@@ -1418,7 +1463,7 @@ public class NotasProfesores implements Serializable {
 			dataListdataListRelacionnotaslogrosdimensionboletin = null;
 		}
 	}
-
+	
 	// ##ESTUDIANTES NOTAS
 	// Propiedades de la lista de dataListRelacionnotaslogrosdimensionboletin
 	public List<Relacionnotaslogrosdimensionboletin> getDataListRelacionnotaslogrosdimensionboletin() {
@@ -1426,7 +1471,9 @@ public class NotasProfesores implements Serializable {
 			if (relacionNotasDimensionSeleccionada != null) {
 				String periodo = relacionNotasDimensionSeleccionada.getPeriodos().getNombre();
 				List<Configuraciones>dataListConfiguraciones = 
-						configuracionesFacade.findByLike("SELECT C FROM Configuraciones C WHERE C.propiedad = 'item" + periodo + "' order by 1");
+						configuracionesFacade.findByLike("SELECT C FROM Configuraciones C WHERE C.propiedad = '" + periodo + 
+								relacionNotasDimensionSeleccionada.getRelaciondimensionesasignaturasano().getDimensiones().getNombre() + 
+								relacionNotasDimensionSeleccionada.getNombrenotas() + "' order by 1");
 				DateFormat fecha = new SimpleDateFormat("MM/dd/yyyy");
 				for(Configuraciones c:dataListConfiguraciones){
 					if(relacionnotaslogrosdimensionboletinFacade
@@ -1461,7 +1508,6 @@ public class NotasProfesores implements Serializable {
 						relacionnotaslogrosdimensionboletinFacade.create(tmp);
 					}
 				}
-				
 				
 				dataListdataListRelacionnotaslogrosdimensionboletin = relacionnotaslogrosdimensionboletinFacade
 						.findByLike("SELECT R FROM Relacionnotaslogrosdimensionboletin R WHERE R.relacionnotasdimension.idrelacionnotasdimesion = "
