@@ -1,0 +1,328 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Registro Logros</title>
+	<!--Css globales-->
+	<h:outputStylesheet name="default.css" library="css" />
+	<h:outputStylesheet name="cssLayout.css" library="css" />
+	<h:outputStylesheet name="cssJuan.css" library="universales/css" />
+	<h:outputStylesheet name="botones.css" library="universales/css" />
+	<h:outputStylesheet name="tablas.css" library="universales/css" />
+	<h:outputStylesheet name="letras.css" library="universales/css" />
+	<h:outputStylesheet name="fieldset.css" library="universales/css" />
+
+	<h:outputScript name="hoverIntent.js" library="menuPrincipal/js" />
+	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
+	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
+
+	<!--Css locales-->
+	<link href="css/notasAcademicasProfesor.css" rel="stylesheet"
+		type="text/css" />
+
+	<!--Js globales-->
+
+	<h:outputScript name="validaciones.js" library="universales/js" />
+	<h:outputScript name="universaljs.js" library="universales/js" />
+
+	<!--Js locales-->
+	<script type="text/javascript" src="js/notasAcademicas.js" />
+
+	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
+	<h:outputScript name="ui.datepicker.js" library="dataPicker/js" />
+</h:head>
+<h:body>
+
+	<h:form>
+		<div style="width: auto;">
+			<ui:include src="/resources/menuPrincipal/xhtml/superfish.xhtml" />
+		</div>
+	</h:form>
+	<br />
+
+	<h:form id="formPrincipal" style="width: 100%;">
+		<fieldset class="fieldSetUniversal"
+			style="width: 1200px; margin-left: auto; margin-right: auto;">
+			<div class="divTablaHeader" style="width: 100%;">
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr style="height: 30px;">
+							<th class="colTablaNotasPrincipal-1 bordesHeader">Curso</th>
+							<th class="colTablaNotasPrincipal-2 bordesHeader">
+								Asignatura</th>
+							<th class="colTablaNotasPrincipal-3 bordesHeader">Dimensión</th>
+							<th class="colTablaNotasPrincipal-4 bordesHeader">Período</th>
+							<th class="colTablaNotasPrincipal-5 bordesHeader">Logro <h:panelGroup
+									id="agregarLogroNuevo">
+									<h:outputLabel value="[+]"
+										styleClass="labelResaltado labelEnlacesUniversal">
+										<f:ajax event="mousedown" execute="@this" render=":logros"
+											listener="#{notasProfesores.seleccionarEditarLogro(null)}"
+											disabled="#{notasProfesores.datalistLogros==null?'true':'false'}"
+											onevent="cargarEdicionLogros" />
+									</h:outputLabel>
+								</h:panelGroup>
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tbody style="width: 100%">
+					<tr>
+						<td class="colTablaNotasPrincipal-1 bordesHeader"><h:panelGroup
+								id="contenedorCursos">
+								<h:dataTable id="tablaCursos"
+									value="#{notasProfesores.dataListCursos}" var="cursos"
+									width="100%" cellpadding="0" cellspacing="0" border="0"
+									columnClasses="colCursos-1" styleClass="border2">
+									<h:column>
+
+										<h:outputLabel value="#{cursos.grados.nombre}"
+											styleClass="botonCursos botonGrisClaro-Verde labelSinResaltar">
+											<f:ajax event="click"
+												render=":formPrincipal:tablaRelacionAsignaturasPeriodos :formPrincipal:contenedoresLogros :formPrincipal:tablaDimensiones :formPrincipal:tablaPeriodos  
+                                                                  :formPrincipal:agregarLogroNuevo"
+												execute="@this"
+												listener="#{notasProfesores.escogerCurso(cursos)}"
+												onevent="seleccionarCurso" />
+										</h:outputLabel>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup></td>
+						<td class="colTablaNotasPrincipal-2 bordesHeader"><h:panelGroup
+								id="contenedorAsignaturas">
+								<h:dataTable id="tablaRelacionAsignaturasPeriodos"
+									value="#{notasProfesores.dataListRelacionasignaturaperiodos}"
+									var="relacionAsignaturaPeriodo" cellpadding="0" cellspacing="0"
+									border="0" width="100%" columnClasses="colAsignaturas-1"
+									styleClass="border2" style="margin-left: 5%;">
+									<h:column>
+										<h:outputLabel
+											value="#{relacionAsignaturaPeriodo.asignaturas.nombre}"
+											styleClass="botonAsignaturas botonGrisClaro-Verde labelSinResaltar">
+											<f:ajax event="click" execute="@this"
+												render=":formPrincipal:tablaDimensiones  :formPrincipal:contenedoresLogros :formPrincipal:tablaPeriodos 
+                                                                  :formPrincipal:agregarLogroNuevo"
+												listener="#{notasProfesores.escogerAsignatura(relacionAsignaturaPeriodo)}"
+												onevent="seleccionarAsignatura" />
+										</h:outputLabel>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup></td>
+						<td class="colTablaNotasPrincipal-3  bordesHeader"><h:panelGroup
+								id="contenedorDimensiones">
+								<h:dataTable id="tablaDimensiones"
+									value="#{notasProfesores.dataListRelaciondimensionesasignaturasano}"
+									var="rdaa" width="100%" cellpadding="0" cellspacing="0"
+									border="0" styleClass="border2"
+									columnClasses=" colDimensiones-1, colDimensiones-2"
+									style="margin-left: 5%;">
+									<h:column>
+										<h:outputLabel id="seleccionarDimension"
+											value="#{rdaa.dimensiones.nombre}"
+											styleClass="botonGrisClaro-Verde labelSinResaltar">
+											<f:ajax event="click"
+												render=":formPrincipal:tablaPeriodos  :formPrincipal:contenedoresLogros   
+                                                                  :formPrincipal:agregarLogroNuevo"
+												listener="#{notasProfesores.seleccionarRelaciondimensionesasignaturasano(rdaa)}"
+												onevent="seleccionarDimension" />
+										</h:outputLabel>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup></td>
+						<td class="colTablaNotasPrincipal-4 bordesHeader"><h:panelGroup
+								id="contenedorPeriodos">
+								<h:dataTable id="tablaPeriodos"
+									value="#{notasProfesores.datalistPeriodos}" var="periodos"
+									width="100%" cellpadding="0" cellspacing="0" border="0"
+									columnClasses="colPeriodos-1" styleClass="border2">
+									<h:column>
+										<center>
+											<h:outputLabel value="#{periodos.nombre}"
+												styleClass="botonGrisClaro-Verde labelSinResaltar"
+												style="width: 70%;">
+												<f:ajax event="click"
+													render=" :formPrincipal:tablaLogros :formPrincipal:pruebaLogros  
+                                                                      :formPrincipal:agregarLogroNuevo"
+													listener="#{notasProfesores.seleccionarPeriodos(periodos)}"
+													onevent="seleccionarPeriodos" />
+											</h:outputLabel>
+										</center>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup>
+						</td>
+						<td class="colTablaNotasPrincipal-5 bordesHeader"><h:panelGroup
+								id="contenedoresLogros" layout="block"
+								style="max-height: 600px; overflow-y: auto;">
+								<h:dataTable id="tablaLogros"
+									value="#{notasProfesores.datalistLogros}" var="logros"
+									width="100%" cellpadding="0" cellspacing="0" border="0"
+									columnClasses="colLogros-1, colLogros-2 ubicacionCeldaMitad, colLogros-3 ubicacionCeldaMitad"
+									styleClass="border2">
+									<h:column>
+										<h:outputLabel id="seleccionarLogro"
+											value="#{logros.logros.logro}"
+											styleClass="marginIzquierdo #{notasProfesores.logroSeleccionado(logros)?'botonSeleccionadoVerde botonLogroSeleccionada':''} botonGrisClaro-Verde labelSinResaltar"
+											style="text-align: justify; width: 85%;">
+										</h:outputLabel>
+									</h:column>
+									<h:column>
+										<center>
+											<h:graphicImage value="/resources/images/borrar.gif"
+												style="cursor: pointer;"
+												onclick="if(!confirm('Desea eliminar este logro?')) return false;">
+												<f:ajax event="click"
+													render=":formPrincipal:contenedoresLogros"
+													listener="#{notasProfesores.eliminarLogro(logros)}" />
+											</h:graphicImage>
+										</center>
+									</h:column>
+									<h:column>
+										<center>
+											<h:graphicImage
+												value="/resources/imagenes/botones/editar.png"
+												style="cursor: pointer;" width="20px" height="20px">
+												<f:ajax event="click" render=":logros"
+													listener="#{notasProfesores.seleccionarEditarLogro(logros)}"
+													onevent="cargarEdicionLogros" />
+											</h:graphicImage>
+										</center>
+									</h:column>
+								</h:dataTable>
+								<h:dataTable id="pruebaLogros"
+									value="#{notasProfesores.otrosLogros}" var="otroslogros"
+									width="100%" cellpadding="0" cellspacing="0" border="0"
+									columnClasses="colPeriodos-1" styleClass="border2">
+									<h:column>
+										<h:column>
+											<h:outputLabel id="seleccionarOtroLogro"
+												value="#{otroslogros.logros.logro}"
+												styleClass="marginIzquierdo #{notasProfesores.logroSeleccionado(logros)?'botonSeleccionadoVerde botonLogroSeleccionada':''} botonGrisClaro-Verde labelSinResaltar"
+												style="text-align: justify; width: 85%;">
+											</h:outputLabel>
+										</h:column>
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</h:form>
+
+
+	<div id="backgroundPopup" style="display: none; z-index: 0"
+		onclick="escongerPopUP()" />
+	<br />
+
+	
+
+
+	<!--Formulario para agregar los logros-->
+	<h:form id="logros" style="display: none;"
+		styleClass="fieldSetUniversal divPopUPAgregarLogro">
+
+		<center>
+			<h:outputText id="tituloPopUp"
+				styleClass="fieldSetUniversal labelResaltado" style="width: 90%" />
+		</center>
+		<br />
+		<br />
+		<div>
+			<h:panelGroup
+				rendered="#{!notasProfesores.dataListRelacionLogrosDimensiones().isEmpty()}">
+				<div class="divTablaHeader" style="width: 100%;">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<thead>
+							<tr style="height: 30px;">
+								<th class="colTablaHistorialLogros-1">Historial Logros</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="box-wrap antiscroll-wrap" style="width: 100%">
+					<div class="box" style="width: 100%">
+						<div class="antiscroll-inner" style="width: 100%">
+							<div class="box-inner"
+								style="width: 100%; margin: 0 auto; max-height: 200px; height: 200px; overflow-y: auto;"
+								id="contenedorEstudiantesBusqueda">
+								<h:panelGroup id="idPanelGroupTablaPedidosPrincipal"
+									class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal"
+									layout="block" style="width: 100%;">
+									<div id="backgroundCargando"></div>
+									<h:dataTable id="tablaHistorialLogros"
+										value="#{notasProfesores.dataListRelacionLogrosDimensiones()}"
+										var="relacionLogros" cellpadding="0" cellspacing="0"
+										width="100%" columnClasses="colTablaHistorialLogros-1"
+										rowClasses="fila1, fila2">
+										<h:column>
+											<h:outputLabel value="#{relacionLogros.logros.logro}"
+												style="cursor:pointer;">
+												<f:ajax event="click" render=":logros:textoLogro"
+													execute="@this" onevent="cargarLogroAntiguo"
+													listener="#{notasProfesores.seleccionarLogroAntiguo(relacionLogros)}">
+												</f:ajax>
+											</h:outputLabel>
+										</h:column>
+									</h:dataTable>
+								</h:panelGroup>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:panelGroup>
+
+
+			<br />
+
+			<h:inputTextarea id="textoLogro" styleClass="inputAgregarPopUP"
+				style="height: 60px">
+			</h:inputTextarea>
+			<br />
+			<center>
+				<h:commandButton value="Agregar" styleClass="botonAzul"
+					onclick="if(clickRender()) return false;">
+					<f:ajax event="click" execute="@form"
+						render=":formPrincipal:tablaLogros"
+						listener="#{notasProfesores.agregarLogro()}"
+						onevent="terminarAgregarLogros" />
+				</h:commandButton>
+			</center>
+		</div>
+	</h:form>
+
+
+
+
+
+	<div id="mensajeAlerta" class="ui-growl ui-widget"
+		style="z-index: 1002; display: none; margin: 0 auto;">
+		<div
+			class="ui-growl-item-container ui-state-highlight ui-corner-all ui-helper-hidden ui-shadow"
+			aria-live="polite" style="display: block;">
+			<div class="ui-growl-item">
+				<div class="ui-growl-icon-close ui-icon ui-icon-closethick"
+					style="display: none;"></div>
+				<span class="ui-growl-image ui-growl-image-info" />
+				<div class="ui-growl-message">
+					<span class="ui-growl-title tituloAlert">Successful</span>
+					<p class="contenidoAlert labelSinResaltar">Welcome :ll</p>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+	</div>
+	
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+		<p:graphicImage name="/imagenes/ajaxloadingbar.gif" />
+	</p:dialog>
+</h:body>
+</html>
