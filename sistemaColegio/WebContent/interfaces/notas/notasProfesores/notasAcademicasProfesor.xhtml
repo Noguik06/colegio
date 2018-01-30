@@ -20,6 +20,8 @@
 	<h:outputScript name="superfish.js" library="menuPrincipal/js" />
 	<h:outputStylesheet name="superfish.css" library="menuPrincipal/css" />
 
+	<h:outputScript library="js" name="calendar_es.js" />
+
 	<!--Css locales-->
 	<link href="css/notasAcademicasProfesor.css" rel="stylesheet"
 		type="text/css" />
@@ -32,8 +34,6 @@
 	<!--Js locales-->
 	<script type="text/javascript" src="js/notasAcademicas.js" />
 
-	<h:outputStylesheet name="ui.datepicker.css" library="dataPicker/css" />
-	<h:outputScript name="ui.datepicker.js" library="dataPicker/js" />
 </h:head>
 <h:body>
 
@@ -46,7 +46,7 @@
 
 	<h:form id="formPrincipal" style="width: 100%;">
 		<fieldset class="fieldSetUniversal"
-			style="width: 1500px; margin-left: auto; margin-right: auto;">
+			style="width: 1200px; margin-left: auto; margin-right: auto;">
 			<div class="divTablaHeader" style="width: 100%;">
 				<table width="100%" cellpadding="0" cellspacing="0">
 					<thead>
@@ -56,18 +56,7 @@
 								Asignatura</th>
 							<th class="colTablaNotasPrincipal-3 bordesHeader">Dimensión</th>
 							<th class="colTablaNotasPrincipal-4 bordesHeader">Período</th>
-							<th class="colTablaNotasPrincipal-5 bordesHeader">Logro <h:panelGroup
-									id="agregarLogroNuevo">
-									<h:outputLabel value="[+]"
-										styleClass="labelResaltado labelEnlacesUniversal">
-										<f:ajax event="mousedown" execute="@this" render=":logros"
-											listener="#{notasProfesores.seleccionarEditarLogro(null)}"
-											disabled="#{notasProfesores.datalistLogros==null?'true':'false'}"
-											onevent="cargarEdicionLogros" />
-									</h:outputLabel>
-								</h:panelGroup>
-							</th>
-							<th class="colTablaNotasPrincipal-6 bordesHeader">Item <h:panelGroup
+							<th class="colTablaNotasPrincipal-5 bordesHeader">Item <h:panelGroup
 									id="agregarItemNueva">
 									<h:outputLabel value="[+]" rendered="false"
 										styleClass="labelResaltado labelEnlacesUniversal">
@@ -107,8 +96,8 @@
 										<h:outputLabel value="#{cursos.grados.nombre}"
 											styleClass="botonCursos botonGrisClaro-Verde labelSinResaltar">
 											<f:ajax event="click"
-												render=":formPrincipal:tablaRelacionAsignaturasPeriodos :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaNotas :formPrincipal:contenedoresLogros :formPrincipal:tablaDimensiones :formPrincipal:tablaPeriodos :formPrincipal:tablaRecuperaciones :formPrincipal:seleccionarRecuperaciones 
-                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva :formPrincipal:agregarLogroNuevo"
+												render=":formPrincipal:tablaRelacionAsignaturasPeriodos :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaNotas  :formPrincipal:tablaDimensiones :formPrincipal:tablaPeriodos  
+                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva"
 												execute="@this"
 												listener="#{notasProfesores.escogerCurso(cursos)}"
 												onevent="seleccionarCurso" />
@@ -128,8 +117,8 @@
 											value="#{relacionAsignaturaPeriodo.asignaturas.nombre}"
 											styleClass="botonAsignaturas botonGrisClaro-Verde labelSinResaltar">
 											<f:ajax event="click" execute="@this"
-												render=":formPrincipal:tablaDimensiones :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaNotas :formPrincipal:contenedoresLogros :formPrincipal:tablaPeriodos :formPrincipal:tablaRecuperaciones :formPrincipal:seleccionarRecuperaciones 
-                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva :formPrincipal:agregarLogroNuevo"
+												render=":formPrincipal:tablaDimensiones :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaNotas :formPrincipal:tablaPeriodos  
+                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva "
 												listener="#{notasProfesores.escogerAsignatura(relacionAsignaturaPeriodo)}"
 												onevent="seleccionarAsignatura" />
 										</h:outputLabel>
@@ -149,8 +138,8 @@
 											value="#{rdaa.dimensiones.nombre}"
 											styleClass="botonGrisClaro-Verde labelSinResaltar">
 											<f:ajax event="click"
-												render=":formPrincipal:tablaPeriodos :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaNotas :formPrincipal:contenedoresLogros :formPrincipal:tablaRecuperaciones :formPrincipal:seleccionarRecuperaciones 
-                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva :formPrincipal:agregarLogroNuevo"
+												render=":formPrincipal:tablaPeriodos :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaNotas  
+                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva"
 												listener="#{notasProfesores.seleccionarRelaciondimensionesasignaturasano(rdaa)}"
 												onevent="seleccionarDimension" />
 										</h:outputLabel>
@@ -169,8 +158,8 @@
 												styleClass="botonGrisClaro-Verde labelSinResaltar"
 												style="width: 70%;">
 												<f:ajax event="click"
-													render=":formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaLogros :formPrincipal:pruebaLogros :formPrincipal:tablaRecuperaciones :formPrincipal:seleccionarRecuperaciones 
-                                                                    :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva :formPrincipal:agregarLogroNuevo"
+													render=":formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin  
+                                                                    :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva"
 													listener="#{notasProfesores.seleccionarPeriodos(periodos)}"
 													onevent="seleccionarPeriodos" />
 											</h:outputLabel>
@@ -179,69 +168,6 @@
 								</h:dataTable>
 							</h:panelGroup></td>
 						<td class="colTablaNotasPrincipal-5 bordesHeader"><h:panelGroup
-								id="contenedoresLogros" layout="block"
-								style="max-height: 600px; overflow-y: auto;">
-								<h:dataTable id="tablaLogros"
-									value="#{notasProfesores.datalistLogros}" var="logros"
-									width="100%" cellpadding="0" cellspacing="0" border="0"
-									columnClasses="colLogros-1, colLogros-2 ubicacionCeldaMitad, colLogros-3 ubicacionCeldaMitad"
-									styleClass="border2">
-									<h:column>
-										<h:outputLabel id="seleccionarLogro"
-											value="#{logros.logros.logro}"
-											styleClass="marginIzquierdo #{notasProfesores.logroSeleccionado(logros)?'botonSeleccionadoVerde botonLogroSeleccionada':''} botonGrisClaro-Verde labelSinResaltar"
-											style="text-align: justify; width: 85%;">
-											<f:ajax event="click"
-												render=":formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaRecuperaciones :formPrincipal:seleccionarRecuperaciones
-                                                                :formPrincipal:agregarItemNueva :formPrincipal:agregarLogroNuevo"
-												disabled="#{notasProfesores.valorLogroPeriodo?'false':'true'}"
-												listener="#{notasProfesores.seleccionarLogro(logros)}"
-												onevent="seleccionarLogros" />
-										</h:outputLabel>
-									</h:column>
-									<h:column>
-										<center>
-											<h:graphicImage value="/resources/images/borrar.gif"
-												style="cursor: pointer;"
-												onclick="if(!confirm('Desea eliminar este logro?')) return false;">
-												<f:ajax event="click"
-													render=":formPrincipal:contenedoresLogros"
-													listener="#{notasProfesores.eliminarLogro(logros)}" />
-											</h:graphicImage>
-										</center>
-									</h:column>
-									<h:column>
-										<center>
-											<h:graphicImage
-												value="/resources/imagenes/botones/editar.png"
-												style="cursor: pointer;" width="20px" height="20px">
-												<f:ajax event="click" render=":logros"
-													listener="#{notasProfesores.seleccionarEditarLogro(logros)}"
-													onevent="cargarEdicionLogros" />
-											</h:graphicImage>
-										</center>
-									</h:column>
-								</h:dataTable>
-								<h:dataTable id="pruebaLogros"
-									value="#{notasProfesores.otrosLogros}" var="otroslogros"
-									width="100%" cellpadding="0" cellspacing="0" border="0"
-									columnClasses="colPeriodos-1" styleClass="border2">
-									<h:column>
-										<h:column>
-											<h:outputLabel id="seleccionarOtroLogro"
-												value="#{otroslogros.logros.logro}"
-												styleClass="marginIzquierdo #{notasProfesores.logroSeleccionado(logros)?'botonSeleccionadoVerde botonLogroSeleccionada':''} botonGrisClaro-Verde labelSinResaltar"
-												style="text-align: justify; width: 85%;">
-												<f:ajax event="click"
-													render=":formPrincipal:tablaNotas :formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaRecuperaciones :formPrincipal:seleccionarRecuperaciones"
-													listener="#{notasProfesores.seleccionarLogro(otroslogros)}"
-													onevent="seleccionarLogros" />
-											</h:outputLabel>
-										</h:column>
-									</h:column>
-								</h:dataTable>
-							</h:panelGroup></td>
-						<td class="colTablaNotasPrincipal-6 bordesHeader"><h:panelGroup
 								id="contenedorNotas">
 								<h:dataTable id="tablaNotas"
 									value="#{notasProfesores.dataListRelacionnotasdimension}"
@@ -254,8 +180,8 @@
 											styleClass="marginIzquierdo #{notasProfesores.notaSeleccionada(notas)?'botonSeleccionadoVerde botonNotasSeleccionado':''} botonGrisClaro-Verde labelSinResaltar"
 											style="width: 70%">
 											<f:ajax event="click"
-												render=":formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaRecuperaciones 
-                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva :formPrincipal:agregarLogroNuevo"
+												render=":formPrincipal:tablaRelacionlogrosdimensionboletin  
+                                                                :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva"
 												listener="#{notasProfesores.seleccionarNotaGlobal(notas)}"
 												onevent="seleccionarNotas" />
 										</h:outputLabel>
@@ -306,7 +232,7 @@
 										styleClass="marginIzquierdo #{notasProfesores.dataListRecuperaciones!=null?'botonSeleccionadoVerde botonNotasSeleccionado':''} botonGrisClaro-Verde labelSinResaltar"
 										style="width: 80%">
 										<f:ajax event="click"
-											render=":formPrincipal:tablaRelacionlogrosdimensionboletin :formPrincipal:tablaRecuperaciones :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva :formPrincipal:agregarLogroNuevo"
+											render=":formPrincipal:tablaRelacionlogrosdimensionboletin  :formPrincipal:agregarNotaNueva :formPrincipal:agregarItemNueva"
 											onevent="seleccionarNotas"
 											listener="#{notasProfesores.seleccionaRecuperaciones()}" />
 									</h:outputLabel>
@@ -331,29 +257,16 @@
 												listener="#{notasProfesores.seleccionarNotaCalificable(rld)}" />
 										</h:outputLabel>
 									</h:column>
-
-								</h:dataTable>
-
-								<h:dataTable id="tablaRecuperaciones"
-									value="#{notasProfesores.dataListRecuperaciones}" var="rld"
-									columnClasses="colNotasCalificables-0 ubicacionCeldaMitad, colNotasCalificables-1"
-									width="100%" cellpadding="0" cellspacing="0"
-									styleClass="border2">
-									<h:column>
-										<h:selectBooleanCheckbox
-											value="#{notasProfesores.valorCheckLogroRecuperacion}">
-											<f:ajax execute="@this" />
-										</h:selectBooleanCheckbox>
+									
+									<h:column rendered="#{notasProfesores.administrador()}">
+										<h:graphicImage value="/resources/imagenes/botones/editar.png"
+											style="cursor: pointer;" width="20px" height="20px">
+											<f:ajax event="click" render=":formCrearNotasCalificables"
+												listener="#{notasProfesores.seleccionarNotaCalificableEditar(rld)}"
+												onevent="cargarEdicionNotasCalificables" />
+										</h:graphicImage>
 									</h:column>
-									<h:column>
-										<h:outputLabel value="#{rld.nombre} #{rld.numero}"
-											styleClass="botonGrisClaro-Verde labelSinResaltar marginIzquierdo">
-											<f:ajax event="click" execute="@this"
-												render=":formRegistroMatricula"
-												onevent="cargarEdicionNotasEstudiantes"
-												listener="#{notasProfesores.seleccionarNotaCalificable(rld)}" />
-										</h:outputLabel>
-									</h:column>
+
 								</h:dataTable>
 							</h:panelGroup></td>
 					</tr>
@@ -386,14 +299,24 @@
 			<tr>
 				<td width="10%" style="width: 10%; min-width: 10%; max-width: 10%;"><h:outputText
 						value="Inicio:" styleClass="labelResaltado" /></td>
-				<td><h:inputText id="fechaNotaCalificarInicio" onfocus="blur()"
-						styleClass="fechaNotaCalificar " style="width: 60%">
-					</h:inputText></td>
+				<td>	
+						<p:calendar id="fechaNotaCalificarInicio" pattern="yyyy-MM-dd"
+									style="width: 90%" locale="es">
+									<f:convertDateTime pattern="yyyy-MM-dd"
+										timeZone="America/Bogota" />
+						</p:calendar>
+				</td>
 				<td width="10%" style="width: 10%; min-width: 10%; max-width: 10%;"><h:outputText
-						value="Fin:" styleClass="labelResaltado" /></td>
-				<td><h:inputText id="fechaNotaCalificarFin" onfocus="blur()"
-						styleClass="fechaNotaCalificar " style="width: 60%">
-					</h:inputText></td>
+						value="Fin:" styleClass="labelResaltado" />
+				</td>
+				<td>
+				
+				<p:calendar id="fechaNotaCalificarFin" pattern="yyyy-MM-dd"
+									style="width: 90%" locale="es">
+									<f:convertDateTime pattern="yyyy-MM-dd"
+										timeZone="America/Bogota" />
+								</p:calendar>
+				</td>
 			</tr>
 		</table>
 		<br />
@@ -453,10 +376,16 @@
 						<center>
 							<h:inputText style="width: 50%"
 								value="#{rm.nota}"
+								rendered="#{!notasProfesores.validacionVigenciaActividad()}"
 								onfocus="guardarValorLetras(this)" onblur="reiniciarValor()"
 								onkeyup="if(validarNumero(this)) return false;">
 								<f:convertNumber />
 							</h:inputText>
+							<h:outputText style="width: 50%"
+								value="#{rm.nota}"
+								rendered="#{notasProfesores.validacionVigenciaActividad()}">
+								<f:convertNumber />
+							</h:outputText>
 						</center>
 					</h:column>
 				</h:dataTable>
@@ -495,84 +424,6 @@
 				listener="#{notasProfesores.agregarNotaGlobal()}" />
 		</h:commandButton>
 	</h:form>
-
-
-	<!--Formulario para agregar los logros-->
-	<h:form id="logros" style="display: none;"
-		styleClass="fieldSetUniversal divPopUPAgregarLogro">
-
-		<center>
-			<h:outputText id="tituloPopUp"
-				styleClass="fieldSetUniversal labelResaltado" style="width: 90%" />
-		</center>
-		<br />
-		<br />
-		<div>
-			<h:panelGroup
-				rendered="#{!notasProfesores.dataListRelacionLogrosDimensiones().isEmpty()}">
-				<div class="divTablaHeader" style="width: 100%;">
-					<table width="100%" cellpadding="0" cellspacing="0">
-						<thead>
-							<tr style="height: 30px;">
-								<th class="colTablaHistorialLogros-1">Historial Logros</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-				<div class="box-wrap antiscroll-wrap" style="width: 100%">
-					<div class="box" style="width: 100%">
-						<div class="antiscroll-inner" style="width: 100%">
-							<div class="box-inner"
-								style="width: 100%; margin: 0 auto; max-height: 200px; height: 200px; overflow-y: auto;"
-								id="contenedorEstudiantesBusqueda">
-								<h:panelGroup id="idPanelGroupTablaPedidosPrincipal"
-									class="claseDivContenedorTablaPrincipalBody claseBorderButtonShadowUniversal"
-									layout="block" style="width: 100%;">
-									<div id="backgroundCargando"></div>
-									<h:dataTable id="tablaHistorialLogros"
-										value="#{notasProfesores.dataListRelacionLogrosDimensiones()}"
-										var="relacionLogros" cellpadding="0" cellspacing="0"
-										width="100%" columnClasses="colTablaHistorialLogros-1"
-										rowClasses="fila1, fila2">
-										<h:column>
-											<h:outputLabel value="#{relacionLogros.logros.logro}"
-												style="cursor:pointer;">
-												<f:ajax event="click" render=":logros:textoLogro"
-													execute="@this" onevent="cargarLogroAntiguo"
-													listener="#{notasProfesores.seleccionarLogroAntiguo(relacionLogros)}">
-												</f:ajax>
-											</h:outputLabel>
-										</h:column>
-									</h:dataTable>
-								</h:panelGroup>
-							</div>
-						</div>
-					</div>
-				</div>
-			</h:panelGroup>
-
-
-			<br />
-
-			<h:inputTextarea id="textoLogro" styleClass="inputAgregarPopUP"
-				style="height: 60px">
-			</h:inputTextarea>
-			<br />
-			<center>
-				<h:commandButton value="Agregar" styleClass="botonAzul"
-					onclick="if(clickRender()) return false;">
-					<f:ajax event="click" execute="@form"
-						render=":formPrincipal:tablaLogros"
-						listener="#{notasProfesores.agregarLogro()}"
-						onevent="terminarAgregarLogros" />
-				</h:commandButton>
-			</center>
-		</div>
-	</h:form>
-
-
-
-
 
 	<div id="mensajeAlerta" class="ui-growl ui-widget"
 		style="z-index: 1002; display: none; margin: 0 auto;">
