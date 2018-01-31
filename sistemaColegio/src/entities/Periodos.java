@@ -42,6 +42,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Periodos.findByFechafin", query = "SELECT p FROM Periodos p WHERE p.fechafin = :fechafin"),
     @NamedQuery(name = "Periodos.findByNombre", query = "SELECT p FROM Periodos p WHERE p.nombre = :nombre")})
 public class Periodos implements Serializable {
+	@OneToMany(mappedBy = "periodos")
+    private List<Relacioncontenidosdimensiones> relacioncontenidosdimensionesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "periodos")
     private List<Definitivasasignaturasperiodos> definitivasasignaturasperiodosList;
     @OneToMany(mappedBy = "periodos")
@@ -150,7 +152,17 @@ public class Periodos implements Serializable {
         this.relacionlogrosdimensionesList = relacionlogrosdimensionesList;
     }
     
-    public int getValor() {
+    @XmlTransient
+    public List<Relacioncontenidosdimensiones> getRelacioncontenidosdimensionesList() {
+		return relacioncontenidosdimensionesList;
+	}
+
+	public void setRelacioncontenidosdimensionesList(
+			List<Relacioncontenidosdimensiones> relacioncontenidosdimensionesList) {
+		this.relacioncontenidosdimensionesList = relacioncontenidosdimensionesList;
+	}
+
+	public int getValor() {
 		return valor;
 	}
 
