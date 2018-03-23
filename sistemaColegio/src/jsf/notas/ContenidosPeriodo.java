@@ -246,8 +246,25 @@ public class ContenidosPeriodo implements Serializable {
 
 		// Reiniciamos los otros logros
 		otrosContenidos = null;
-
 		
+		datalistPeriodos = periodosFacade
+				.findByLike("SELECT P FROM Periodos P WHERE P.anoacademicos.idanosacademicos = "
+						+ getCurrentYear().getIdanosacademicos()
+						+ " ORDER BY P.fechainicio");
+		//
+		periodoSeleccionado = null;
+
+		// Reiniciar la lista de los contenidos
+		datalistContenidos = null;
+
+		relacionContenidosDimensionesSeleccionado = null;
+		// relacionnotasrelacionlogrosdimensionSeleccionada = null;
+
+		// Reiniciar las notas
+		relacionContenidosDimensionesSeleccionado = null;
+
+		// Reiniciamos
+		otrosContenidos = null;
 	}
 
 	//
@@ -421,28 +438,15 @@ public class ContenidosPeriodo implements Serializable {
 	// Metodo para seleccionar el Periodo
 	public void seleccionarPeriodos(Periodos periodo) {
 		this.periodoSeleccionado = periodo;
-		datalistContenidos = relacioncontenidosdimensionesFacade
+		datalistContenidos =  relacioncontenidosdimensionesFacade
 				.findByLike("SELECT R FROM Relacioncontenidosdimensiones R WHERE R.periodos.idperiodos = "
 						+ periodo.getIdperiodos()
-						+ " AND R.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
-						+ relaciondimensionesasignaturasanoAsignada
-								.getIdrelaciondimensionesasignaturasano());
-
-		// Relaciondimensionesasignaturasano
-		otrosContenidos = relacioncontenidosdimensionesFacade
-				.findByLike("SELECT R FROM Relacioncontenidosdimensiones R WHERE R.periodos.idperiodos = "
-						+ periodo.getIdperiodos()
-						+ " AND R.relaciondimensionesasignaturasano.cursos.grados.idgrados = "
-						+ relaciondimensionesasignaturasanoAsignada.getCursos()
-								.getGrados().getIdgrados()
-						+ " AND R.relaciondimensionesasignaturasano.relacionasignaturasperiodos.idrelacionasignaturaperiodos = "
+						+ " AND R.relacionasignaturaperiodos.idrelacionasignaturaperiodos = "
 						+ relacionasignaturaperiodosAsignado
 								.getIdrelacionasignaturaperiodos()
-						+ " AND NOT EXISTS (SELECT RR FROM Relacioncontenidosdimensiones RR WHERE RR.idrelacioncontenidosdimensiones = R.idrelacioncontenidosdimensiones AND RR.periodos.idperiodos = "
-						+ periodo.getIdperiodos()
-						+ " AND RR.relaciondimensionesasignaturasano.idrelaciondimensionesasignaturasano = "
-						+ relaciondimensionesasignaturasanoAsignada
-								.getIdrelaciondimensionesasignaturasano() + ")");
+						+ " AND R.cursos.idcursos = "
+						+ cursoSeleccionado.getIdcursos());
+				
 	
 		// Reiniciar las notas
 		relacionContenidosDimensionesSeleccionado = null;
@@ -479,31 +483,6 @@ public class ContenidosPeriodo implements Serializable {
 	}
 
 
-
-	// Metodo para mostrar el historial de logros de esta asignatura en esta
-	// dimension
-	public List<Relacioncontenidosdimensiones> dataListRelacionContenidosDimensiones() {
-		if (periodoSeleccionado != null) {
-			List<Relacioncontenidosdimensiones> tmp = relacioncontenidosdimensionesFacade
-					.findByLike("SELECT R FROM Relacioncontenidosdimensiones "
-							+ "R WHERE R.periodos.idperiodos != "
-							+ periodoSeleccionado.getIdperiodos()
-							+ " AND "
-							+ "R.relaciondimensionesasignaturasano.dimensiones.iddimensiones = "
-							+ relaciondimensionesasignaturasanoAsignada
-									.getDimensiones().getIddimensiones()
-							+ "AND R.relaciondimensionesasignaturasano.relacionasignaturasperiodos.asignaturas.idasignaturas = "
-							+ relacionasignaturaperiodosAsignado
-									.getAsignaturas().getIdasignaturas()
-							+ " "
-							+ "AND R.relaciondimensionesasignaturasano.cursos.grados.idgrados = "
-							+ cursoSeleccionado.getGrados().getIdgrados()
-							+ " ORDER BY R.contenidos.contenido");
-			return tmp;
-		}
-		return null;
-	}
-	
 	// Metodo para agregar un nuevo contenido
 	public void agregarContenido() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -535,9 +514,10 @@ public class ContenidosPeriodo implements Serializable {
 
 			Relacioncontenidosdimensiones tmp = new Relacioncontenidosdimensiones(
 					new Long(0));
-			tmp.setRelaciondimensionesasignaturasano(relaciondimensionesasignaturasanoAsignada);
+			tmp.setRelacionasignaturaperiodos(relacionasignaturaperiodosAsignado);
 			tmp.setPeriodos(periodoSeleccionado);
 			tmp.setContenidos(contenidoNuevo);
+			tmp.setCursos(cursoSeleccionado);
 			relacioncontenidosdimensionesFacade.create(tmp);
 
 			datalistContenidos.add(tmp);
