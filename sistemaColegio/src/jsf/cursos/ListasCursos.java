@@ -83,7 +83,7 @@ public class ListasCursos implements Serializable {
 	@PostConstruct
     public void init() {
 //        cars = service.createCars(10);
-        list = Arrays.asList(true, true, true, true, true, true, true, true, true, true);
+        list = Arrays.asList(true, true, true, true, true, true, true, true, true, true, true);
     }
 
 	// Metodo para obtener los cursos
@@ -302,7 +302,8 @@ public class ListasCursos implements Serializable {
 					+ "u.fechanacimiento, "
 					+ "u.sexo, "
 					+ "u.direccion, "
-					+ "u.eps "
+					+ "u.eps, "
+					+ "u.nombredeusuario "
 					+ "from "
 					+ "registromatriculas reg "
 					+ "join grados fr on fr.idgrados = reg.grados "
