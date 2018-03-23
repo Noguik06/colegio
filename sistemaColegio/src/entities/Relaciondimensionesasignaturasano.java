@@ -61,8 +61,7 @@ public class Relaciondimensionesasignaturasano implements Serializable {
     @OneToMany(mappedBy = "relaciondimensionesasignaturasano")
     private List<Relacionnotasdimension> relacionnotasdimensionList;
     
-    @OneToMany(mappedBy = "relaciondimensionesasignaturasano")
-    private List<Relacioncontenidosdimensiones> relacioncontenidosdimensionesList;
+    
     
     
 
@@ -97,16 +96,6 @@ public class Relaciondimensionesasignaturasano implements Serializable {
     public void setRelacionlogrosdimensionesList(List<Relacionlogrosdimensiones> relacionlogrosdimensionesList) {
         this.relacionlogrosdimensionesList = relacionlogrosdimensionesList;
     }
-    
-    @XmlTransient
-    public List<Relacioncontenidosdimensiones> getRelacioncontenidosdimensionesList() {
-		return relacioncontenidosdimensionesList;
-	}
-
-	public void setRelacioncontenidosdimensionesList(
-			List<Relacioncontenidosdimensiones> relacioncontenidosdimensionesList) {
-		this.relacioncontenidosdimensionesList = relacioncontenidosdimensionesList;
-	}
 
 	@XmlTransient
     public List<Relacionnotasdimension> getRelacionnotasdimensionList() {

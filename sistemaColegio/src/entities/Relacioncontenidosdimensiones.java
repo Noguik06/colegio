@@ -37,9 +37,9 @@ public class Relacioncontenidosdimensiones implements Serializable {
     @Column(name = "idrelacioncontenidosdimensiones")
     private Long idrelacioncontenidosdimensiones;
     
-    @JoinColumn(name = "relaciondimensionesasignaturasano", referencedColumnName = "idrelaciondimensionesasignaturasano")
+    @JoinColumn(name = "relacionasignaturaperiodos", referencedColumnName = "idrelacionasignaturaperiodos")
     @ManyToOne
-    private Relaciondimensionesasignaturasano relaciondimensionesasignaturasano;
+    private Relacionasignaturaperiodos relacionasignaturaperiodos;
     
     @JoinColumn(name = "periodos", referencedColumnName = "idperiodos")
     @ManyToOne
@@ -48,6 +48,10 @@ public class Relacioncontenidosdimensiones implements Serializable {
     @JoinColumn(name = "contenidos", referencedColumnName = "idcontenidos")
     @ManyToOne
     private Contenidos contenidos;
+    
+    @JoinColumn(name = "cursos", referencedColumnName = "idcursos")
+    @ManyToOne
+    private Cursos cursos;
     
 
     public Relacioncontenidosdimensiones() {
@@ -73,14 +77,6 @@ public class Relacioncontenidosdimensiones implements Serializable {
 		this.contenidos = contenidos;
 	}
 
-	public Relaciondimensionesasignaturasano getRelaciondimensionesasignaturasano() {
-        return relaciondimensionesasignaturasano;
-    }
-
-    public void setRelaciondimensionesasignaturasano(Relaciondimensionesasignaturasano relaciondimensionesasignaturasano) {
-        this.relaciondimensionesasignaturasano = relaciondimensionesasignaturasano;
-    }
-
     public Periodos getPeriodos() {
         return periodos;
     }
@@ -89,10 +85,23 @@ public class Relacioncontenidosdimensiones implements Serializable {
         this.periodos = periodos;
     }
 
-    
+    public Relacionasignaturaperiodos getRelacionasignaturaperiodos() {
+		return relacionasignaturaperiodos;
+	}
 
+	public void setRelacionasignaturaperiodos(Relacionasignaturaperiodos relacionasignaturaperiodos) {
+		this.relacionasignaturaperiodos = relacionasignaturaperiodos;
+	}
 
-    @Override
+	public Cursos getCursos() {
+		return cursos;
+	}
+
+	public void setCursos(Cursos idCursos) {
+		this.cursos = idCursos;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (idrelacioncontenidosdimensiones != null ? idrelacioncontenidosdimensiones.hashCode() : 0);

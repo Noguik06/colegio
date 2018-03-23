@@ -68,6 +68,10 @@ public class Relacionasignaturaperiodos implements Serializable {
     @OneToMany(mappedBy = "relacionasignaturaperiodos")
     private Collection<Relacionrecuperacionregistromatriculas> relacionrecuperacionregistromatriculasCollection;
     
+    
+    @OneToMany(mappedBy = "relacionasignaturaperiodos")
+    private List<Relacioncontenidosdimensiones> relacioncontenidosdimensionesList;
+    
     public Relacionasignaturaperiodos() {
     }
 
@@ -125,7 +129,17 @@ public class Relacionasignaturaperiodos implements Serializable {
         this.relaciondimensionesasignaturasanoList = relaciondimensionesasignaturasanoList;
     }
 
-    @Override
+    @XmlTransient
+    public List<Relacioncontenidosdimensiones> getRelacioncontenidosdimensionesList() {
+		return relacioncontenidosdimensionesList;
+	}
+
+	public void setRelacioncontenidosdimensionesList(
+			List<Relacioncontenidosdimensiones> relacioncontenidosdimensionesList) {
+		this.relacioncontenidosdimensionesList = relacioncontenidosdimensionesList;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (idrelacionasignaturaperiodos != null ? idrelacionasignaturaperiodos.hashCode() : 0);
