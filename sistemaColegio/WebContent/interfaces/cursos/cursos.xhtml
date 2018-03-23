@@ -54,7 +54,7 @@
 		<br />
 		<h:commandLink>
 			Excel
-			<p:dataExporter type="xls" target="est" fileName="Informe Pedidos"
+			<p:dataExporter type="xls" target="est" fileName="Lista Estudiantes"
 			pageOnly="true" selectionOnly="true"/>
 		</h:commandLink>
 		&nbsp;
@@ -87,6 +87,14 @@
 				sortBy="#{estudiante[1]}" filterMatchMode="contains"
 				filterFunction="#{listasCursos.filterByNombre}">
 				<h:outputText value="#{estudiante[1]}"
+					style="text-transform: capitalize;">
+					<f:converter converterId="minusculasjava" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Usuario" filterBy="#{estudiante[10]}"  width="12%"
+				rendered="#{listasCursos.list[10]}"	
+				sortBy="#{estudiante[10]}" filterMatchMode="contains">
+				<h:outputText value="#{estudiante[10]}"
 					style="text-transform: capitalize;">
 					<f:converter converterId="minusculasjava" />
 				</h:outputText>

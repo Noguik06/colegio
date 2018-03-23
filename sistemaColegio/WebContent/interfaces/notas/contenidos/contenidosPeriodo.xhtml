@@ -6,7 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Registro Logros</title>
+	<title>Registro Contenidos</title>
 	<!--Css globales-->
 	<h:outputStylesheet name="default.css" library="css" />
 	<h:outputStylesheet name="cssLayout.css" library="css" />
@@ -54,7 +54,6 @@
 							<th class="colTablaNotasPrincipal-1 bordesHeader">Curso</th>
 							<th class="colTablaNotasPrincipal-2 bordesHeader">
 								Asignatura</th>
-							<th class="colTablaNotasPrincipal-3 bordesHeader">Dimensión</th>
 							<th class="colTablaNotasPrincipal-4 bordesHeader">Período</th>
 							<th class="colTablaNotasPrincipal-5 bordesHeader">Contenido <h:panelGroup
 									id="agregarLogroNuevo">
@@ -84,7 +83,7 @@
 										<h:outputLabel value="#{cursos.grados.nombre}"
 											styleClass="botonCursos botonGrisClaro-Verde labelSinResaltar">
 											<f:ajax event="click"
-												render=":formPrincipal:tablaRelacionAsignaturasPeriodos :formPrincipal:contenedoresLogros :formPrincipal:pruebaLogros :formPrincipal:tablaDimensiones :formPrincipal:tablaPeriodos  
+												render=":formPrincipal:tablaRelacionAsignaturasPeriodos :formPrincipal:contenedoresLogros :formPrincipal:tablaPeriodos  
                                                                   :formPrincipal:agregarLogroNuevo"
 												execute="@this"
 												listener="#{contenidosPeriodo.escogerCurso(cursos)}"
@@ -105,36 +104,15 @@
 											value="#{relacionAsignaturaPeriodo.asignaturas.nombre}"
 											styleClass="botonAsignaturas botonGrisClaro-Verde labelSinResaltar">
 											<f:ajax event="click" execute="@this"
-												render=":formPrincipal:tablaDimensiones  :formPrincipal:contenedoresLogros :formPrincipal:pruebaLogros :formPrincipal:tablaPeriodos 
+												render=":formPrincipal:contenedoresLogros :formPrincipal:tablaPeriodos 
                                                                   :formPrincipal:agregarLogroNuevo"
 												listener="#{contenidosPeriodo.escogerAsignatura(relacionAsignaturaPeriodo)}"
 												onevent="seleccionarAsignatura" />
 										</h:outputLabel>
 									</h:column>
 								</h:dataTable>
-							</h:panelGroup></td>
-						<td class="colTablaNotasPrincipal-3  bordesHeader"><h:panelGroup
-								id="contenedorDimensiones">
-								<h:dataTable id="tablaDimensiones"
-									value="#{contenidosPeriodo.dataListRelaciondimensionesasignaturasano}"
-									var="rdaa" width="100%" cellpadding="0" cellspacing="0"
-									border="0" styleClass="border2"
-									columnClasses=" colDimensiones-1, colDimensiones-2"
-									style="margin-left: 5%;">
-									<h:column>
-										<h:outputLabel id="seleccionarDimension"
-											value="#{rdaa.dimensiones.nombre}"
-											styleClass="botonGrisClaro-Verde labelSinResaltar">
-											<f:ajax event="click"
-												render=":formPrincipal:tablaPeriodos  :formPrincipal:contenedoresLogros 
-														:formPrincipal:pruebaLogros   
-                                                        :formPrincipal:agregarLogroNuevo"
-												listener="#{contenidosPeriodo.seleccionarRelaciondimensionesasignaturasano(rdaa)}"
-												onevent="seleccionarDimension" />
-										</h:outputLabel>
-									</h:column>
-								</h:dataTable>
-							</h:panelGroup></td>
+							</h:panelGroup>
+						</td>
 						<td class="colTablaNotasPrincipal-4 bordesHeader"><h:panelGroup
 								id="contenedorPeriodos">
 								<h:dataTable id="tablaPeriodos"
@@ -147,7 +125,7 @@
 												styleClass="botonGrisClaro-Verde labelSinResaltar"
 												style="width: 70%;">
 												<f:ajax event="click"
-													render=" :formPrincipal:tablaContenidos :formPrincipal:pruebaLogros  
+													render=" :formPrincipal:tablaContenidos  
                                                                       :formPrincipal:agregarLogroNuevo"
 													listener="#{contenidosPeriodo.seleccionarPeriodos(periodos)}"
 													onevent="seleccionarPeriodos" />
@@ -193,20 +171,6 @@
 													onevent="cargarEdicionLogros" />
 											</h:graphicImage>
 										</center>
-									</h:column>
-								</h:dataTable>
-								<h:dataTable id="pruebaLogros"
-									value="#{contenidosPeriodo.otrosContenidos}" var="otrosContenidos"
-									width="100%" cellpadding="0" cellspacing="0" border="0"
-									columnClasses="colPeriodos-1" styleClass="border2">
-									<h:column>
-										<h:column>
-											<h:outputLabel id="seleccionarOtroContenido"
-												value="#{otrosContenidos.contenidos.contenido}"
-												styleClass="marginIzquierdo botonGrisClaro-Verde labelSinResaltar"
-												style="text-align: justify; width: 85%;">
-											</h:outputLabel>
-										</h:column>
 									</h:column>
 								</h:dataTable>
 							</h:panelGroup>

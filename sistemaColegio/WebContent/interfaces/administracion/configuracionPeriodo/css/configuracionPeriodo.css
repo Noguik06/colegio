@@ -50,42 +50,6 @@ td {
     max-height: 35px;
 }
 
-/*###TABLA PRINCIPAL*/
-.colTablaNotasPrincipal-1{
-    width: 15%;
-    min-width: 15%;
-    max-width: 15%;
-}
-
-.colTablaNotasPrincipal-2{
-    width: 15%;
-    min-width: 15%;
-    max-width: 15%;
-}
-
-.colTablaNotasPrincipal-3{
-    width: 15%;
-    min-width: 15%;
-    max-width: 15%;
-}
-
-.colTablaNotasPrincipal-4{
-    width: 20%;
-    min-width: 20%;
-    max-width: 20%;
-}
-
-.colTablaNotasPrincipal-5{
-    width: 16%;
-    min-width: 16%;
-    max-width: 16%;
-}
-
-.colTablaNotasPrincipal-6{
-    width: 18%;
-    min-width: 18%;
-    max-width: 18%;
-}
 
 
 /*##TABLAS DE LOS CURSOS###*/
@@ -272,3 +236,61 @@ td {
 .tablasEstudiantesCol-2{
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/*###TABLA PRINCIPAL*/
+.colTablaNotasPrincipal-1{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
+}
+
+.colTablaNotasPrincipal-2{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
+}
+
+.colTablaNotasPrincipal-3{
+    width: 15%;
+    min-width: 15%;
+    max-width: 15%;
+}
+
+.colTablaNotasPrincipal-4{
+    width: 20%;
+    min-width: 20%;
+    max-width: 20%;
+}
+
+.colTablaNotasPrincipal-5{
+    width: 16%;
+    min-width: 16%;
+    max-width: 16%;
+}
+
+.colTablaNotasPrincipal-6{
+    width: 18%;
+    min-width: 18%;
+    max-width: 18%;
+}
+
+
+.botonPeriodo{
+	width: 70%;
+    min-width: 70;
+    max-width: 70%;
+}
+
+
+

@@ -152,16 +152,16 @@ td {
 
 /*##TABLAS DE LOS LOGROS*/
 .colLogros-1{
-    width: 80%;
-    min-width: 80%;
-    max-width: 80%;
+    width: 90%;
+    min-width: 90%;
+    max-width: 90%;
 }
 
 
 .colLogros-1 label{
-    min-width: 80%;
-    max-width: 80%;
-    width: 80%;
+    min-width: 90%;
+    max-width: 90%;
+    width: 90%;
 }
 
 
